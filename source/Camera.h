@@ -8,6 +8,8 @@
 #include <QVector3D>
 #include <QMatrix4x4>
 
+#include "CachedValue.h"
+
 
 class Camera : public QObject
 {
@@ -44,7 +46,6 @@ public:
     const QMatrix4x4 & view();
     const QMatrix4x4 & projection();
     const QMatrix4x4 & viewProjection();
-
     const QMatrix4x4 & viewInverted();
     const QMatrix4x4 & projectionInverted();
     const QMatrix4x4 & viewProjectionInverted();
@@ -56,7 +57,7 @@ signals:
 
 protected:
     void dirty(bool update = true);
-    void discardInvertedMatrices();
+    void discardMatrices();
 
 protected:
     bool m_dirty;
@@ -71,10 +72,10 @@ protected:
     qreal m_zFar;
     QSize m_viewport;
 
-    QMatrix4x4   m_view;
-    QMatrix4x4 * m_viewInverted;
-    QMatrix4x4   m_projection;
-    QMatrix4x4 * m_projectionInverted;
-    QMatrix4x4   m_viewProjection;
-    QMatrix4x4 * m_viewProjectionInverted;
+    CachedValue<QMatrix4x4> m_view;
+    CachedValue<QMatrix4x4> m_viewInverted;
+    CachedValue<QMatrix4x4> m_projection;
+    CachedValue<QMatrix4x4> m_projectionInverted;
+    CachedValue<QMatrix4x4> m_viewProjection;
+    CachedValue<QMatrix4x4> m_viewProjectionInverted;
 };

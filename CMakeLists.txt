@@ -197,7 +197,9 @@ set(sources
 
     ${source_path}/FileAssociatedShader.cpp
     ${source_path}/FileAssociatedShader.h
-
+    
+    ${source_path}/CachedValue.h
+    ${source_path}/CachedValue.hpp
 
     # from libglow
     ${source_path}/AutoTimer.cpp

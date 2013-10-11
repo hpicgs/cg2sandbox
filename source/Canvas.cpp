@@ -20,8 +20,8 @@ Canvas::Canvas(
 : QWindow(screen)
 , m_context(nullptr)
 , m_painter(nullptr)
-, m_camera(nullptr)
-, m_navigation(nullptr)
+, m_camera(new Camera())
+, m_navigation(new Navigation(*m_camera))
 , m_swapInterval(VerticalSyncronization)
 , m_repaintTimer(new QBasicTimer())
 , m_continuousRepaint(false)
@@ -31,12 +31,10 @@ Canvas::Canvas(
 , m_update(false)
 {
     setSurfaceType(OpenGLSurface);    
+	
     create();
 
-    m_camera = new Camera();
     m_camera->setFovy(40.0);
-
-    m_navigation = new Navigation(*m_camera);
     m_navigation->reset();
 
     initializeGL(format);
@@ -44,13 +42,6 @@ Canvas::Canvas(
 
 Canvas::~Canvas()
 {
-	delete m_repaintTimer;
-    delete m_fpsTimer;
-
-    delete m_navigation;
-    delete m_camera;
-
-	delete m_context;
 }
 
 QSurfaceFormat Canvas::format() const

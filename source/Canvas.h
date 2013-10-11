@@ -5,6 +5,7 @@
 #include <QOpenGLFunctions_3_2_Core>
 
 #include <QList>
+#include <QScopedPointer>
 
 class QOpenGLContext;
 class QSurfaceFormat;
@@ -91,16 +92,16 @@ signals:
     void objUpdate(const QVector3D & obj);
 
 protected:
-    QOpenGLContext * m_context;
+    QScopedPointer<QOpenGLContext> m_context;
 
-    AbstractPainter * m_painter;
-    Camera * m_camera;
-    Navigation * m_navigation;
+    QScopedPointer<AbstractPainter> m_painter;
+    QScopedPointer<Camera> m_camera;
+    QScopedPointer<Navigation> m_navigation;
 
     SwapInterval m_swapInterval;    ///< required for toggle
 
-    QBasicTimer * m_repaintTimer;
-    Timer * m_fpsTimer;
+    QScopedPointer<QBasicTimer> m_repaintTimer;
+    QScopedPointer<Timer> m_fpsTimer;
 
     long double m_swapts;
     unsigned int m_swaps;
