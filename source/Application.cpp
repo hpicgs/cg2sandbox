@@ -1,7 +1,6 @@
-
-#include <QDebug>
-#include <QFileInfo>
-#include <QStringList>
+#ifndef NDEBUG
+	#include <QDebug>
+#endif
 
 #include "version.h"
 
@@ -15,10 +14,6 @@ Application::Application(
 ,   char ** argv)
 : QApplication(argc, argv)
 {
-	const QFileInfo fi(QCoreApplication::applicationFilePath());
-
-	//QApplication::setApplicationDisplayName(fi.baseName());
-
 	QApplication::setApplicationName(SANDBOX_PROJECT_NAME);
 	QApplication::setApplicationVersion(SANDBOX_VERSION);
 
@@ -27,14 +22,18 @@ Application::Application(
 
 	qInstallMessageHandler(globalMessageHandler);
 
+#ifndef NDEBUG
 	qDebug("%s on Qt-%s", qPrintable(title()), qPrintable(qVersion()));
 	qDebug() << qPrintable(SANDBOX_VERSION);
+#endif
 }
 
 Application::~Application()
 {
+#ifndef NDEBUG
     qDebug("%s exited", qPrintable(title()));
     qDebug();
+#endif
 }
 
 const QString Application::title()

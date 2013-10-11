@@ -17,9 +17,11 @@ AbstractPainter::~AbstractPainter()
 {
 }
 
-const QStringList AbstractPainter::extensions() const
+const QStringList& AbstractPainter::extensions() const
 {
-    return QStringList();
+    static QStringList extensions;
+    
+    return extensions;
 }
 
 void AbstractPainter::show()
@@ -49,10 +51,11 @@ const float AbstractPainter::depthAt(const QPointF & windowCoordinates)
     const GLint x(static_cast<GLint>(windowCoordinates.x()));
     const GLint y(static_cast<GLint>(windowCoordinates.y()));
 
-    const GLint w(m_camera->viewport().width());
-    const GLint h(m_camera->viewport().height());
-
     assert(m_camera);
+
+    const GLint w(static_cast<GLint>(m_camera->viewport().width()));
+    const GLint h(static_cast<GLint>(m_camera->viewport().height()));
+
     if (x >= w || y >= h)
         return 1.f;
 

@@ -6,6 +6,7 @@
 struct Boundary
 {
 public:
+    Boundary();
     Boundary(
         const QVector3D & upperRightBack = QVector3D()
     ,   const QVector3D & lowerLeftFront = QVector3D());
