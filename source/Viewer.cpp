@@ -6,6 +6,8 @@
 #include <QOpenGLContext>
 #include <QShortcut>
 #include <QSettings>
+#include <QLabel>
+#include <QVector3D>
 
 #include "Application.h"
 #include "Viewer.h"
@@ -29,12 +31,20 @@ Viewer::Viewer(
 , m_swapIntervalShortcut(nullptr)
 {
     m_ui->setupUi(this);
+    setWindowTitle(Application::title());
 
     m_fullscreenShortcut = new QShortcut(m_ui->toggleFullScreenAction->shortcut(), this);
     connect(m_fullscreenShortcut, &QShortcut::activated, this, &Viewer::toggleFullScreen);
 
     m_swapIntervalShortcut = new QShortcut(m_ui->toggleSwapIntervalAction->shortcut(), this);
     connect(m_swapIntervalShortcut, &QShortcut::activated, this, &Viewer::toggleSwapInterval);
+
+    m_objLabel = new QLabel("obj", m_ui->statusbar);
+    m_ui->statusbar->addPermanentWidget(m_objLabel);
+    m_mouseLabel = new QLabel("mouse", m_ui->statusbar);
+    m_ui->statusbar->addPermanentWidget(m_mouseLabel);
+    m_fpsLabel = new QLabel("fps", m_ui->statusbar);
+    m_ui->statusbar->addPermanentWidget(m_fpsLabel);
 
 
     QSettings::setDefaultFormat(QSettings::IniFormat);
@@ -44,6 +54,7 @@ Viewer::Viewer(
     restoreState(s.value(SETTINGS_STATE).toByteArray());
 
     m_ui->menubar->setVisible(!isFullScreen());
+    m_ui->statusbar->setVisible(!isFullScreen());
     m_fullscreenShortcut->setEnabled(isFullScreen());
     m_swapIntervalShortcut->setEnabled(isFullScreen());
 };
@@ -60,11 +71,22 @@ Viewer::~Viewer()
 
 void Viewer::fpsChanged(float fps)
 {
-    std::stringstream fpss;
-    fpss << Application::title().toStdString() << " (" 
-        << std::fixed << std::setprecision(2) << fps << " fps)";
+    m_fpsLabel->setText(QString(" %1 fps ")
+        .arg(fps, 2, 'g', 4));
+}
 
-    setWindowTitle(QString::fromStdString(fpss.str()));
+void Viewer::mouseChanged(const QPoint & mouse)
+{
+    m_mouseLabel->setText(QString(" %1 %2 mouse ")
+        .arg(mouse.x(), 4, 10, QChar('0')).arg(mouse.y(), 4, 10, QChar('0')));
+}
+
+void Viewer::objChanged(const QVector3D & obj)
+{
+    m_objLabel->setText(QString(" %1%2 %3%4 %5%6 xyz ")
+        .arg(obj.x() > 0 ? " " : "").arg(obj.x())
+        .arg(obj.y() > 0 ? " " : "").arg(obj.y())
+        .arg(obj.z() > 0 ? " " : "").arg(obj.z()));
 }
 
 void Viewer::on_toggleFullScreenAction_triggered(bool checked)
@@ -74,12 +96,13 @@ void Viewer::on_toggleFullScreenAction_triggered(bool checked)
 
 void Viewer::toggleFullScreen()
 {
+    m_ui->menubar->setVisible(isFullScreen());
+    m_ui->statusbar->setVisible(isFullScreen());
+
     if (isFullScreen())
         showNormal();
     else
         showFullScreen();
-
-    m_ui->menubar->setVisible(!isFullScreen());
 
     m_fullscreenShortcut->setEnabled(isFullScreen());
     m_swapIntervalShortcut->setEnabled(isFullScreen());

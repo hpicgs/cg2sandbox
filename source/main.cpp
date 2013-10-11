@@ -28,6 +28,8 @@ int main(int argc, char* argv[])
         canvas.setSwapInterval(Canvas::VerticalSyncronization);
 
         QObject::connect(&canvas, &Canvas::fpsUpdate, &viewer, &Viewer::fpsChanged);
+        QObject::connect(&canvas, &Canvas::mouseUpdate, &viewer, &Viewer::mouseChanged);
+        QObject::connect(&canvas, &Canvas::objUpdate, &viewer, &Viewer::objChanged);
         QObject::connect(&viewer, &Viewer::toggleSwapInterval, &canvas, &Canvas::toggleSwapInterval);
 
         Painter painter;

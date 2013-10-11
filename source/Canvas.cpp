@@ -353,7 +353,12 @@ void Canvas::mouseMoveEvent(QMouseEvent * event)
 
     m_context->makeCurrent(this);
     m_navigation->mouseMoveEvent(event);
-    m_context->doneCurrent();
+
+    emit mouseUpdate(event->pos());
+    if (m_painter)
+        emit objUpdate(m_painter->objAt(event->pos()));
+
+    m_context->doneCurrent();        
 }
 
 void Canvas::mousePressEvent(QMouseEvent * event)

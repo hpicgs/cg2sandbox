@@ -87,6 +87,8 @@ protected:
 
 signals:
     void fpsUpdate(float fps);
+    void mouseUpdate(const QPoint & mouse);
+    void objUpdate(const QVector3D & obj);
 
 protected:
     QOpenGLContext * m_context;

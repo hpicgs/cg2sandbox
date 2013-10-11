@@ -8,6 +8,7 @@
 
 class Ui_Viewer;
 
+class QLabel;
 class QSurfaceFormat;
 class QShortcut;
 
@@ -28,6 +29,8 @@ signals:
 
 public slots:
     void fpsChanged(float fps);
+    void mouseChanged(const QPoint & mouse);
+    void objChanged(const QVector3D & obj);
 
 protected slots:
     void on_toggleFullScreenAction_triggered(bool checked);
@@ -37,6 +40,10 @@ protected slots:
 
 protected:
 	const std::unique_ptr<Ui_Viewer> m_ui;
+
+    QLabel * m_fpsLabel;
+    QLabel * m_mouseLabel;
+    QLabel * m_objLabel;
 
     QShortcut * m_fullscreenShortcut;
     QShortcut * m_swapIntervalShortcut;

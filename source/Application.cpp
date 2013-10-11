@@ -39,5 +39,7 @@ Application::~Application()
 
 const QString Application::title()
 {
-    return QApplication::applicationName();
+    return QString("%1 %2")
+        .arg(QApplication::applicationName())
+        .arg(QApplication::applicationVersion());
 }
