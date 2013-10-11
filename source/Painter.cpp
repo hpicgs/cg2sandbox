@@ -53,21 +53,27 @@ void Painter::resize(
 
     const float aspect(static_cast<float>(width) / static_cast<float>(height));
 
-    m_program->bind();
-    m_program->setUniformValue("transform", camera()->viewProjection());
-    m_program->release();
+    if (m_program->isLinked())
+    {
+        m_program->bind();
+        m_program->setUniformValue("transform", camera()->viewProjection());
+        m_program->release();
+    }
 }
 
 void Painter::update()
 {
-    m_program->bind();
-    m_program->setUniformValue("transform", camera()->viewProjection());
-    m_program->release();
+    if (m_program->isLinked())
+    {
+        m_program->bind();
+        m_program->setUniformValue("transform", camera()->viewProjection());
+        m_program->release();
+    }
 }
 
 void Painter::update(const QList<QOpenGLShaderProgram *> & programs)
 {
-    if (programs.contains(m_program))
+    if (programs.contains(m_program) && m_program->isLinked())
     {
         m_program->bind();
         m_program->setUniformValue("transform", m_transform);
@@ -79,7 +85,10 @@ void Painter::paint()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_program->bind();
-    m_cube->draw(*this);
-    m_program->release();
+    if (m_program->isLinked())
+    {
+        m_program->bind();
+        m_cube->draw(*this);
+        m_program->release();
+    }
 }
