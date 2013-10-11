@@ -1,0 +1,88 @@
+
+#include <cmath>
+#include <iterator>
+
+#include <QOpenGLBuffer>
+#include <QOpenGLFunctions_3_2_Core>
+
+#include "UnitCube.h"
+
+
+const UnitCube::Strip3 UnitCube::strip()
+{
+    vec3 vertices[]
+    { 
+        vec3{-.5f,-.5f,-.5f}
+    ,   vec3{-.5f,-.5f, .5f}
+    ,   vec3{-.5f, .5f,-.5f}
+    ,   vec3{-.5f, .5f, .5f}
+    ,   vec3{ .5f,-.5f,-.5f}
+    ,   vec3{ .5f,-.5f, .5f}
+    ,   vec3{ .5f, .5f,-.5f}
+    ,   vec3{ .5f, .5f, .5f}
+    };
+
+    vec3 normals[]
+    { 
+        vec3{-1.f, 0.f, 0.f}
+    ,   vec3{ 1.f, 0.f, 0.f}
+    ,   vec3{ 0.f,-1.f, 0.f}
+    ,   vec3{ 0.f, 1.f, 0.f}
+    ,   vec3{ 0.f, 0.f,-1.f}
+    ,   vec3{ 0.f, 0.f, 1.f}
+    ,   vec3{ 0.f, 0.f, 0.f}  // dummy
+    };
+
+    // use an interleaved array
+    return 
+    {
+        vertices[7], normals[6]
+    ,   vertices[3], normals[6]
+    ,   vertices[5], normals[5]
+    ,   vertices[1], normals[5]
+    ,   vertices[0], normals[2]
+    ,   vertices[3], normals[0]
+    ,   vertices[2], normals[0]
+    ,   vertices[7], normals[3]
+    ,   vertices[6], normals[3]
+    ,   vertices[5], normals[1]
+    ,   vertices[4], normals[1]
+    ,   vertices[0], normals[2]
+    ,   vertices[6], normals[4] 
+    ,   vertices[2], normals[4]
+    };
+}
+
+UnitCube::UnitCube(
+    QOpenGLFunctions_3_2_Core & gl
+,   const GLuint vertexAttribLocation
+,   const GLuint normalAttribLocation)
+:   m_strip(QOpenGLBuffer::Type::VertexBuffer)
+{
+    const Strip3 raw(strip());
+
+    m_vao.create();
+    m_vao.bind();
+
+    m_strip.create();
+    m_strip.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_strip.bind();
+    m_strip.allocate(raw.data(), sizeof(vec3) * 2 * raw.size());
+
+    gl.glVertexAttribPointer(vertexAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(vec3) * 2, nullptr);
+    gl.glEnableVertexAttribArray(vertexAttribLocation);
+
+    gl.glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(vec3)* 2, reinterpret_cast<void*>(sizeof(vec3)));
+    gl.glEnableVertexAttribArray(normalAttribLocation);
+
+    m_vao.release();
+}
+
+void UnitCube::draw(QOpenGLFunctions_3_2_Core & gl)
+{
+    gl.glEnable(GL_DEPTH_TEST);
+
+    m_vao.bind();
+    gl.glDrawArrays(GL_TRIANGLE_STRIP, 0, 14);
+    m_vao.release();
+}
