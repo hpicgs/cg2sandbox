@@ -61,9 +61,6 @@ Viewer::Viewer(
 
 Viewer::~Viewer()
 {
-    delete m_fullscreenShortcut;
-    delete m_swapIntervalShortcut;
-
     QSettings s;
     s.setValue(SETTINGS_GEOMETRY, saveGeometry());
     s.setValue(SETTINGS_STATE, saveState());

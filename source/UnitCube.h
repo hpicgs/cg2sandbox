@@ -14,13 +14,6 @@ class QOpenGLFunctions_3_2_Core;
 
 class UnitCube
 {
-    struct vec3 {
-        float _[3]; };
-
-    using Strip3 = std::vector<vec3>;
-
-    static const Strip3 strip();
-
 public:
     UnitCube(
         QOpenGLFunctions_3_2_Core & gl

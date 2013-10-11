@@ -1,56 +1,57 @@
-
-#include <cmath>
-#include <iterator>
-
-#include <QOpenGLBuffer>
-#include <QOpenGLFunctions_3_2_Core>
-
 #include "UnitCube.h"
 
+#include <QOpenGLFunctions_3_2_Core>
 
-const UnitCube::Strip3 UnitCube::strip()
-{
-    vec3 vertices[]
-    { 
-        vec3{-.5f,-.5f,-.5f}
-    ,   vec3{-.5f,-.5f, .5f}
-    ,   vec3{-.5f, .5f,-.5f}
-    ,   vec3{-.5f, .5f, .5f}
-    ,   vec3{ .5f,-.5f,-.5f}
-    ,   vec3{ .5f,-.5f, .5f}
-    ,   vec3{ .5f, .5f,-.5f}
-    ,   vec3{ .5f, .5f, .5f}
-    };
+namespace {
+	struct vec3 {
+        float _[3]; };
 
-    vec3 normals[]
-    { 
-        vec3{-1.f, 0.f, 0.f}
-    ,   vec3{ 1.f, 0.f, 0.f}
-    ,   vec3{ 0.f,-1.f, 0.f}
-    ,   vec3{ 0.f, 1.f, 0.f}
-    ,   vec3{ 0.f, 0.f,-1.f}
-    ,   vec3{ 0.f, 0.f, 1.f}
-    ,   vec3{ 0.f, 0.f, 0.f}  // dummy
-    };
+	using Strip3 = std::vector<vec3>;
 
-    // use an interleaved array
-    return 
-    {
-        vertices[7], normals[6]
-    ,   vertices[3], normals[6]
-    ,   vertices[5], normals[5]
-    ,   vertices[1], normals[5]
-    ,   vertices[0], normals[2]
-    ,   vertices[3], normals[0]
-    ,   vertices[2], normals[0]
-    ,   vertices[7], normals[3]
-    ,   vertices[6], normals[3]
-    ,   vertices[5], normals[1]
-    ,   vertices[4], normals[1]
-    ,   vertices[0], normals[2]
-    ,   vertices[6], normals[4] 
-    ,   vertices[2], normals[4]
-    };
+	const Strip3 strip()
+	{
+		static vec3 vertices[]
+		{ 
+			vec3{-.5f,-.5f,-.5f}
+			,   vec3{-.5f,-.5f, .5f}
+			,   vec3{-.5f, .5f,-.5f}
+			,   vec3{-.5f, .5f, .5f}
+			,   vec3{ .5f,-.5f,-.5f}
+			,   vec3{ .5f,-.5f, .5f}
+			,   vec3{ .5f, .5f,-.5f}
+			,   vec3{ .5f, .5f, .5f}
+		};
+
+		static vec3 normals[]
+		{ 
+			vec3{-1.f, 0.f, 0.f}
+			,   vec3{ 1.f, 0.f, 0.f}
+			,   vec3{ 0.f,-1.f, 0.f}
+			,   vec3{ 0.f, 1.f, 0.f}
+			,   vec3{ 0.f, 0.f,-1.f}
+			,   vec3{ 0.f, 0.f, 1.f}
+			,   vec3{ 0.f, 0.f, 0.f}  // dummy
+		};
+
+		// use an interleaved array
+		return 
+		{
+			vertices[7], normals[6]
+			,   vertices[3], normals[6]
+			,   vertices[5], normals[5]
+			,   vertices[1], normals[5]
+			,   vertices[0], normals[2]
+			,   vertices[3], normals[0]
+			,   vertices[2], normals[0]
+			,   vertices[7], normals[3]
+			,   vertices[6], normals[3]
+			,   vertices[5], normals[1]
+			,   vertices[4], normals[1]
+			,   vertices[0], normals[2]
+			,   vertices[6], normals[4] 
+			,   vertices[2], normals[4]
+		};
+	}
 }
 
 UnitCube::UnitCube(
@@ -72,7 +73,7 @@ UnitCube::UnitCube(
     gl.glVertexAttribPointer(vertexAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(vec3) * 2, nullptr);
     gl.glEnableVertexAttribArray(vertexAttribLocation);
 
-    gl.glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(vec3)* 2, reinterpret_cast<void*>(sizeof(vec3)));
+    gl.glVertexAttribPointer(normalAttribLocation, 3, GL_FLOAT, GL_FALSE, sizeof(vec3) * 2, reinterpret_cast<void*>(sizeof(vec3)));
     gl.glEnableVertexAttribArray(normalAttribLocation);
 
     m_vao.release();

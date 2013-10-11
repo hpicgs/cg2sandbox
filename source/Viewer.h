@@ -1,9 +1,8 @@
 
 #pragma once
 
-#include <memory>
-
 #include <QMainWindow>
+#include <QScopedPointer>
 
 
 class Ui_Viewer;
@@ -39,7 +38,7 @@ protected slots:
     void on_toggleSwapIntervalAction_triggered(bool checked);
 
 protected:
-	const std::unique_ptr<Ui_Viewer> m_ui;
+	const QScopedPointer<Ui_Viewer> m_ui;
 
     QLabel * m_fpsLabel;
     QLabel * m_mouseLabel;
