@@ -1,3 +1,4 @@
+
 #include <cassert>
 
 template <typename T>
@@ -8,7 +9,7 @@ CachedValue<T>::CachedValue()
 }
 
 template <typename T>
-CachedValue<T>::CachedValue(const T& value)
+CachedValue<T>::CachedValue(const T & value)
 : m_valid(true)
 , m_value(value)
 {
@@ -21,15 +22,20 @@ bool CachedValue<T>::isValid() const
 }
 
 template <typename T>
-const T& CachedValue<T>::value() const
+T & CachedValue<T>::value()
+{
+    return m_value;
+}
+
+template <typename T>
+const T & CachedValue<T>::value() const
 {
 	assert(m_valid);
-	
 	return m_value;
 }
 
 template <typename T>
-void CachedValue<T>::setValue(const T& value)
+void CachedValue<T>::setValue(const T & value)
 {
 	m_valid = true;
 	m_value = value;
@@ -45,10 +51,4 @@ template <typename T>
 void CachedValue<T>::invalidate()
 {
 	m_valid = false;
-}
-
-template <typename T>
-CachedValue<T>::operator bool() const
-{
-	return isValid();
 }

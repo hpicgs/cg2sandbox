@@ -42,6 +42,13 @@ Canvas::Canvas(
 
 Canvas::~Canvas()
 {
+    delete m_repaintTimer;
+    delete m_fpsTimer;
+
+    delete m_navigation;
+    delete m_camera;
+
+    delete m_context;    
 }
 
 QSurfaceFormat Canvas::format() const

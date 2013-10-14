@@ -57,7 +57,7 @@ signals:
 
 protected:
     void dirty(bool update = true);
-    void discardMatrices();
+    void invalidateMatrices();
 
 protected:
     bool m_dirty;

@@ -25,13 +25,13 @@ Camera::~Camera()
 {
 }
 
-void Camera::discardMatrices()
+void Camera::invalidateMatrices()
 {
     m_view.invalidate();
     m_viewInverted.invalidate();
     m_projection.invalidate();
-    m_viewInverted.invalidate();
     m_projectionInverted.invalidate();
+    m_viewProjection.invalidate();
     m_viewProjectionInverted.invalidate();
 }
 
@@ -154,7 +154,7 @@ void Camera::update()
     if (!m_dirty)
         return;
 
-    discardMatrices();
+    invalidateMatrices();
 
     m_dirty = false;
 
@@ -166,11 +166,11 @@ const QMatrix4x4 & Camera::view()
     if (m_dirty)
         update();
     
-    if (!m_view)
+    if (!m_view.isValid())
     {
-	m_view.value().setToIdentity();
-	m_view.value().lookAt(m_eye, m_center, m_up);
-	m_view.validate();
+        m_view.value().setToIdentity();
+	    m_view.value().lookAt(m_eye, m_center, m_up);
+	    m_view.validate();
     }
 
     return m_view.value();
@@ -180,12 +180,12 @@ const QMatrix4x4 & Camera::projection()
 {
     if (m_dirty)
         update();
-    
-    if (!m_projection)
+
+    if (!m_projection.isValid())
     {
-	m_projection.value().setToIdentity();
-	m_projection.value().perspective(m_fovy, m_aspect, m_zNear, m_zFar);
-	m_projection.validate();
+	    m_projection.value().setToIdentity();
+	    m_projection.value().perspective(m_fovy, m_aspect, m_zNear, m_zFar);
+	    m_projection.validate();
     }
 
     return m_projection.value();
@@ -196,10 +196,8 @@ const QMatrix4x4 & Camera::viewProjection()
     if (m_dirty)
         update();
 
-    if (!m_viewProjection)
-    {
-	m_viewProjection.setValue(projection() * view());
-    }
+    if (!m_viewProjection.isValid())
+    	m_viewProjection.setValue(projection() * view());
     
     return m_viewProjection.value();
 }
@@ -209,10 +207,8 @@ const QMatrix4x4 & Camera::viewInverted()
     if (m_dirty)
         update();
 
-    if (!m_viewInverted)
-    {
-        m_viewInverted.setValue(QMatrix4x4(view().value().inverted()));
-    }
+    if (!m_viewInverted.isValid())
+        m_viewInverted.setValue(QMatrix4x4(view().inverted()));
 
     return m_viewInverted.value();
 }
@@ -222,10 +218,8 @@ const QMatrix4x4 & Camera::projectionInverted()
     if (m_dirty)
         update();
 
-    if (!m_projectionInverted)
-    {
-        m_projectionInverted.setValue(QMatrix4x4(projection().value().inverted()));
-    }
+    if (!m_projectionInverted.isValid())
+        m_projectionInverted.setValue(QMatrix4x4(projection().inverted()));
 
     return m_projectionInverted.value();
 }
@@ -235,10 +229,8 @@ const QMatrix4x4 & Camera::viewProjectionInverted()
     if (m_dirty)
         update();
 
-    if (!m_viewProjectionInverted)
-    {
-        m_viewProjectionInverted.setValue(QMatrix4x4(viewProjection().value().inverted()));
-    }
+    if (!m_viewProjectionInverted.isValid())
+        m_viewProjectionInverted.setValue(QMatrix4x4(viewProjection().inverted()));
 
     return m_viewProjectionInverted.value();
 }

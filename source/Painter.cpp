@@ -51,8 +51,6 @@ void Painter::resize(
 {
     glViewport(0, 0, width, height);
 
-    const float aspect(static_cast<float>(width) / static_cast<float>(height));
-
     if (m_program->isLinked())
     {
         m_program->bind();
@@ -76,7 +74,7 @@ void Painter::update(const QList<QOpenGLShaderProgram *> & programs)
     if (programs.contains(m_program) && m_program->isLinked())
     {
         m_program->bind();
-        m_program->setUniformValue("transform", m_transform);
+        m_program->setUniformValue("transform", camera()->viewProjection());
         m_program->release();
     }
 }

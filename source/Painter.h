@@ -33,7 +33,6 @@ protected:
 
     UnitCube * m_cube;
     QOpenGLShaderProgram * m_program;
-    QMatrix4x4 m_transform;
 
     QOpenGLShader * m_fragShader;
     QOpenGLShader * m_vertShader;
