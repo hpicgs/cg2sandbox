@@ -17,33 +17,36 @@ int main(int argc, char* argv[])
     Application app(argc, argv);
 
     {
-        Viewer viewer;
+        QScopedPointer<Viewer> viewer(new Viewer());
 
         QSurfaceFormat format;
         format.setVersion(3, 2);
         format.setProfile(QSurfaceFormat::CoreProfile);
 
-        Canvas canvas(format);
-        canvas.setContinuousRepaint(true, 0);
-        canvas.setSwapInterval(Canvas::VerticalSyncronization);
+        Canvas * canvas = new Canvas(format);
+        canvas->setContinuousRepaint(true, 0);
+        canvas->setSwapInterval(Canvas::VerticalSyncronization);
 
-        QObject::connect(&canvas, &Canvas::fpsUpdate, &viewer, &Viewer::fpsChanged);
-        QObject::connect(&canvas, &Canvas::mouseUpdate, &viewer, &Viewer::mouseChanged);
-        QObject::connect(&canvas, &Canvas::objUpdate, &viewer, &Viewer::objChanged);
-        QObject::connect(&viewer, &Viewer::toggleSwapInterval, &canvas, &Canvas::toggleSwapInterval);
+        QObject::connect(canvas, &Canvas::fpsUpdate, viewer.data(), &Viewer::fpsChanged);
+        QObject::connect(canvas, &Canvas::mouseUpdate, viewer.data(), &Viewer::mouseChanged);
+        QObject::connect(canvas, &Canvas::objUpdate, viewer.data(), &Viewer::objChanged);
+        QObject::connect(viewer.data(), &Viewer::toggleSwapInterval, canvas, &Canvas::toggleSwapInterval);
 
-        Painter painter;
-        canvas.assignPainter(&painter);
+        {
+            Painter painter;
+            canvas->assignPainter(&painter);
 
-        QWidget * widget = QWidget::createWindowContainer(&canvas);
-        widget->setMinimumSize(1, 1);
-        widget->setAutoFillBackground(false); // Important for overdraw, not occluding the scene.
-        widget->setFocusPolicy(Qt::TabFocus);
+            QWidget * widget = QWidget::createWindowContainer(canvas);
+            widget->setMinimumSize(1, 1);
+            widget->setAutoFillBackground(false); // Important for overdraw, not occluding the scene.
+            widget->setFocusPolicy(Qt::TabFocus);
 
-        viewer.setCentralWidget(widget);
-        viewer.show();
+            viewer->setCentralWidget(widget);
+            viewer->show();
 
-        result = app.exec();
+            result = app.exec();
+            canvas->assignPainter(nullptr);
+        }
     }
     return result;
 }

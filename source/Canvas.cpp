@@ -18,7 +18,7 @@ Canvas::Canvas(
     const QSurfaceFormat & format
 ,   QScreen * screen)
 : QWindow(screen)
-, m_context(nullptr)
+, m_context(new QOpenGLContext)
 , m_painter(nullptr)
 , m_camera(new Camera())
 , m_navigation(new Navigation(*m_camera))
@@ -31,7 +31,7 @@ Canvas::Canvas(
 , m_update(false)
 {
     setSurfaceType(OpenGLSurface);    
-	
+
     create();
 
     m_camera->setFovy(40.0);
@@ -42,13 +42,6 @@ Canvas::Canvas(
 
 Canvas::~Canvas()
 {
-    delete m_repaintTimer;
-    delete m_fpsTimer;
-
-    delete m_navigation;
-    delete m_camera;
-
-    delete m_context;    
 }
 
 QSurfaceFormat Canvas::format() const
@@ -95,11 +88,6 @@ const GLint Canvas::queryi(const GLenum penum)
 
 void Canvas::initializeGL(const QSurfaceFormat & format)
 {
-    if (m_context)
-        return;
-
-    m_context = new QOpenGLContext;
-
     m_context->setFormat(format);
     m_context->create();
 
@@ -121,12 +109,12 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
 
     verifyExtensions(); // false if no painter ...
 
-    connect(m_camera, &Camera::changed, this, &Canvas::cameraChanged);
+    connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
 }
 
 void Canvas::resizeEvent(QResizeEvent * event)
 {
-    if (!m_context || !m_painter)
+    if (!m_painter)
         return;
 
     m_camera->setViewport(event->size());
@@ -162,7 +150,7 @@ void Canvas::paintGL()
 
     if (!m_fpsTimer)
     {
-        m_fpsTimer = new Timer(true, false);
+        m_fpsTimer.reset(new Timer(true, false));
         m_swapts = 0.0;
     }
     else
@@ -202,11 +190,14 @@ void Canvas::assignPainter(AbstractPainter * painter)
     if (m_painter == painter)
         return;
 
+    m_painter = painter;
+    if (!m_painter)
+        return;
+
     m_context->makeCurrent(this);
 
-    m_painter = painter;
     m_painter->initialize();
-    m_painter->setCamera(m_camera);
+    m_painter->setCamera(m_camera.data());
 
     verifyExtensions();
 
@@ -220,11 +211,6 @@ bool Canvas::verifyExtensions() const
     if (!m_painter)
         return false;
 
-    if (!m_context)
-    {
-        qWarning("Extensions cannot be veryfied due to uninitialized context.");
-        return false;
-    }
     if (!m_context->isValid())
     {
         qWarning("Extensions cannot be veryfied due to invalid context.");
@@ -263,7 +249,7 @@ void Canvas::setSwapInterval(SwapInterval swapInterval)
 
 #ifdef WIN32
 
-    typedef bool(WINAPI * SWAPINTERVALEXTPROC) (int);
+    using SWAPINTERVALEXTPROC = bool(WINAPI *) (int);
     static SWAPINTERVALEXTPROC wglSwapIntervalEXT = nullptr;
 
     if (!wglSwapIntervalEXT)

@@ -26,7 +26,7 @@ public:
     /** return list of mandatory extensions (verify results in fatal if one is
         not supported).
     */
-    virtual const QStringList& extensions() const;
+    virtual const QStringList & extensions() const;
 
     /** this should setup the opengl state and allocate all required static 
         resources (context is 3.2 core for this one).
