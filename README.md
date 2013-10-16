@@ -18,8 +18,16 @@ assimp/code/LWOAnimation.cpp
 
 Qt 5.1.1 Compiling for Visual Studio 2013 RC
 
-- http://qt-project.org/forums/viewthread/32508
+Fix for RC compiler crash: in "qtbase/src/corelib/tools/qlocale_tools.cpp" add on line 1184 and 1258:
+```
+#pragma optimize("", off) // just before “static Bigint *diff(Bigint *a, Bigint *b)
+...
+#pragma optimize("", on) 
+```
+- source: http://qt-project.org/forums/viewthread/32508
 
+
+Build Batch:
 ```
 set CL=/MP
 set QMAKEPATH=C:/Qt/5.1.1_12/qtbase/bin
