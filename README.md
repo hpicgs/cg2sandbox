@@ -20,6 +20,8 @@ Qt 5.1.1 Compiling for Visual Studio 2013 RC
 
 - http://qt-project.org/forums/viewthread/32508
 
+```
 set CL=/MP
 set QMAKEPATH=C:/Qt/5.1.1.12/qtbase/bin
 configure -opensource -confirm-license -nomake examples -nomake tests -opengl desktop -platform win32-msvc2013
+```
