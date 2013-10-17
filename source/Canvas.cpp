@@ -249,7 +249,8 @@ void Canvas::setSwapInterval(SwapInterval swapInterval)
 
 #ifdef WIN32
 
-    using SWAPINTERVALEXTPROC = bool(WINAPI *) (int);
+    // ToDo: C++11 - type aliases
+    typedef bool(WINAPI * SWAPINTERVALEXTPROC) (int);
     static SWAPINTERVALEXTPROC wglSwapIntervalEXT = nullptr;
 
     if (!wglSwapIntervalEXT)
@@ -262,7 +263,7 @@ void Canvas::setSwapInterval(SwapInterval swapInterval)
     qWarning("ToDo: Setting swap interval is currently not implemented for __APPLE__");
 
 #else
-
+    // ToDo: C++11 - type aliases
     typedef int(APIENTRY * SWAPINTERVALEXTPROC) (int);
     static SWAPINTERVALEXTPROC glXSwapIntervalSGI = nullptr;
 
