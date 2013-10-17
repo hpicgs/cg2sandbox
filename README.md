@@ -14,6 +14,8 @@ assimp/code/CMakeLists.txt
 - ```COMPILE_FLAGS "-D_SCL_SECURE_NO_WARNINGS"``` was added to avoid secure warnings in msvc  
 assimp/code/LWOAnimation.cpp
 - ```#include <functional>``` was added in order to compile in windows
+assimp/code/Vertex.h on msvc11
+- ```#include <functional>``` was added ...
 
 
 ### Qt 5.1.1 Compiling for Visual Studio 2013 RC
