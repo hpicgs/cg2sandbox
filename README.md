@@ -18,7 +18,7 @@ assimp/code/Vertex.h on msvc11
 - ```#include <functional>``` was added ...
 
 
-### Qt 5.1.1 Compiling for Visual Studio 2013 RC (works with RTM)
+### Qt 5.1.1 Compiling for Visual Studio 2013 RC (fix not required for RTM)
 
 Fix (http://qt-project.org/forums/viewthread/32508) for RC compiler crash: in "qtbase/src/corelib/tools/qlocale_tools.cpp" add on line 1184 and 1258:
 ```
