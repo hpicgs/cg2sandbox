@@ -14,10 +14,10 @@ Camera::Camera(
 , m_center(center)
 , m_up(up)
 
-, m_fovy(30.0)
+, m_fovy(40.0)
 , m_aspect(1.0)
 , m_zNear(0.1)
-, m_zFar(8.0)
+, m_zFar(512.0)
 {
 }
 

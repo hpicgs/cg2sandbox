@@ -17,6 +17,7 @@ class AbstractPainter;
 class Camera;
 class Navigation;
 class Timer;
+class AdaptiveGrid;
 
 
 class Canvas : public QWindow, protected QOpenGLFunctions_3_2_Core
@@ -102,6 +103,8 @@ protected:
 
     QScopedPointer<QBasicTimer> m_repaintTimer;
     QScopedPointer<Timer> m_fpsTimer;
+
+    QScopedPointer<AdaptiveGrid> m_grid;
 
     long double m_swapts;
     unsigned int m_swaps;

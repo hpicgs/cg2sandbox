@@ -202,11 +202,15 @@ set(sources
     ${source_path}/CachedValue.hpp
 
     # from libglow
+    ${source_path}/AdaptiveGrid.cpp
+    ${source_path}/AdaptiveGrid.h
     ${source_path}/AutoTimer.cpp
     ${source_path}/AutoTimer.h
     ${source_path}/ChronoTimer.cpp
     ${source_path}/ChronoTimer.h
 	${source_path}/MathMacros.h
+    ${source_path}/Plane3.cpp
+    ${source_path}/Plane3.h
     ${source_path}/Timer.cpp
     ${source_path}/Timer.h
     ${source_path}/UnitCube.cpp

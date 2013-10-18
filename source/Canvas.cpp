@@ -7,6 +7,7 @@
 #include <QResizeEvent>
 
 #include "AbstractPainter.h"
+#include "AdaptiveGrid.h"
 #include "FileAssociatedShader.h"
 #include "Camera.h"
 #include "Navigation.h"
@@ -92,7 +93,11 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
     m_context->create();
 
     m_context->makeCurrent(this);
-    initializeOpenGLFunctions();
+    if (!initializeOpenGLFunctions())
+    {
+        qCritical() << "Initializing OpenGL failed.";
+        return;
+    }
 
     // print some hardware information
 
@@ -109,7 +114,11 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
 
     verifyExtensions(); // false if no painter ...
 
+    m_grid.reset(new AdaptiveGrid(*this));
+
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
+
+    m_context->doneCurrent();
 }
 
 void Canvas::resizeEvent(QResizeEvent * event)
@@ -120,7 +129,12 @@ void Canvas::resizeEvent(QResizeEvent * event)
     m_camera->setViewport(event->size());
 
     m_context->makeCurrent(this);
+
     m_painter->resize(event->size().width(), event->size().height());
+
+    m_grid->update(m_camera->eye(), m_camera->viewProjection());
+    m_grid->setNearFar(m_camera->zNear(), m_camera->zFar());
+
     m_context->doneCurrent();
 
     if (isExposed() && Hidden != visibility())
@@ -143,6 +157,7 @@ void Canvas::paintGL()
     else
         m_painter->update(programsWithInvalidatedUniforms);
     m_painter->paint();
+    m_grid->draw(*this);
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();

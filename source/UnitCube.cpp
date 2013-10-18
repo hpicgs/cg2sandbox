@@ -70,7 +70,7 @@ UnitCube::UnitCube(
     QOpenGLFunctions_3_2_Core & gl
 ,   const GLuint vertexAttribLocation
 ,   const GLuint normalAttribLocation)
-:   m_strip(QOpenGLBuffer::Type::VertexBuffer)
+:   m_strip(QOpenGLBuffer::VertexBuffer)
 {
     const Strip3 raw(strip());
 
