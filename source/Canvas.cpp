@@ -152,11 +152,13 @@ void Canvas::paintGL()
     if (m_update)
     {
         m_painter->update();
+		m_grid->update(m_camera->eye(), m_camera->viewProjection());
         m_update = false;
     }
     else
         m_painter->update(programsWithInvalidatedUniforms);
-    m_painter->paint();
+
+	m_painter->paint();
     m_grid->draw(*this);
 
     m_context->swapBuffers(this);

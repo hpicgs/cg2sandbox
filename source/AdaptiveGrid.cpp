@@ -27,15 +27,15 @@ out vec3 v_vertex;
 
 void main()
 {
-	float m = 1.0 - mod(distance[1], 1.0);
-	float t = a_vertex.w;
+	//float m = 1.0 - mod(distance[1], 1.0);
+	//float t = a_vertex.w;
 
 	vec4 vertex = transform * vec4(a_vertex.xyz, 1.0);
 
-	v_vertex = vertex.xyz;
+//	v_vertex = vertex.xyz;
 
 	// interpolate minor grid lines alpha based on distance
-	v_type =  mix(1.0 - t, 1.0 - 2.0 * m * t, step(a_vertex.w, 0.7998));
+	//v_type =  mix(1.0 - t, 1.0 - 2.0 * m * t, step(a_vertex.w, 0.7998));
 
 	gl_Position = vertex;
 }
@@ -48,8 +48,8 @@ const char * AdaptiveGrid::s_fsSource = R"(
 
 uniform vec2 distance;
 
-uniform float znear = 0.1;
-uniform float zfar  = 1024.0;
+uniform float znear;
+uniform float zfar;
 uniform vec3 color;
 
 flat in float v_type;
@@ -59,9 +59,9 @@ out vec4 fragColor;
 
 void main()
 {
-	float t = v_type; // 1.0 - v_type * 0.5;
+//	float t = v_type; // 1.0 - v_type * 0.5;
 
-	float z = gl_FragCoord.z; 
+//	float z = gl_FragCoord.z; 
 
 	// complete function
 	// z = (2.0 * zfar * znear / (zfar + znear - (zfar - znear) * (2.0 * z - 1.0)));
@@ -69,13 +69,13 @@ void main()
 	// z = (z - znear) / (zfar - znear);
 
 	// simplyfied with wolfram alpha
-	z = - znear * z / (zfar * z - zfar - znear * z);
+//	z = - znear * z / (zfar * z - zfar - znear * z);
 
-	float g = mix(t, 1.0, z * z);
+//	float g = mix(t, 1.0, z * z);
 
-	float l = clamp(8.0 - length(v_vertex) / distance[0], 0.0, 1.0);
+//	float l = clamp(8.0 - length(v_vertex) / distance[0], 0.0, 1.0);
 
-	fragColor = vec4(color, l * (1.0 - g * g));
+	fragColor = vec4(1.0, 0.0, 0.0, 1.0); //vec4(color, l * (1.0 - g * g));
 }
 
 )";
@@ -98,7 +98,7 @@ AdaptiveGrid::AdaptiveGrid(
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment, s_fsSource);
     m_program->link();
 
-    setColor(QColor::fromRgb(0.8, 0.8, 0.8));
+    setColor(QColor::fromRgbF(0.8, 0.8, 0.8));
 
     m_vao.create();
     m_vao.bind();
@@ -106,7 +106,8 @@ AdaptiveGrid::AdaptiveGrid(
     setupGridLineBuffer(segments);
     
     const int a_vertex = m_program->attributeLocation("a_vertex");
-    gl.glVertexAttribPointer(a_vertex, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, nullptr);
+
+	gl.glVertexAttribPointer(a_vertex, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, nullptr);
     gl.glEnableVertexAttribArray(a_vertex);
 
     m_vao.release();
@@ -120,60 +121,64 @@ void AdaptiveGrid::setupGridLineBuffer(unsigned short segments)
 {
     std::vector<QVector4D> points;
 
-    double type;
+    float type;
     int  n = 1;
 
-    const double g(static_cast<double>(segments));
+    const float g(static_cast<float>(segments));
 
-    type = .2; // sub gridlines, every 0.125, except every 0.5
-    for (double f = -g + .125; f < g; f += .125)
+    type = .2f; // sub gridlines, every 0.125, except every 0.5
+    for (float f = -g + .125f; f < g; f += .125f)
         if (n++ % 4)
         {
-            points.push_back(QVector4D( g, 0.0, f, type));
-            points.push_back(QVector4D(-g, 0.0, f, type));
-            points.push_back(QVector4D( f, 0.0, g, type));
-            points.push_back(QVector4D( f, 0.0,-g, type));
+            points.push_back(QVector4D( g, 0.f, f, type));
+            points.push_back(QVector4D(-g, 0.f, f, type));
+            points.push_back(QVector4D( f, 0.f, g, type));
+            points.push_back(QVector4D( f, 0.f,-g, type));
         }
     type = .4f; // grid lines every 1.0 units, offseted by 0.5
     for (float f = -g + .5f; f < g; f += 1.f)
     {
-        points.push_back(QVector4D( g, 0.0, f, type));
-        points.push_back(QVector4D(-g, 0.0, f, type));
-        points.push_back(QVector4D( f, 0.0, g, type));
-        points.push_back(QVector4D( f, 0.0,-g, type));
+        points.push_back(QVector4D( g, 0.f, f, type));
+        points.push_back(QVector4D(-g, 0.f, f, type));
+        points.push_back(QVector4D( f, 0.f, g, type));
+        points.push_back(QVector4D( f, 0.f,-g, type));
     }
     type = .8f; // grid lines every 1.0 units
     for (float f = -g + 1.f; f < g; f += 1.f) 
     {
-        points.push_back(QVector4D( g, 0.0, f, type));
-        points.push_back(QVector4D(-g, 0.0, f, type));
-        points.push_back(QVector4D( f, 0.0, g, type));
-        points.push_back(QVector4D( f, 0.0,-g, type));
+        points.push_back(QVector4D( g, 0.f, f, type));
+        points.push_back(QVector4D(-g, 0.f, f, type));
+        points.push_back(QVector4D( f, 0.f, g, type));
+        points.push_back(QVector4D( f, 0.f,-g, type));
     }
     // use hesse normal form and transform each grid line onto the specified plane.
     QMatrix4x4 T; // ToDo
     for (QVector4D & point : points)
         point = QVector4D(QVector3D(T * QVector4D(point.toVector3D(), 1.f)), point.w());
 
-    m_size = segments * 64 - 4;
+	m_size = points.size(); // segments * 64 - 4;
     
     m_buffer.create();
     m_buffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
     m_buffer.bind();
-    m_buffer.allocate(points.data(), sizeof(float)* 4 * m_size);    
+	m_buffer.allocate(points.data(), sizeof(float)* 4 * points.size());
 }
 
 void AdaptiveGrid::setNearFar(
     float zNear
 ,   float zFar)
 {
+	m_program->bind();
     m_program->setUniformValue("zNear", zNear);
     m_program->setUniformValue("zFar", zFar);
+	m_program->release();
 }
 
 void AdaptiveGrid::setColor(const QColor & color)
 {
+	m_program->bind();
     m_program->setUniformValue("color", QVector3D(color.redF(), color.greenF(), color.blueF()));
+	m_program->release();
 }
 
 void AdaptiveGrid::update(
@@ -205,7 +210,7 @@ void AdaptiveGrid::update(
     const size_t k = v[0] != 0.0 && j != 0 ? 0 : v[1] != 0.0  && j != 1 ? 1 : 2;
 
     const QVector3D av(i - m_location);
-    const float a[2] = { av.x(), av.y() };
+    const float a[3] = { av.x(), av.y(), av.z() };
 
     const float t = v[k] ? a[k] / v[k] : 0.f;
     const float s = u[j] ? (a[j] - t * v[j]) / u[j] : 0.f;
@@ -213,11 +218,13 @@ void AdaptiveGrid::update(
     const QVector3D irounded = round(s) * uv + round(t) * vv;
 
     QMatrix4x4 offset;
-    offset.translate(irounded);
     offset.scale(distance);
+	offset.translate(irounded);
 
-    m_program->setUniformValue("distance",  QVector2D(l, frac(distancelog)));
-    m_program->setUniformValue("transform", modelViewProjection * offset);
+	m_program->bind();
+    m_program->setUniformValue("distance",  QVector2D(l, mod(distancelog, 1.f)));
+	m_program->setUniformValue("transform", modelViewProjection * offset);
+	m_program->release();
 } 
 
 void AdaptiveGrid::draw(

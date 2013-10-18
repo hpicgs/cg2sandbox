@@ -17,7 +17,7 @@ Camera::Camera(
 , m_fovy(40.0)
 , m_aspect(1.0)
 , m_zNear(0.1)
-, m_zFar(512.0)
+, m_zFar(1024.0)
 {
 }
 
