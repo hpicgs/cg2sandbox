@@ -115,6 +115,7 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
     verifyExtensions(); // false if no painter ...
 
     m_grid.reset(new AdaptiveGrid(*this));
+    m_grid->setNearFar(m_camera->zNear(), m_camera->zFar());
 
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
 
@@ -131,9 +132,7 @@ void Canvas::resizeEvent(QResizeEvent * event)
     m_context->makeCurrent(this);
 
     m_painter->resize(event->size().width(), event->size().height());
-
     m_grid->update(m_camera->eye(), m_camera->viewProjection());
-    m_grid->setNearFar(m_camera->zNear(), m_camera->zFar());
 
     m_context->doneCurrent();
 
@@ -152,7 +151,8 @@ void Canvas::paintGL()
     if (m_update)
     {
         m_painter->update();
-		m_grid->update(m_camera->eye(), m_camera->viewProjection());
+        m_grid->update(m_camera->eye(), m_camera->viewProjection());
+
         m_update = false;
     }
     else

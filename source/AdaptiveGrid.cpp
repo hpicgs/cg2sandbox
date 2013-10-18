@@ -27,17 +27,16 @@ out vec3 v_vertex;
 
 void main()
 {
-	//float m = 1.0 - mod(distance[1], 1.0);
-	//float t = a_vertex.w;
+    float m = 1.0 - distance[1];
+    float t = a_vertex.w;
 
-	vec4 vertex = transform * vec4(a_vertex.xyz, 1.0);
+    vec4 vertex = transform * vec4(a_vertex.xyz, 1.0);
+    v_vertex = vertex.xyz;
 
-//	v_vertex = vertex.xyz;
+    // interpolate minor grid lines alpha based on distance
+    v_type =  mix(1.0 - t, 1.0 - 2.0 * m * t, step(a_vertex.w, 0.7998));
 
-	// interpolate minor grid lines alpha based on distance
-	//v_type =  mix(1.0 - t, 1.0 - 2.0 * m * t, step(a_vertex.w, 0.7998));
-
-	gl_Position = vertex;
+    gl_Position = vertex;
 }
 
 )";
@@ -59,23 +58,23 @@ out vec4 fragColor;
 
 void main()
 {
-//	float t = v_type; // 1.0 - v_type * 0.5;
+    float t = v_type;
 
-//	float z = gl_FragCoord.z; 
+    float z = gl_FragCoord.z; 
 
-	// complete function
-	// z = (2.0 * zfar * znear / (zfar + znear - (zfar - znear) * (2.0 * z - 1.0)));
-	// normalized to [0,1]
-	// z = (z - znear) / (zfar - znear);
+    // complete function
+    // z = (2.0 * zfar * znear / (zfar + znear - (zfar - znear) * (2.0 * z - 1.0)));
+    // normalized to [0,1]
+    // z = (z - znear) / (zfar - znear);
 
-	// simplyfied with wolfram alpha
-//	z = - znear * z / (zfar * z - zfar - znear * z);
+    // simplyfied with wolfram alpha
+    z = - znear * z / (zfar * z - zfar - znear * z);
 
-//	float g = mix(t, 1.0, z * z);
+    float g = mix(t, 1.0, z * z);
 
-//	float l = clamp(8.0 - length(v_vertex) / distance[0], 0.0, 1.0);
+    float l = clamp(8.0 - length(v_vertex) / distance[0], 0.0, 1.0);
 
-	fragColor = vec4(1.0, 0.0, 0.0, 1.0); //vec4(color, l * (1.0 - g * g));
+    fragColor = vec4(color, l * (1.0 - g * g));
 }
 
 )";
@@ -169,8 +168,8 @@ void AdaptiveGrid::setNearFar(
 ,   float zFar)
 {
 	m_program->bind();
-    m_program->setUniformValue("zNear", zNear);
-    m_program->setUniformValue("zFar", zFar);
+    m_program->setUniformValue("znear", zNear);
+    m_program->setUniformValue("zfar", zFar);
 	m_program->release();
 }
 
@@ -197,7 +196,7 @@ void AdaptiveGrid::update(
 
     const float l = (viewpoint - i).length();
 
-    const float distancelog = log(l * .5f) / log(8.f);
+    const float distancelog = log(l * .4998f) / log(8.f);
     const float distance = pow(8.f, ceil(distancelog));
 
     QMatrix4x4 T; // ToDo
@@ -218,11 +217,11 @@ void AdaptiveGrid::update(
     const QVector3D irounded = round(s) * uv + round(t) * vv;
 
     QMatrix4x4 offset;
+    offset.translate(irounded);
     offset.scale(distance);
-	offset.translate(irounded);
 
 	m_program->bind();
-    m_program->setUniformValue("distance",  QVector2D(l, mod(distancelog, 1.f)));
+    m_program->setUniformValue("distance", QVector2D(l, mod(distancelog, 1.f)));
 	m_program->setUniformValue("transform", modelViewProjection * offset);
 	m_program->release();
 } 
