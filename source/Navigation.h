@@ -84,12 +84,15 @@ protected:
 	// math
 
 	const QVector3D mouseRayPlaneIntersection(
-        const QPoint & mouse) const;
+        bool & intersects
+    ,   const QPoint & mouse) const;
     const QVector3D mouseRayPlaneIntersection(
-        const QPoint & mouse
+        bool & intersects
+    ,   const QPoint & mouse
     ,   const QVector3D & p0) const;
     const QVector3D mouseRayPlaneIntersection(
-		const QPoint & mouse
+        bool & intersects
+    ,   const QPoint & mouse
 	,	const QVector3D & p0
 	,	const QMatrix4x4 & viewProjectionInverted) const;
 

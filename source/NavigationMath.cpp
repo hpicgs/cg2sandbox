@@ -52,26 +52,26 @@ const QVector3D NavigationMath::rayPlaneIntersection(
 	return t * r + r0; // retrieve point via the ray
 }
 
-const QVector3D NavigationMath::rayPlaneIntersectionExt(
-	const QVector3D & rnear
-,	const QVector3D & rfar
-,	const QVector3D & location
-,	const QVector3D & normal
-,   const qreal maxDistance)
-{
-	bool valid;
-
-	QVector3D i = rayPlaneIntersection(valid, rnear, rfar, location, normal);
-
-    if (valid && i.length() < maxDistance)
-		return i;
-
-	const QVector2D r0 = xz(rnear); // root of the ray, projected onto xz-plane
-	const QVector2D &r = xz(rfar - rnear);
-
-    i = -rayCircleIntersection(valid, r0, r, maxDistance);
-	return QVector3D(i.x(), 0.0, i.y());
-}
+//const QVector3D NavigationMath::rayPlaneIntersectionExt(
+//	const QVector3D & rnear
+//,	const QVector3D & rfar
+//,	const QVector3D & location
+//,	const QVector3D & normal
+//,   const qreal maxDistance)
+//{
+//	bool valid;
+//
+//	QVector3D i = rayPlaneIntersection(valid, rnear, rfar, location, normal);
+//
+//    if (valid && i.length() < maxDistance)
+//		return i;
+//
+//	const QVector2D r0 = xz(rnear); // root of the ray, projected onto xz-plane
+//	const QVector2D &r = xz(rfar - rnear);
+//
+//    i = -rayCircleIntersection(valid, r0, r, maxDistance);
+//	return QVector3D(i.x(), 0.0, i.y());
+//}
 
 const QVector2D NavigationMath::raySquareIntersection(
 	const QVector2D & point

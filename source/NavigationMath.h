@@ -29,12 +29,12 @@ public:
 	,	const QVector3D & location = QVector3D(0.f, 0.f, 0.f) ///< location of the plane
 	,	const QVector3D & normal = QVector3D(0.f, 1.f, 0.f)); ///< normal of the plane
 
-    static const QVector3D rayPlaneIntersectionExt(
-        const QVector3D & rnear ///< ray start
-    ,   const QVector3D & rfar  ///< ray end - used for line direction retrieval
-    ,   const QVector3D & location = QVector3D(0.f, 0.f, 0.f) ///< location of the plane
-    ,   const QVector3D & normal = QVector3D(0.f, 1.f, 0.f)   ///< normal of the plane
-    ,   qreal maxDistance = 8.0);
+    //static const QVector3D rayPlaneIntersectionExt(
+    //    const QVector3D & rnear ///< ray start
+    //,   const QVector3D & rfar  ///< ray end - used for line direction retrieval
+    //,   const QVector3D & location = QVector3D(0.f, 0.f, 0.f) ///< location of the plane
+    //,   const QVector3D & normal = QVector3D(0.f, 1.f, 0.f)   ///< normal of the plane
+    //,   qreal maxDistance = 8.0);
 
 	/** Yields the intersection point of a ray defined by a 2d point to the 
         root with an axis aligned square of side length a

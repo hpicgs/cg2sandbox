@@ -73,7 +73,8 @@ void Navigation::reset(bool update)
 
 
 const QVector3D Navigation::mouseRayPlaneIntersection(
-    const QPoint & mouse
+    bool & intersects
+,   const QPoint & mouse
 ,   const QVector3D & p0) const
 {
     // build a ray in object space from screen space mouse position and get
@@ -82,12 +83,13 @@ const QVector3D Navigation::mouseRayPlaneIntersection(
     const QVector3D ln = m_coordsProvider->objAt(mouse, 0.0);
     const QVector3D lf = m_coordsProvider->objAt(mouse, 1.0);
 
-    return NavigationMath::rayPlaneIntersectionExt(ln, lf, p0);
+    return NavigationMath::rayPlaneIntersection(intersects, ln, lf, p0);
 }
 
 
 const QVector3D Navigation::mouseRayPlaneIntersection(
-    const QPoint & mouse
+    bool & intersects
+,   const QPoint & mouse
 ,   const QVector3D & p0
 ,   const QMatrix4x4 & viewProjectionInverted) const
 {
@@ -97,16 +99,18 @@ const QVector3D Navigation::mouseRayPlaneIntersection(
     const QVector3D ln = m_coordsProvider->objAt(mouse, 0.0, viewProjectionInverted);
     const QVector3D lf = m_coordsProvider->objAt(mouse, 1.0, viewProjectionInverted);
 
-    return NavigationMath::rayPlaneIntersectionExt(ln, lf, p0);
+    return NavigationMath::rayPlaneIntersection(intersects, ln, lf, p0);
 }
 
-const QVector3D Navigation::mouseRayPlaneIntersection(const QPoint & mouse) const
+const QVector3D Navigation::mouseRayPlaneIntersection(
+    bool & intersects
+,   const QPoint & mouse) const
 {
     const float depth = m_coordsProvider->depthAt(mouse);
 
     // no scene object was picked - simulate picking on xz-plane
     if (depth >= 1.0 - std::numeric_limits<float>::epsilon())
-        return mouseRayPlaneIntersection(mouse, QVector3D());
+        return mouseRayPlaneIntersection(intersects, mouse, QVector3D());
 
     return m_coordsProvider->objAt(mouse, depth);
 }
@@ -118,8 +122,10 @@ void Navigation::panningBegin(const QPoint & mouse)
     m_mode = PanInteraction;
 
     m_viewProjectionInverted = m_camera.viewProjectionInverted();
-    m_i0 = mouseRayPlaneIntersection(mouse);
-    m_i0Valid = NavigationMath::validDepth(m_coordsProvider->depthAt(mouse));
+    
+    bool intersects;
+    m_i0 = mouseRayPlaneIntersection(intersects, mouse);
+    m_i0Valid = intersects && NavigationMath::validDepth(m_coordsProvider->depthAt(mouse));
 
     m_eye = m_camera.eye();
     m_center = m_camera.center();
@@ -150,9 +156,11 @@ void Navigation::panningProcess(const QPoint & mouse)
         clamp(0, m_camera.viewport().width(), mouse.x())
     ,   clamp(0, m_camera.viewport().height(), mouse.y()));
 
-    m_i1 = mouseRayPlaneIntersection(clamped, m_i0, m_viewProjectionInverted);
+    bool intersects;
+    m_i1 = mouseRayPlaneIntersection(intersects, clamped, m_i0, m_viewProjectionInverted);
 
-    pan(m_i0 - m_i1);
+    if (intersects)
+        pan(m_i0 - m_i1);
 }
 
 void Navigation::pan(QVector3D t)
@@ -171,8 +179,9 @@ void Navigation::rotatingBegin(const QPoint & mouse)
     assert(NoInteraction == m_mode);
     m_mode = RotateInteraction;
 
-    m_i0 = mouseRayPlaneIntersection(mouse);
-    m_i0Valid = NavigationMath::validDepth(m_coordsProvider->depthAt(mouse));
+    bool intersects;
+    m_i0 = mouseRayPlaneIntersection(intersects, mouse);
+    m_i0Valid = intersects && NavigationMath::validDepth(m_coordsProvider->depthAt(mouse));
 
     m_m0 = mouse;
 
@@ -237,7 +246,12 @@ void Navigation::scaleAtMouse(
     const QVector3D ln = m_camera.eye();
     const QVector3D lf = m_camera.center();
 
-    QVector3D i = mouseRayPlaneIntersection(mouse);
+    bool intersects;
+
+    QVector3D i = mouseRayPlaneIntersection(intersects, mouse);
+
+    if(!intersects && !NavigationMath::validDepth(m_coordsProvider->depthAt(mouse)))
+        return;
 
     // scale the distance between the pointed position in the scene and the 
     // camera position - using ray constraints, the center is scaled appropriately.
@@ -254,8 +268,8 @@ void Navigation::scaleAtMouse(
     // center based on the intersection with the scene and use this to obtain 
     // the new viewray-groundplane intersection as new center.
     const QVector3D center = lf + scale * (lf - i);
-    m_camera.setCenter(NavigationMath::rayPlaneIntersectionExt(eye, center));
 
+    m_camera.setCenter(NavigationMath::rayPlaneIntersection(intersects, eye, center));
     m_camera.update();
 }
 
@@ -266,7 +280,10 @@ void Navigation::resetScaleAtMouse(const QPoint & mouse)
 
     // set the distance between pointed position in the scene and camera to 
     // default distance
-    QVector3D i = mouseRayPlaneIntersection(mouse);
+    bool intersects;
+    QVector3D i = mouseRayPlaneIntersection(intersects, mouse);
+    if (!intersects && !NavigationMath::validDepth(m_coordsProvider->depthAt(mouse)))
+        return;
 
     qreal scale = (DEFAULT_DISTANCE / (ln - i).length());
 
@@ -283,7 +300,10 @@ void Navigation::scaleAtCenter(qreal scale)
     const QVector3D ln = m_camera.eye();
     const QVector3D lf = m_camera.center();
 
-    QVector3D i = NavigationMath::rayPlaneIntersectionExt(ln, lf);
+    bool intersects;
+    QVector3D i = NavigationMath::rayPlaneIntersection(intersects, ln, lf);
+    if (!intersects)
+        return;
 
     //enforceScaleConstraints(scale, i);
 
