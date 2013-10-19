@@ -47,9 +47,9 @@ Navigation::~Navigation()
 {
 }
 
-void Navigation::setBoundaryHint(const Boundary & boundary)
+void Navigation::setBoundaryHint(const AxisAlignedBoundingBox & aabb)
 {
-    m_boundary = boundary;
+    m_aabb = aabb;
 }
 
 void Navigation::setCoordinateProvider(AbstractCoordinateProvider * provider)
