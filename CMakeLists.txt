@@ -26,6 +26,12 @@ set(SANDBOX_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 # Include cmake modules from ./cmake
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+# Find the WinSDK libs
+if (WIN32)
+    set(CMAKE_PREFIX_PATH "C:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x64")
+    cmake_policy(SET CMP0020 NEW)
+endif (WIN32)
+
 # Set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
