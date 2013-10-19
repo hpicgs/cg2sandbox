@@ -7,7 +7,7 @@ cg2sandbox
 
 + CMake 2.8.11
 + Qt 5.1
-+ OpenGL support > 3.2
++ OpenGL support >= 3.2 (3.1 or below might work in some cases)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
 
 #### Disclaimer
