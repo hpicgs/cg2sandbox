@@ -12,6 +12,9 @@
 #define PI4  (PI * 4.00L)
 #define PI_4 (PI * 0.25L)
 
+#define round(v)\
+	floor(v + 0.5)
+
 #define abs(v) \
     (((v) < 0) ? -(v) : (v))
 
