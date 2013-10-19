@@ -3,7 +3,6 @@
 #endif
 
 #include "version.h"
-
 #include "MessageHandler.h"
 
 #include "Application.h"

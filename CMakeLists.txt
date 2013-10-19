@@ -207,7 +207,7 @@ set(sources
     ${source_path}/CachedValue.h
     ${source_path}/CachedValue.hpp
 
-    # from libglow
+    # based on or targeted for libglow
     ${source_path}/AdaptiveGrid.cpp
     ${source_path}/AdaptiveGrid.h
     ${source_path}/AutoTimer.cpp
@@ -223,8 +223,8 @@ set(sources
     ${source_path}/UnitCube.h
 
     ${source_path}/AbstractCoordinateProvider.h
-    ${source_path}/Boundary.cpp
-    ${source_path}/Boundary.h
+    ${source_path}/AxisAlignedBoundingBox.cpp
+    ${source_path}/AxisAlignedBoundingBox.h
     ${source_path}/Camera.cpp
     ${source_path}/Camera.h
     ${source_path}/Navigation.cpp

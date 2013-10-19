@@ -7,7 +7,7 @@
 #include <QMatrix4x4>
 #include <QMap>
 
-#include "Boundary.h"
+#include "AxisAlignedBoundingBox.h"
 
 class QVector2D;
 class QVector3D;
@@ -36,7 +36,7 @@ public:
 	Navigation(Camera & camera);
 	virtual ~Navigation();
 
-    void setBoundaryHint(const Boundary & boundary);
+    void setBoundaryHint(const AxisAlignedBoundingBox & aabb);
     void setCoordinateProvider(AbstractCoordinateProvider * provider);
 
 	virtual void reset(bool update = true);
@@ -98,7 +98,7 @@ protected:
 
 protected:
     Camera & m_camera;
-	Boundary m_boundary;
+    AxisAlignedBoundingBox m_aabb;
 
     AbstractCoordinateProvider * m_coordsProvider;
 

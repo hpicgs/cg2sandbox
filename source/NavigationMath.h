@@ -8,7 +8,7 @@ class QVector2D;
 class QSize;
 class QMatrix4x4;
 
-struct Boundary;
+class AxisAlignedBoundingBox;
 
 class NavigationMath
 {
@@ -18,7 +18,7 @@ public:
     //static void retrieveNearAndFarPlane(
     //    const QVector3D & camera
     //,   const QVector3D & center
-    //,   const Boundary & boundary
+    //,   const AxisAlignedBoundingBox & aabb
     //,   float & zNear = 0.1f
     //,   float & zFar = 1024.f);
 
@@ -61,7 +61,7 @@ public:
 
 	static const bool boundaryVisible(
 		const QMatrix4x4 & modelViewProjection
-	,	const Boundary & boundary);
+    ,   const AxisAlignedBoundingBox & aabb);
 
 	static const bool pointVisible(
 		const QMatrix4x4 & modelViewProjection

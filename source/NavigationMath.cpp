@@ -7,7 +7,7 @@
 #include <QMatrix4x4>
 
 #include "MathMacros.h"
-#include "Boundary.h"
+#include "AxisAlignedBoundingBox.h"
 #include "NavigationMath.h"
 
 
@@ -141,20 +141,20 @@ const float NavigationMath::angle(
 
 const bool NavigationMath::boundaryVisible(
     const QMatrix4x4 & mvp
-,   const Boundary & b)
+,   const AxisAlignedBoundingBox & b)
 {
 	const QVector3D box[8] = 
 	{
 	// front
-		QVector3D(b.llf.x(),  b.llf.y(), b.urb.z())
-	,	QVector3D(b.urb.x(),  b.llf.y(), b.urb.z())
-	,	QVector3D(b.urb.x(),  b.urb.y(), b.urb.z())
-	,	QVector3D(b.llf.x(),  b.urb.y(), b.urb.z())
+		QVector3D(b.llf().x(),  b.llf().y(), b.urb().z())
+	,	QVector3D(b.urb().x(),  b.llf().y(), b.urb().z())
+	,	QVector3D(b.urb().x(),  b.urb().y(), b.urb().z())
+	,	QVector3D(b.llf().x(),  b.urb().y(), b.urb().z())
 	// back
-	,	QVector3D(b.llf.x(),  b.llf.y(), b.llf.z())
-	,	QVector3D(b.urb.x(),  b.llf.y(), b.llf.z())
-	,	QVector3D(b.urb.x(),  b.urb.y(), b.llf.z())
-	,	QVector3D(b.llf.x(),  b.urb.y(), b.llf.z())
+	,	QVector3D(b.llf().x(),  b.llf().y(), b.llf().z())
+	,	QVector3D(b.urb().x(),  b.llf().y(), b.llf().z())
+	,	QVector3D(b.urb().x(),  b.urb().y(), b.llf().z())
+	,	QVector3D(b.llf().x(),  b.urb().y(), b.llf().z())
 	};
 
 	// transform bounds and check if any point is outside NDC (Normalized Device 
