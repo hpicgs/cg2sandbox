@@ -6,14 +6,14 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 
-class QOpenGLFunctions_3_2_Core;
+class OpenGLFunctions;
 class QColor;
 
 class AdaptiveGrid
 {
 public:
     AdaptiveGrid(
-        QOpenGLFunctions_3_2_Core & gl
+        OpenGLFunctions & gl
     ,   unsigned short segments = 16
     ,   const QVector3D & location = QVector3D(0.0, 0.0, 0.0)
     ,   const QVector3D & normal = QVector3D(0.0, 1.0, 0.0));
@@ -30,7 +30,7 @@ public:
         const QVector3D & viewpoint
     ,   const QMatrix4x4 & modelViewProjection);
 
-    void draw(QOpenGLFunctions_3_2_Core & gl);
+    void draw(OpenGLFunctions & gl);
 
 private:
     void setupGridLineBuffer(unsigned short segments);

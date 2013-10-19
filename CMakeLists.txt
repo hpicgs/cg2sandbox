@@ -17,6 +17,7 @@ set(META_AUTHOR_DOMAIN       "https://moodle.hpi3d.de/")
 
 option(OPTION_LIMIT_CONFIGS  "Generate limited configs (Release; Debug)" ON)
 option(OPTION_LOCAL_INSTALL  "Install to a local directory instead of the system" OFF)
+option(OPTION_NO_OPENGL_320  "Try using the 3.0 OpenGL profile in evil compatibility mode." OFF)
 
 # CMAKE CONFIGURATION
 
@@ -172,6 +173,10 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 
+if(OPTION_NO_OPENGL_320)
+    add_definitions("-DNO_OPENGL_320")
+endif()
+
 set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 # Generate meta-header
@@ -189,6 +194,7 @@ set(sources
     ${source_path}/Canvas.h
     ${source_path}/MessageHandler.cpp
     ${source_path}/MessageHandler.h
+    ${source_path}/OpenGLFunctions.h
     ${source_path}/Painter.cpp
     ${source_path}/Painter.h
     ${source_path}/Viewer.cpp

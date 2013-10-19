@@ -4,10 +4,10 @@
 #include <QColor>
 #include <QVector2D>
 #include <QVector4D>
-#include <QOpenGLFunctions_3_2_Core>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLShader>
 
+#include "OpenGLFunctions.h"
 #include "MathMacros.h"
 #include "Plane3.h"
 #include "AdaptiveGrid.h"
@@ -81,7 +81,7 @@ void main()
 
 
 AdaptiveGrid::AdaptiveGrid(
-    QOpenGLFunctions_3_2_Core & gl
+    OpenGLFunctions & gl
 ,   unsigned short segments
 ,   const QVector3D & location
 ,   const QVector3D & normal)
@@ -227,7 +227,7 @@ void AdaptiveGrid::update(
 } 
 
 void AdaptiveGrid::draw(
-    QOpenGLFunctions_3_2_Core & gl)
+    OpenGLFunctions & gl)
 {
     gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     gl.glEnable(GL_BLEND);

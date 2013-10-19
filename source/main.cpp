@@ -20,9 +20,12 @@ int main(int argc, char* argv[])
         QScopedPointer<Viewer> viewer(new Viewer());
 
         QSurfaceFormat format;
+#ifdef NO_OPENGL_320
+        format.setVersion(3, 0);
+#else
         format.setVersion(3, 2);
         format.setProfile(QSurfaceFormat::CoreProfile);
-
+#endif
         Canvas * canvas = new Canvas(format);
         canvas->setContinuousRepaint(true, 0);
         canvas->setSwapInterval(Canvas::VerticalSyncronization);
@@ -32,21 +35,21 @@ int main(int argc, char* argv[])
         QObject::connect(canvas, &Canvas::objUpdate, viewer.data(), &Viewer::objChanged);
         QObject::connect(viewer.data(), &Viewer::toggleSwapInterval, canvas, &Canvas::toggleSwapInterval);
 
-        {
-            Painter painter;
-            canvas->assignPainter(&painter);
 
-            QWidget * widget = QWidget::createWindowContainer(canvas);
-            widget->setMinimumSize(1, 1);
-            widget->setAutoFillBackground(false); // Important for overdraw, not occluding the scene.
-            widget->setFocusPolicy(Qt::TabFocus);
+        Painter painter;
+        canvas->assignPainter(&painter);
 
-            viewer->setCentralWidget(widget);
-            viewer->show();
+        QWidget * widget = QWidget::createWindowContainer(canvas);
+        widget->setMinimumSize(1, 1);
+        widget->setAutoFillBackground(false); // Important for overdraw, not occluding the scene.
+        widget->setFocusPolicy(Qt::TabFocus);
 
-            result = app.exec();
-            canvas->assignPainter(nullptr);
-        }
+        viewer->setCentralWidget(widget);
+        viewer->show();
+
+        result = app.exec();
+        canvas->assignPainter(nullptr);
+
     }
     return result;
 }

@@ -1,6 +1,8 @@
+
+#include "OpenGLFunctions.h"
+
 #include "UnitCube.h"
 
-#include <QOpenGLFunctions_3_2_Core>
 
 namespace 
 {
@@ -67,7 +69,7 @@ namespace
 }
 
 UnitCube::UnitCube(
-    QOpenGLFunctions_3_2_Core & gl
+    OpenGLFunctions & gl
 ,   const GLuint vertexAttribLocation
 ,   const GLuint normalAttribLocation)
 :   m_strip(QOpenGLBuffer::VertexBuffer)
@@ -91,7 +93,7 @@ UnitCube::UnitCube(
     m_vao.release();
 }
 
-void UnitCube::draw(QOpenGLFunctions_3_2_Core & gl)
+void UnitCube::draw(OpenGLFunctions & gl)
 {
     gl.glEnable(GL_DEPTH_TEST);
 

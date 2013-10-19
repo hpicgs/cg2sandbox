@@ -15,7 +15,7 @@
 
 namespace
 {
-    static const QVector3D DEFAULT_EYE    = QVector3D(0.0, 2.0, 4.0);
+    static const QVector3D DEFAULT_EYE    = QVector3D(0.0, 1.2, 2.4);
     static const QVector3D DEFAULT_CENTER = QVector3D(0.0, 0.0, 0.0);
     static const QVector3D DEFAULT_UP     = QVector3D(0.0, 1.0, 0.0);
 

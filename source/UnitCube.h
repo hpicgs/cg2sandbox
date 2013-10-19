@@ -10,13 +10,13 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 
-class QOpenGLFunctions_3_2_Core;
+#include "OpenGLFunctions.h"
 
 class UnitCube
 {
 public:
     UnitCube(
-        QOpenGLFunctions_3_2_Core & gl
+        OpenGLFunctions & gl
     ,   const GLuint vertexAttribLocation = 0
     ,   const GLuint normalAttribLocation = 1);
 
@@ -25,7 +25,7 @@ public:
         the default GL_LAST_VERTEX_CONVENTION). use flat interpolation to get 
         the face normal within the fragment shader.
     */
-    void draw(QOpenGLFunctions_3_2_Core & gl);
+    void draw(OpenGLFunctions & gl);
 
 private:
     QOpenGLVertexArrayObject m_vao;

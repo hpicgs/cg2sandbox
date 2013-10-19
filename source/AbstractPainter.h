@@ -1,10 +1,10 @@
 
 #pragma once
 
-#include <QOpenGLFunctions_3_2_Core>
 #include <QList>
 #include <QSize>
 
+#include "OpenGLFunctions.h"
 #include "AbstractCoordinateProvider.h"
 
 class QStringList;
@@ -14,7 +14,7 @@ class Camera;
 
 
 class AbstractPainter : public AbstractCoordinateProvider
-    , protected QOpenGLFunctions_3_2_Core
+    , protected OpenGLFunctions
 {
 public:
     AbstractPainter();
