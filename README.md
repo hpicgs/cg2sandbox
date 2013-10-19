@@ -1,36 +1,148 @@
 cg2sandbox
-=======
+==========
+
+### General Remarks
+
+#### Requirements
+
++ CMake 2.8.11
++ Qt 5.1
++ OpenGL support > 3.2
++ XCode/QtCreator/gcc/mingw/VisualStudio/etc..
+
+#### Disclaimer
+
++ FOR ASSESSMENT WE BUILD YOUR SUBMISSION IN WINDOWS WITH MSVC11 ONLY!
++ WE OFFICIALLY SUPPORT WINDOWS WITH MSVC11 ONLY!
++ Still, if you have problems on other platforms please let us know. 
+We are dedicated to provide a framework that is working on all common desktop plattforms.
 
 
+## Build Instructions
 
+### Windows - General Requirements
+
++ install cmake from
+    http://www.cmake.org/cmake/resources/software.html
++ install qt5 from (for this exercise we used visual studio 2012 x64, but older version should work fine...)
+	http://qt-project.org/downloads
++ install visual studio or qt creator
+
+
+### Windows - Visual Studio (the preferred way)
+
+#### Prerequisites
+
++ Having a Visual Studio installed (MSVC10 or UP)
+
+#### Building and Running an Exercise
+
++ Start cmake-gui with batch or manually (but provide QT_DIR and make sure the Qt binaries are on the path)
++ Open CMakeLists.txt with cmake-gui 
++ Specify path to build binaries (recommended in extra build directory) -> "build" folder
++ Press configure and generate
++ Open solution with batch
++ setup working directory of exercise executable to ".." for each configuration you want to start your program in
++ compile and run as required...
+
+
+### Windows - Qt Creator
+
+#### Prerequisites
+
++ Use the qt creator 2.4 or newer (at best, the one that comes with qt 5.1)
++ Set the path for the CMake executable in Tools > Options > Build & Run > CMake.
++ Now you should be able to open CMakeLists.txt files (if not check http://doc.qt.digia.com/qtcreator-2.4/creator-project-cmake.html)
++ NOTE: you need a CDB if you want to compile with MSVC... http://msdn.microsoft.com/de-de/windows/hardware/hh852363 
++ Installing the Debugging Tools should suffice.
+
+#### Building and Running an Exercise
+
++ File > Open File or Project
++ select the CMakeLists.txt
++ specify Build Directory
++ Press Run-CMake, then finish
++ Specify Working Directory via Projects > Run > Working Directory (see http://doc.qt.digia.com/qtcreator-2.3/creator-run-settings.html)
+  to point to exercise folder, not the build folder
++ Compile (e.g. with [Ctrl] + [R])
+
+
+### Windows - NMake
+
+#### Prerequisites
+
++ Cmake is available via command line
++ You habe nmake installed and you can use ae.g.  Visual Studio Command Promt
+
+#### Building and Running an Exercise
+
++ set PATH=%PATH%;"C:\Qt\5.1.0\qtbase\bin\"
++ mkdir build
++ cd build
++ cmake -DCMAKE_PREFIX_PATH="C:\Qt\5.1.0\qtbase\lib\cmake" -G "NMake Makefiles" .. # this worked for us... (perhaps you need to specify platform/compiler...)
++ nmake
++ cd ..
++ set QT_DIR=C:\Qt\5.1.0
++ set PATH=%PATH%;%QT_DIR%\qtbase\bin;
++ ./build/exercise1
+
+
+### Linux (tested on Ubuntu 12.10 x64)
+
+####  Gathering Requirements
+
++ install cmake, this should give you 2.8.9 or above ...
++ if version is below you probably need to update to a newer version or compile cmake for youself
++ sudo apt-get install cmake 
++ download qt 5.0.2
++ suppose the filename is qt.run (replace appropriately)
++ in downloaded folder do:
+	+ chmod u+x qt.run
+	+ ./qt.run
+
+#### Building and Running an Exercise
+
++ in your cg2 exercise1 (or exercise#) source folder do:
++ mkdir build
++ cd build
++ cmake -DCMAKE_PREFIX_PATH="/opt/Qt5.1.0/5.1.0/gcc_64" ..  # this worked for us...
++ make
++ cd ..
++ ./build/exercise1
+
+
+### MacOS
+
+#### Building and Running an Exercise
+
++ The following instructions are used for XCode. You can also use other IDEs like QtCreator or Netbeans.
++ Start CMake.
++ Choose generator, e.g., XCode or Unix Makefiles.
++ Configure and Generate.
++ Open XCode project and run make
+
+
+## Third Party Libraries
 
 ### Assimp Modifications
 
-assimp/CMakeLists.txt
-- ```ENABLE_BOOST_WORKAROUND``` was set to ```ON``` by default
-- disabled the uninstall capability
-assimp/code/CMakeLists.txt
-- ```COMPILE_FLAGS "-D_CRT_SECURE_NO_WARNINGS"``` was added to avoid secure warnings in msvc  
-- ```COMPILE_FLAGS "-D_SCL_SECURE_NO_WARNINGS"``` was added to avoid secure warnings in msvc  
-assimp/code/LWOAnimation.cpp
-- ```#include <functional>``` was added in order to compile in windows
-assimp/code/Vertex.h on msvc11
-- ```#include <functional>``` was added ...
+##### assimp/CMakeLists.txt
 
++ ENABLE_BOOST_WORKAROUND was set to ON by default
++ disabled the uninstall capability
 
-### Qt 5.1.1 Compiling for Visual Studio 2013 RC (fix not required for RTM)
+##### assimp/code/CMakeLists.txt
 
-Fix (http://qt-project.org/forums/viewthread/32508) for RC compiler crash: in "qtbase/src/corelib/tools/qlocale_tools.cpp" add on line 1184 and 1258:
-```
-#pragma optimize("", off) // just before “static Bigint *diff(Bigint *a, Bigint *b)
-...
-#pragma optimize("", on) 
-```
++ COMPILE_FLAGS "-D_CRT_SECURE_NO_WARNINGS" was added to avoid secure warnings in msvc  
++ COMPILE_FLAGS "-D_SCL_SECURE_NO_WARNINGS" was added to avoid secure warnings in msvc  
 
-Build Batch
-```
-set CL=/MP
-set QMAKEPATH=C:/Qt/5.1.1_12/qtbase/bin
-configure -opensource -confirm-license -nomake examples -nomake tests -opengl desktop -platform win32-msvc2013 -c++11
-nmake
-```
+#####  assimp/code/LWOAnimation.cpp
+
++ \#include <functional> was added in order to compile in windows
+
+### Qt 5.1.1 Compiling for Visual Studio 2013 RC
+
++ http://qt-project.org/forums/viewthread/32508
++ set CL=/MP
++ set QMAKEPATH=C:/Qt/5.1.1.12/qtbase/bin
++ configure -opensource -confirm-license -nomake examples -nomake tests -opengl desktop -platform win32-msvc2013
