@@ -30,13 +30,13 @@ public:
     const QVector3D & up() const;
     void setUp(const QVector3D & up);
 
-    const qreal zNear() const;
-    void setZNear(const qreal zNear);
-    const qreal zFar() const;
-    void setZFar(const qreal zFar);
+    const float zNear() const;
+    void setZNear(const float zNear);
+    const float zFar() const;
+    void setZFar(const float zFar);
 
-    const qreal fovy() const;
-    void setFovy(const qreal fovy);
+    const float fovy() const;
+    void setFovy(const float fovy);
 
     const QSize & viewport() const;
     void setViewport(const QSize & viewport);
@@ -66,10 +66,10 @@ protected:
     QVector3D m_center;
     QVector3D m_up;
 
-    qreal m_fovy;
-    qreal m_aspect;
-    qreal m_zNear;
-    qreal m_zFar;
+    float m_fovy;
+    float m_aspect;
+    float m_zNear;
+    float m_zFar;
     QSize m_viewport;
 
     CachedValue<QMatrix4x4> m_view;

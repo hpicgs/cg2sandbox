@@ -14,10 +14,10 @@ Camera::Camera(
 , m_center(center)
 , m_up(up)
 
-, m_fovy(40.0)
-, m_aspect(1.0)
-, m_zNear(0.1)
-, m_zFar(1024.0)
+, m_fovy(40.f)
+, m_aspect(1.f)
+, m_zNear(0.1f)
+, m_zFar(1024.f)
 {
 }
 
@@ -85,12 +85,12 @@ void Camera::setUp(const QVector3D & up)
     dirty();
 }
 
-const qreal Camera::zNear() const
+const float Camera::zNear() const
 {
     return m_zNear;
 }
 
-void Camera::setZNear(const qreal zNear)
+void Camera::setZNear(const float zNear)
 {
     if (zNear == m_zNear)
         return;
@@ -101,12 +101,12 @@ void Camera::setZNear(const qreal zNear)
     dirty();
 }
 
-const qreal Camera::zFar() const
+const float Camera::zFar() const
 {
     return m_zFar;
 }
 
-void Camera::setZFar(const qreal zFar)
+void Camera::setZFar(const float zFar)
 {
     if (zFar == m_zFar)
         return;
@@ -117,12 +117,12 @@ void Camera::setZFar(const qreal zFar)
     dirty();
 }
 
-const qreal Camera::fovy() const
+const float Camera::fovy() const
 {
     return m_fovy;
 }
 
-void Camera::setFovy(const qreal fovy)
+void Camera::setFovy(const float fovy)
 {
     if (fovy == m_fovy)
         return;
@@ -143,7 +143,7 @@ void Camera::setViewport(const QSize & viewport)
     if (viewport == m_viewport)
         return;
 
-    m_aspect = viewport.width() / qMax<qreal>(static_cast<qreal>(viewport.height()), 1.0);
+    m_aspect = viewport.width() / qMax<float>(static_cast<float>(viewport.height()), 1.f);
     m_viewport = viewport;
 
     dirty();

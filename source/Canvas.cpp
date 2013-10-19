@@ -11,6 +11,7 @@
 #include "FileAssociatedShader.h"
 #include "Camera.h"
 #include "Navigation.h"
+#include "NavigationMath.h"
 #include "Timer.h"
 #include "Canvas.h"
 
@@ -358,8 +359,12 @@ void Canvas::mouseMoveEvent(QMouseEvent * event)
 
     emit mouseUpdate(event->pos());
     if (m_painter)
-        emit objUpdate(m_painter->objAt(event->pos()));
-
+    {
+        if (NavigationMath::validDepth(m_painter->depthAt(event->pos())))
+            emit objUpdate(m_painter->objAt(event->pos()));
+        else
+            emit objUpdate(QVector3D());
+    }
     m_context->doneCurrent();        
 }
 

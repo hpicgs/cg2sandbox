@@ -15,12 +15,12 @@ class NavigationMath
 public:
     static bool validDepth(float depth);
 
-    static void retrieveNearAndFarPlane(
-        const QVector3D & camera
-    ,   const QVector3D & center
-    ,   const Boundary & boundary
-    ,   qreal & zNear
-    ,   qreal & zFar);
+    //static void retrieveNearAndFarPlane(
+    //    const QVector3D & camera
+    //,   const QVector3D & center
+    //,   const Boundary & boundary
+    //,   float & zNear = 0.1f
+    //,   float & zFar = 1024.f);
 
 	static const QVector3D rayPlaneIntersection(
 		bool & valid
@@ -34,28 +34,28 @@ public:
     //,   const QVector3D & rfar  ///< ray end - used for line direction retrieval
     //,   const QVector3D & location = QVector3D(0.f, 0.f, 0.f) ///< location of the plane
     //,   const QVector3D & normal = QVector3D(0.f, 1.f, 0.f)   ///< normal of the plane
-    //,   qreal maxDistance = 8.0);
+    //,   float maxDistance = 8.0);
 
 	/** Yields the intersection point of a ray defined by a 2d point to the 
         root with an axis aligned square of side length a
     */
     static const QVector2D raySquareIntersection(
 		const QVector2D & point ///< ray points from point to root
-	,	qreal length = 1.0);
+	,	float length = 1.f);
 
 	static const bool insideSquare(
 		const QVector2D & point ///< ray points from point to root
-	,	qreal length = 1.0);
+	,	float length = 1.f);
 
 	static const QVector2D rayCircleIntersection(
 		bool & valid
 	,	const QVector2D & origin
 	,	const QVector2D & ray
-	,	qreal radius = 1.0);
+	,	float radius = 1.f);
 
 	static const QVector2D xz(const QVector3D & xyz);
 
-	static const qreal angle(
+	static const float angle(
 		const QVector3D & a
 	,	const QVector3D & b);
 
@@ -74,11 +74,11 @@ public:
 		const QVector3D & eye
 	,	const QVector3D & center
 	,	const QVector3D & up
-	,	qreal verticalFieldOfView
-	,	qreal aspect
+	,	float verticalFieldOfView
+	,	float aspect
 	,	const QVector3D & point);
 
-	static const qreal distanceToClosestPoint(
+	static const float distanceToClosestPoint(
 		const QVector3D & camera
 	,	const QVector3D & center
 	,	const QVector3D & point);

@@ -63,22 +63,22 @@ protected:
 	void rotatingEnd();
 
     void pan(QVector3D t);
-    void rotate(qreal hAngle, qreal vAngle);
+    void rotate(float hAngle, float vAngle);
 
-	void scaleAtCenter(qreal scale);
-	void scaleAtMouse(const QPoint & mouse,	qreal scale);
+	void scaleAtCenter(float scale);
+	void scaleAtMouse(const QPoint & mouse,	float scale);
 	void resetScaleAtMouse(const QPoint & mouse);
 
-//	void enforceWholeMapVisible(const qreal offset = 0.08);
+//	void enforceWholeMapVisible(const float offset = 0.08);
 
 	// constraints
 
 	void enforceTranslationConstraints(QVector3D & p) const;
 	void enforceRotationConstraints(
-		qreal & hAngle
-	,	qreal & vAngle) const;
+		float & hAngle
+	,	float & vAngle) const;
 	void enforceScaleConstraints(
-		qreal & scale
+		float & scale
 	,	QVector3D & i) const;
 
 	// math

@@ -15,23 +15,23 @@
 
 namespace
 {
-    static const QVector3D DEFAULT_EYE    = QVector3D(0.0, 1.2, 2.4);
-    static const QVector3D DEFAULT_CENTER = QVector3D(0.0, 0.0, 0.0);
-    static const QVector3D DEFAULT_UP     = QVector3D(0.0, 1.0, 0.0);
+    static const QVector3D DEFAULT_EYE    = QVector3D(0.f, 1.2f, 2.4f);
+    static const QVector3D DEFAULT_CENTER = QVector3D(0.f, 0.0f, 0.0f);
+    static const QVector3D DEFAULT_UP     = QVector3D(0.f, 1.0f, 0.0f);
 
-    static const qreal DEFAULT_SCALE_STEP = 0.1;
-    static const qreal DEFAULT_DISTANCE   = 2.0;
-    static const qreal DEFAULT_DIST_MIN   = 0.1;
-    static const qreal DEFAULT_DIST_MAX   = 4.0;
+    static const float DEFAULT_SCALE_STEP = 0.1f;
+    static const float DEFAULT_DISTANCE   = 2.0f;
+    static const float DEFAULT_DIST_MIN   = 0.1f;
+    static const float DEFAULT_DIST_MAX   = 4.0f;
 
-    static const qreal ROTATION_HOR_DOF   = 0.8 * PI;
-    static const qreal ROTATION_VER_DOF   = 0.8 * PI;
+    static const float ROTATION_HOR_DOF   = 0.8f * static_cast<float>(PI);
+    static const float ROTATION_VER_DOF   = 0.8f * static_cast<float>(PI);
 
-    static const qreal ROTATION_KEY_SCALE = 1.0;
+    static const float ROTATION_KEY_SCALE = 1.0f;
 
-    //static const qreal NAV_CONSTRAINT_PAN_CIRCLE_R = 2.83;
-    static const qreal CONSTRAINT_ROT_MAX_V_UP = 0.02 * PI;
-    static const qreal CONSTRAINT_ROT_MAX_V_LO = 0.98 * PI;
+    //static const float NAV_CONSTRAINT_PAN_CIRCLE_R = 2.83;
+    static const float CONSTRAINT_ROT_MAX_V_UP = 0.02f * static_cast<float>(PI);
+    static const float CONSTRAINT_ROT_MAX_V_LO = 0.98f * static_cast<float>(PI);
 }
 
 Navigation::Navigation(Camera & camera)
@@ -201,16 +201,16 @@ void Navigation::rotatingProcess(const QPoint & mouse)
 
     const QPointF delta = m_m0 - mouse;
     // setup the degree of freedom for horizontal rotation within a single action
-    const qreal wDeltaX = deg(delta.x() / m_camera.viewport().width());
+    const float wDeltaX = deg(delta.x() / m_camera.viewport().width());
     // setup the degree of freedom for vertical rotation within a single action
-    const qreal wDeltaY = deg(delta.y() / m_camera.viewport().height());
+    const float wDeltaY = deg(delta.y() / m_camera.viewport().height());
 
     rotate(wDeltaX, wDeltaY);
 }
 
 void Navigation::rotate(
-    qreal hAngle
-,   qreal vAngle)
+    float hAngle
+,   float vAngle)
 {
     static const QVector3D up(0.0, 1.0, 0.0);
 
@@ -241,7 +241,7 @@ void Navigation::rotate(
 
 void Navigation::scaleAtMouse(
     const QPoint & mouse
-,   qreal scale)
+,   float scale)
 {
     const QVector3D ln = m_camera.eye();
     const QVector3D lf = m_camera.center();
@@ -285,7 +285,7 @@ void Navigation::resetScaleAtMouse(const QPoint & mouse)
     if (!intersects && !NavigationMath::validDepth(m_coordsProvider->depthAt(mouse)))
         return;
 
-    qreal scale = (DEFAULT_DISTANCE / (ln - i).length());
+    float scale = (DEFAULT_DISTANCE / (ln - i).length());
 
     //enforceScaleConstraints(scale, i);
 
@@ -295,7 +295,7 @@ void Navigation::resetScaleAtMouse(const QPoint & mouse)
     m_camera.update();
 }
 
-void Navigation::scaleAtCenter(qreal scale)
+void Navigation::scaleAtCenter(float scale)
 {
     const QVector3D ln = m_camera.eye();
     const QVector3D lf = m_camera.center();
@@ -328,8 +328,8 @@ void Navigation::enforceTranslationConstraints(QVector3D & p) const
 }
 
 void Navigation::enforceRotationConstraints(
-    qreal & hAngle
-,   qreal & vAngle) const
+    float & hAngle
+,   float & vAngle) const
 {
     // hAngle is not constrained, vAngle is.
 
@@ -337,7 +337,7 @@ void Navigation::enforceRotationConstraints(
     // to up/down it can be rotated and clamp if required.
 
     static const QVector3D up(0.0, 1.0, 0.0);
-    const qreal va = deg(acos(
+    const float va = deg(acos(
         QVector3D::dotProduct((m_eye - m_center).normalized(), up)));
 
     if (vAngle <= 0.0)
@@ -347,7 +347,7 @@ void Navigation::enforceRotationConstraints(
 }
  
 void Navigation::enforceScaleConstraints(
-    qreal & scale
+    float & scale
 ,   QVector3D & i) const
 {
     // first constraint: i must be within the ground quad...
@@ -362,7 +362,7 @@ void Navigation::enforceScaleConstraints(
     // second constraint: scale factor must be within min and max... 
     const QVector3D eye = m_eye + scale * (m_eye - i);
 
-    const qreal ds = (eye - i).length();
+    const float ds = (eye - i).length();
 
     if ((scale > 0. && ds >= DEFAULT_DIST_MAX)
     ||  (scale < 0. && ds <= DEFAULT_DIST_MIN)
@@ -370,9 +370,9 @@ void Navigation::enforceScaleConstraints(
         scale = 0.0;
 }
 
-//void Navigation::enforceWholeMapVisible(const qreal offset)
+//void Navigation::enforceWholeMapVisible(const float offset)
 //{
-//    const qreal h(_swmBounds.urb.y());
+//    const float h(_swmBounds.urb.y());
 //
 //    const QVector3D bbox[8] =
 //    {
@@ -388,14 +388,14 @@ void Navigation::enforceScaleConstraints(
 //        , QVector3D(-1.f, h, -1.f)
 //    };
 //
-//    qreal nearest = FLT_MAX;
+//    float nearest = FLT_MAX;
 //
 //    QVector3D farthestCamera = _center;
-//    qreal farthestDistanceSquared = 0.0;
+//    float farthestDistanceSquared = 0.0;
 //
 //    // temporaries for modelview matrix update
 //    QMatrix4x4 modelView, projection, modelViewProjection;
-//    qreal zNear, zFar;
+//    float zNear, zFar;
 //
 //    // retrieve the closest point to the ray in view direction
 //    for (int i = 0; i < 8; ++i)
@@ -414,7 +414,7 @@ void Navigation::enforceScaleConstraints(
 //        const QVector3D newCamera = NavigationUtils::cameraWithPointInView(
 //            _camera, _center, _up, fieldOfView(), _aspect, p);
 //
-//        const qreal ls = (_center - newCamera).lengthSquared();
+//        const float ls = (_center - newCamera).lengthSquared();
 //
 //        // retrieve distance from current center
 //        if (ls > farthestDistanceSquared)
@@ -425,9 +425,9 @@ void Navigation::enforceScaleConstraints(
 //    }
 //
 //    // adjust distance, so that znear is always max distance to new camera
-//    qreal d = sqrt(farthestDistanceSquared) + offset;
+//    float d = sqrt(farthestDistanceSquared) + offset;
 //
-//    d = qMin<qreal>(d, NAV_DEFAULT_DIST_MAX);
+//    d = qMin<float>(d, NAV_DEFAULT_DIST_MAX);
 //
 //    _camera = _center + (_camera - _center).normalized() * d;
 //
@@ -525,7 +525,7 @@ void Navigation::mouseDoubleClickEvent(QMouseEvent * event)
 
 void Navigation::wheelEvent(QWheelEvent * event)
 {
-    static const qreal wheelNormalizationFactor = 1.0 / 120.0;
+    static const float wheelNormalizationFactor = 1.f / 120.f;
     event->ignore();
 
     if (m_mode == NoInteraction)

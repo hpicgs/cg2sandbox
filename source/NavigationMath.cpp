@@ -16,19 +16,16 @@ bool NavigationMath::validDepth(const float depth)
     return depth < (1.0 - std::numeric_limits<float>::epsilon());
 }
 
-void NavigationMath::retrieveNearAndFarPlane(
-    const QVector3D & camera
-,   const QVector3D & center
-,   const Boundary & boundary
-,   qreal & zNear
-,   qreal & zFar)
-{
-    zNear = 0.01;
-    zFar = 1024.0;
-
-    assert(zNear > 0.);
-    assert(zFar > zNear);
-}
+//void NavigationMath::retrieveNearAndFarPlane(
+//    const QVector3D & camera
+//,   const QVector3D & center
+//,   const Boundary & boundary
+//,   float & zNear
+//,   float & zFar)
+//{
+//    assert(zNear > 0.);
+//    assert(zFar > zNear);
+//}
 
 const QVector3D NavigationMath::rayPlaneIntersection(
 	bool & valid
@@ -41,14 +38,14 @@ const QVector3D NavigationMath::rayPlaneIntersection(
 	const QVector3D &r = rfar - rnear; 
 
 	// intersect with plane in point normal form
-	const qreal lDotN = QVector3D::dotProduct(r, normal);
+	const float lDotN = QVector3D::dotProduct(r, normal);
 
 	valid = !r.isNull();
 
 	if(!valid)
 		return QVector3D();
 
-	qreal t = QVector3D::dotProduct(location - r0, normal) / lDotN;
+	float t = QVector3D::dotProduct(location - r0, normal) / lDotN;
 	return t * r + r0; // retrieve point via the ray
 }
 
@@ -57,7 +54,7 @@ const QVector3D NavigationMath::rayPlaneIntersection(
 //,	const QVector3D & rfar
 //,	const QVector3D & location
 //,	const QVector3D & normal
-//,   const qreal maxDistance)
+//,   const float maxDistance)
 //{
 //	bool valid;
 //
@@ -75,10 +72,10 @@ const QVector3D NavigationMath::rayPlaneIntersection(
 
 const QVector2D NavigationMath::raySquareIntersection(
 	const QVector2D & point
-,	const qreal length)
+,	const float length)
 {
-	const qreal ax = abs(point.x());
-    const qreal ay = abs(point.y());
+	const float ax = abs(point.x());
+    const float ay = abs(point.y());
 
 	if(ax >= ay) // intersection is with left or right border
         return QVector2D(sign(point.x()), point.y() / ax) * length;
@@ -88,7 +85,7 @@ const QVector2D NavigationMath::raySquareIntersection(
 
 const bool NavigationMath::insideSquare(
 	const QVector2D & point
-,	const qreal length)
+,	const float length)
 {
 	return abs(point.x()) <= length && abs(point.y()) <= length;
 }
@@ -97,7 +94,7 @@ const QVector2D NavigationMath::rayCircleIntersection(
 	bool & valid
 ,	const QVector2D & origin
 ,	const QVector2D & ray
-,	const qreal radius)
+,	const float radius)
 {
 	if(ray.isNull())
 	{
@@ -105,11 +102,11 @@ const QVector2D NavigationMath::rayCircleIntersection(
 		return QVector2D();
 	}
 
-	const qreal a = ray.lengthSquared();
-	const qreal b = 2. * QVector2D::dotProduct(ray, origin);
-    const qreal c = origin.lengthSquared() - static_cast<qreal>(radius * radius);
+	const float a = ray.lengthSquared();
+	const float b = 2. * QVector2D::dotProduct(ray, origin);
+    const float c = origin.lengthSquared() - static_cast<float>(radius * radius);
 
-	const qreal delta = b * b - 4. * a * c;
+	const float delta = b * b - 4. * a * c;
 
 	if (delta < 0.0) 
 	{
@@ -117,14 +114,14 @@ const QVector2D NavigationMath::rayCircleIntersection(
 		return QVector2D();
 	}
 
-	const qreal s = sqrt(delta);
+	const float s = sqrt(delta);
 
 	// the two intersections
-	const qreal t0 = (-b + s) / (2.0 * a);
-	const qreal t1 = (-b - s) / (2.0 * a);
+	const float t0 = (-b + s) / (2.0 * a);
+	const float t1 = (-b - s) / (2.0 * a);
 
 	// nearest one
-	const qreal t = qMin<qreal>(t0, t1);
+	const float t = qMin<float>(t0, t1);
 
 	valid = true;
 	return t * ray + origin;
@@ -135,7 +132,7 @@ const QVector2D NavigationMath::xz(const QVector3D & xyz)
 	return QVector2D(xyz.x(), xyz.z());
 }
 
-const qreal NavigationMath::angle(
+const float NavigationMath::angle(
 	const QVector3D & a
 ,	const QVector3D & b) 
 {
@@ -167,7 +164,7 @@ const bool NavigationMath::boundaryVisible(
 	{
 		const QVector3D t = mvp * box[i];
 
-		if(qAbs<qreal>(t.x()) > 1.0 || qAbs<qreal>(t.y()) > 1.0)
+		if(qAbs<float>(t.x()) > 1.0 || qAbs<float>(t.y()) > 1.0)
 			return false;
 	}
 	return true;
@@ -179,15 +176,15 @@ const bool NavigationMath::pointVisible(
 {
 	const QVector3D t = mvp * p;
 
-    return qAbs<qreal>(t.x()) <= 1.0 && qAbs<qreal>(t.y()) <= 1.0;
+    return qAbs<float>(t.x()) <= 1.0 && qAbs<float>(t.y()) <= 1.0;
 }
 
 const QVector3D NavigationMath::cameraWithPointInView(
 	const QVector3D & eye
 ,	const QVector3D & center
 ,	const QVector3D & up
-,	const qreal fovy
-,	const qreal aspect
+,	const float fovy
+,	const float aspect
 ,	const QVector3D & point)
 {
 	const QVector3D ray(center - eye);
@@ -198,8 +195,8 @@ const QVector3D NavigationMath::cameraWithPointInView(
 	const QVector3D u(QVector3D::crossProduct(v,  n).normalized());
 
 	// get both field of view vectors
-	const qreal vFov(rad(fovy));
-	const qreal hFov(2.0 * atan(tan(vFov * 0.5) * aspect));
+	const float vFov(rad(fovy));
+	const float hFov(2.0 * atan(tan(vFov * 0.5) * aspect));
 
 	// closest point c
     const QVector3D c = eye + ray * distanceToClosestPoint(eye, center, point);
@@ -207,19 +204,19 @@ const QVector3D NavigationMath::cameraWithPointInView(
 	// project bc = t to u and v using scalar projection
 	const QVector3D t = point - c;
 
-	const qreal uPart = abs(QVector3D::dotProduct(t, u));
-	const qreal vPart = abs(QVector3D::dotProduct(t, v)) / aspect;
+	const float uPart = abs(QVector3D::dotProduct(t, u));
+	const float vPart = abs(QVector3D::dotProduct(t, v)) / aspect;
 
 	// retrieve max distance to camera with required fov for the bigger part
-	const qreal p = qMax<qreal>(uPart, vPart);
+	const float p = qMax<float>(uPart, vPart);
 
 	// required distance from c to new camera position
-	const qreal a = p / tan(vFov * 0.5);
+	const float a = p / tan(vFov * 0.5);
 
     return c - a * n;
 }
 
-const qreal NavigationMath::distanceToClosestPoint(
+const float NavigationMath::distanceToClosestPoint(
 	const QVector3D & eye
 ,	const QVector3D & center
 ,	const QVector3D & point)
@@ -227,8 +224,8 @@ const qreal NavigationMath::distanceToClosestPoint(
 	const QVector3D ray(center - eye);
 	const QVector3D b(point - eye);
 
-	const qreal m = ray.lengthSquared(); // magnitude of ray
-	const qreal theta = QVector3D::dotProduct(b, ray);
+	const float m = ray.lengthSquared(); // magnitude of ray
+	const float theta = QVector3D::dotProduct(b, ray);
 
 	if(m == 0.0)
 		return 0.0;
