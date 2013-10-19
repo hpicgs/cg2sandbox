@@ -13,70 +13,54 @@
 #include "AdaptiveGrid.h"
 
 
-const char * AdaptiveGrid::s_vsSource = R"(
-
-#version 150
-
-uniform mat4 transform;
-uniform vec2 distance;
-
-in vec4 a_vertex;
-
-flat out float v_type;
-out vec3 v_vertex;
-
-void main()
-{
-    float m = 1.0 - distance[1];
-    float t = a_vertex.w;
-
-    vec4 vertex = transform * vec4(a_vertex.xyz, 1.0);
-    v_vertex = vertex.xyz;
-
-    // interpolate minor grid lines alpha based on distance
-    v_type =  mix(1.0 - t, 1.0 - 2.0 * m * t, step(a_vertex.w, 0.7998));
-
-    gl_Position = vertex;
-}
-
+const char * AdaptiveGrid::s_vsSource = "(\
+#version 150\
+uniform mat4 transform;\
+uniform vec2 distance;\
+in vec4 a_vertex;\
+flat out float v_type;\
+out vec3 v_vertex;\
+\
+void main()\
+{\
+    float m = 1.0 - distance[1];\
+    float t = a_vertex.w;\
+    vec4 vertex = transform * vec4(a_vertex.xyz, 1.0);\
+    v_vertex = vertex.xyz;\
+    // interpolate minor grid lines alpha based on distance\
+    v_type =  mix(1.0 - t, 1.0 - 2.0 * m * t, step(a_vertex.w, 0.7998));\
+    gl_Position = vertex;\
+}\
 )";
 
-const char * AdaptiveGrid::s_fsSource = R"(
-
-#version 150
-
-uniform vec2 distance;
-
-uniform float znear;
-uniform float zfar;
-uniform vec3 color;
-
-flat in float v_type;
-in vec3 v_vertex;
-
-out vec4 fragColor;
-
-void main()
-{
-    float t = v_type;
-
-    float z = gl_FragCoord.z; 
-
-    // complete function
-    // z = (2.0 * zfar * znear / (zfar + znear - (zfar - znear) * (2.0 * z - 1.0)));
-    // normalized to [0,1]
-    // z = (z - znear) / (zfar - znear);
-
-    // simplyfied with wolfram alpha
-    z = - znear * z / (zfar * z - zfar - znear * z);
-
-    float g = mix(t, 1.0, z * z);
-
-    float l = clamp(8.0 - length(v_vertex) / distance[0], 0.0, 1.0);
-
-    fragColor = vec4(color, l * (1.0 - g * g));
-}
-
+const char * AdaptiveGrid::s_fsSource = "(\
+\
+#version 150\
+\
+uniform vec2 distance;\
+uniform float znear;\
+uniform float zfar;\
+uniform vec3 color;\
+flat in float v_type;\
+in vec3 v_vertex;\
+out vec4 fragColor;\
+void main()\
+{\
+    float t = v_type;\
+    float z = gl_FragCoord.z;\
+	\
+    // complete function\
+    // z = (2.0 * zfar * znear / (zfar + znear - (zfar - znear) * (2.0 * z - 1.0)));\
+    // normalized to [0,1]\
+    // z = (z - znear) / (zfar - znear);\
+	\
+    // simplyfied with wolfram alpha\
+    z = - znear * z / (zfar * z - zfar - znear * z);\
+	\
+    float g = mix(t, 1.0, z * z);\
+    float l = clamp(8.0 - length(v_vertex) / distance[0], 0.0, 1.0);\
+    fragColor = vec4(color, l * (1.0 - g * g));\
+}\
 )";
 
 
