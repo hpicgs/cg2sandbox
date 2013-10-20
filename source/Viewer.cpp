@@ -43,6 +43,8 @@ Viewer::Viewer(
     m_ui->statusbar->addPermanentWidget(m_objLabel);
     m_mouseLabel = new QLabel("mouse", m_ui->statusbar);
     m_ui->statusbar->addPermanentWidget(m_mouseLabel);
+    m_timeLabel = new QLabel("time", m_ui->statusbar);
+    m_ui->statusbar->addPermanentWidget(m_timeLabel);
     m_fpsLabel = new QLabel("fps", m_ui->statusbar);
     m_ui->statusbar->addPermanentWidget(m_fpsLabel);
 
@@ -76,6 +78,14 @@ void Viewer::mouseChanged(const QPoint & mouse)
 {
     m_mouseLabel->setText(QString(" %1 %2 mouse ")
         .arg(mouse.x(), 4, 10, QChar('0')).arg(mouse.y(), 4, 10, QChar('0')));
+}
+
+void Viewer::timeChanged(float timef)
+{
+    std::stringstream s;
+    s << " " << std::setprecision(3) << std::setfill('0') << std::setw(3) << timef << " time ";
+
+    m_timeLabel->setText(QString::fromStdString(s.str()));
 }
 
 void Viewer::objChanged(const QVector3D & obj)

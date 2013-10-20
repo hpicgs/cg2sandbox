@@ -13,6 +13,7 @@
 #include "Navigation.h"
 #include "NavigationMath.h"
 #include "Timer.h"
+#include "CyclicTime.h"
 #include "Canvas.h"
 
 
@@ -28,11 +29,12 @@ Canvas::Canvas(
 , m_repaintTimer(new QBasicTimer())
 , m_continuousRepaint(false)
 , m_fpsTimer(nullptr)
+, m_time(new CyclicTime(0.0L, 60.0)) // this is one day in 60 seconds (1d/1h)
 , m_swapts(0.0)
 , m_swaps(0)
 , m_update(false)
 {
-    setSurfaceType(OpenGLSurface);    
+    setSurfaceType(OpenGLSurface); 
 
     create();
 
@@ -121,6 +123,9 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
 
     m_context->doneCurrent();
+
+    m_time->setf(0.0);
+    m_time->start();
 }
 
 void Canvas::resizeEvent(QResizeEvent * event)
@@ -159,12 +164,13 @@ void Canvas::paintGL()
     else
         m_painter->update(programsWithInvalidatedUniforms);
 
-	m_painter->paint();
+	m_painter->paint(m_time->getf(true));
     m_grid->draw(*this);
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();
 
+    emit timeUpdate(m_time->getf());
 
     if (!m_fpsTimer)
     {

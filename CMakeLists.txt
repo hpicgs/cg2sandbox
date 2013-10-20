@@ -233,6 +233,8 @@ set(sources
     ${source_path}/AxisAlignedBoundingBox.h
     ${source_path}/Camera.cpp
     ${source_path}/Camera.h
+    ${source_path}/CyclicTime.cpp
+    ${source_path}/CyclicTime.h
     ${source_path}/Navigation.cpp
     ${source_path}/Navigation.h
     ${source_path}/NavigationMath.cpp

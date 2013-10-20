@@ -20,7 +20,7 @@ public:
 
     virtual bool initialize();
     
-    virtual void paint();
+    virtual void paint(float timef);
     virtual void resize(
         int width
     ,   int height);
