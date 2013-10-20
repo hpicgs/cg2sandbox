@@ -257,7 +257,7 @@ bool Canvas::verifyExtensions() const
         qWarning("The following mandatory OpenGL extension is not supported:");
 
     foreach(const QString & extension, unsupported)
-        qWarning(qPrintable(extension));
+        qWarning() << extension;
 
     qWarning("");
 
@@ -294,7 +294,7 @@ void Canvas::setSwapInterval(SwapInterval swapInterval)
     if (!glXSwapIntervalSGI)
         glXSwapIntervalSGI = reinterpret_cast<SWAPINTERVALEXTPROC>(m_context->getProcAddress("glXSwapIntervalSGI"));
     if (glXSwapIntervalSGI)
-        result = glXSwapIntervalSGI(requestedInterval);
+        result = glXSwapIntervalSGI(swapInterval);
 
 #endif
 
