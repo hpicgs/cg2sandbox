@@ -203,6 +203,7 @@ set(sources
     ${source_path}/OpenGLFunctions.h
     ${source_path}/Painter.cpp
     ${source_path}/Painter.h
+	${source_path}/PainterMode.h
     ${source_path}/Viewer.cpp
     ${source_path}/Viewer.h
     ${source_path}/Viewer.ui
