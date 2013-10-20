@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.10 FATAL_ERROR)
 
 
 # PROJECT DESCRIPTION
@@ -149,7 +149,9 @@ set_property(GLOBAL PROPERTY AUTOMOC_FOLDER CMakeAutomocTargets)
 
 # http://qt-project.org/forums/viewthread/30006/
 
-cmake_policy(SET CMP0020 NEW)
+if (MSVC)
+	cmake_policy(SET CMP0020 NEW)
+endif()
 
 find_package(Qt5Core    5.1 REQUIRED)
 find_package(Qt5Gui     5.1 REQUIRED)
