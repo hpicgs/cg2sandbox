@@ -7,7 +7,7 @@ cg2sandbox
 
 + CMake 2.8.11
 + Qt 5.1
-+ OpenGL support >= 3.2 (3.1 or below might work in some cases)
++ OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL320```)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
 
 #### Disclaimer
@@ -24,7 +24,7 @@ We are dedicated to provide a framework that is working on all common desktop pl
 
 + install cmake from
     http://www.cmake.org/cmake/resources/software.html
-+ install qt5 from (for this exercise we used visual studio 2012 x64, but older version should work fine...)
++ install qt5 from (for this exercise we used visual studio 2012 x64 and 2013 x64)
 	http://qt-project.org/downloads
 + install visual studio or qt creator
 
@@ -87,14 +87,14 @@ We are dedicated to provide a framework that is working on all common desktop pl
 + ./build/exercise1
 
 
-### Linux (tested on Ubuntu 12.10 x64)
+### Linux (tested on Ubuntu 13.10 x64)
 
 ####  Gathering Requirements
 
 + install cmake, this should give you 2.8.9 or above ...
 + if version is below you probably need to update to a newer version or compile cmake for youself
 + sudo apt-get install cmake 
-+ download qt 5.0.2
++ download qt 5.1.0
 + suppose the filename is qt.run (replace appropriately)
 + in downloaded folder do:
 	+ chmod u+x qt.run
@@ -124,7 +124,9 @@ We are dedicated to provide a framework that is working on all common desktop pl
 
 ## Third Party Libraries
 
-### Assimp Modifications
+The following modifications where made in order to get things running. Note: these are not modifications you need to do when using this repo.
+
+### Assimp Modifications 
 
 ##### assimp/CMakeLists.txt
 
