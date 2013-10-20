@@ -42,7 +42,7 @@ We are dedicated to provide a framework that is working on all common desktop pl
 + Specify path to build binaries (recommended in extra build directory) -> "build" folder
 + Press configure and generate
 + Open solution with batch
-+ setup working directory of exercise executable to ".." for each configuration you want to start your program in
++ setup working directory of cg2sandbox to ".." for each configuration you want to run
 + compile and run as required...
 
 
