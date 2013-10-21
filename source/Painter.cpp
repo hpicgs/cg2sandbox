@@ -32,8 +32,6 @@ bool Painter::initialize()
 
     glClearColor(1.f, 1.f, 1.f, 0.f);
 
-    m_cube = new UnitCube(*this);
-
     m_program = new QOpenGLShaderProgram();
 
     m_fragShader = FileAssociatedShader::getOrCreate(
@@ -41,6 +39,10 @@ bool Painter::initialize()
     m_vertShader = FileAssociatedShader::getOrCreate(
         QOpenGLShader::Vertex, "data/default.vert", *m_program);
     m_program->link();
+
+    m_cube = new UnitCube(*this
+        , m_program->attributeLocation("a_vertex")
+        , m_program->attributeLocation("a_normal"));
 
     return true;
 }
