@@ -42,7 +42,7 @@ public:
     virtual void show();
     virtual void hide();
 
-    virtual void paint() = 0;
+    virtual void paint(float timef) = 0;
     virtual void resize(int width, int height) = 0;
 
     virtual void update() = 0;

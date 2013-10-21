@@ -18,6 +18,7 @@ class AbstractPainter;
 class Camera;
 class Navigation;
 class Timer;
+class CyclicTime;
 class AdaptiveGrid;
 
 
@@ -91,6 +92,7 @@ protected:
 signals:
     void fpsUpdate(float fps);
     void mouseUpdate(const QPoint & mouse);
+    void timeUpdate(float timef);
     void objUpdate(const QVector3D & obj);
 
 protected:
@@ -104,6 +106,8 @@ protected:
 
     QScopedPointer<QBasicTimer> m_repaintTimer;
     QScopedPointer<Timer> m_fpsTimer;
+
+    QScopedPointer<CyclicTime> m_time; ///< this is used as "game time"
 
     QScopedPointer<AdaptiveGrid> m_grid;
 

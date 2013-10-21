@@ -30,6 +30,7 @@ public slots:
     void fpsChanged(float fps);
     void mouseChanged(const QPoint & mouse);
     void objChanged(const QVector3D & obj);
+    void timeChanged(float timef);
 
 protected slots:
     void on_toggleFullScreenAction_triggered(bool checked);
@@ -42,6 +43,7 @@ protected:
 
     QLabel * m_fpsLabel;
     QLabel * m_mouseLabel;
+    QLabel * m_timeLabel;
     QLabel * m_objLabel;
 
     QShortcut * m_fullscreenShortcut;
