@@ -1,12 +1,5 @@
 #pragma once
 
-#include <hash_map>
-#include <vector>
-
-#include <qgl.h>
-
-#include <QVector3D>
-
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 
