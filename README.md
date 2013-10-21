@@ -5,9 +5,9 @@ cg2sandbox
 
 #### Requirements
 
-+ CMake 2.8.11
++ CMake 2.8.10
 + Qt 5.1
-+ OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL320```)
++ OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL_320```)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
 
 #### Disclaimer
@@ -24,7 +24,7 @@ We are dedicated to provide a framework that is working on all common desktop pl
 
 + install cmake from
     http://www.cmake.org/cmake/resources/software.html
-+ install qt5 from (for this exercise we used visual studio 2012 x64 and 2013 x64)
++ install qt5.1 from (for this exercise we used visual studio 2012 x64 and 2013 x64)
 	http://qt-project.org/downloads
 + install visual studio or qt creator
 
@@ -87,29 +87,28 @@ We are dedicated to provide a framework that is working on all common desktop pl
 + ./build/exercise1
 
 
-### Linux (tested on Ubuntu 13.10 x64)
+### Linux (tested on Ubuntu 13.04 x64)
 
 ####  Gathering Requirements
 
-+ install cmake, this should give you 2.8.9 or above ...
-	+ if version is below you probably need to update to a newer version or compile cmake for youself
++ install cmake, this should give you 2.8.10 or above (in Ubuntu 13.04)
+	+ sudo apt-get install cmake
 + install a C++ compiler with support for C++11 (GCC 4.7 or higher is recommended)
 	+ e.g. for Ubuntu 12.04:
 		- add-apt-repository -y ppa:george-edison55/gcc4.7-precise
 		- apt-get -y install gcc-4.7 g++-4.7
-+ sudo apt-get install cmake 
-+ download qt 5.1.0
++ download qt 5.1.0 (http://qt-project.org/downloads)
 + suppose the filename is qt.run (replace appropriately)
 + in downloaded folder do:
 	+ chmod u+x qt.run
-	+ ./qt.run
+	+ sudo ./qt.run
 
 #### Building and Running an Exercise
 
-+ in your cg2 exercise1 (or exercise#) source folder do:
+in your cg2 exercise1 (or exercise#) source folder do:
 + mkdir build
 + cd build
-+ cmake -DCMAKE_PREFIX_PATH="/opt/Qt5.1.0/5.1.0/gcc_64" ..  # this worked for us...
++ PATH="/opt/Qt5.1.0/5.1.0/gcc_64/bin;$PATH" cmake ..  # this worked for us...
 	+ you might need to set the newer compiler manually: -DCMAKE_CXX_COMPILER=/usr/bin/gcc-4.7
 + make
 + cd ..
