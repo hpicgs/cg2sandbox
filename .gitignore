@@ -11,3 +11,6 @@
 /build11
 /_open-project11.bat
 /cg2sandbox.log
+
+# Qt Creator User Files
+*.txt.user

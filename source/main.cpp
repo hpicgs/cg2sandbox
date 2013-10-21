@@ -3,12 +3,9 @@
 #include <QWidget>
 
 #include "Application.h"
-
 #include "Viewer.h"
 #include "Canvas.h"
-
 #include "Painter.h"
-
 
 int main(int argc, char* argv[])
 {
@@ -16,7 +13,6 @@ int main(int argc, char* argv[])
 
     Application app(argc, argv);
 
-    {
         QScopedPointer<Viewer> viewer(new Viewer());
 
         QSurfaceFormat format;
@@ -26,7 +22,7 @@ int main(int argc, char* argv[])
         format.setVersion(3, 2);
         format.setProfile(QSurfaceFormat::CoreProfile);
 #endif
-        Canvas * canvas = new Canvas(format);
+    Canvas* canvas = new Canvas(format);
         canvas->setContinuousRepaint(true, 0);
         canvas->setSwapInterval(Canvas::VerticalSyncronization);
 
@@ -35,7 +31,6 @@ int main(int argc, char* argv[])
         QObject::connect(canvas, &Canvas::timeUpdate, viewer.data(), &Viewer::timeChanged);
         QObject::connect(canvas, &Canvas::mouseUpdate, viewer.data(), &Viewer::mouseChanged);
         QObject::connect(viewer.data(), &Viewer::toggleSwapInterval, canvas, &Canvas::toggleSwapInterval);
-
 
         Painter painter;
         canvas->assignPainter(&painter);
@@ -50,6 +45,7 @@ int main(int argc, char* argv[])
 
         result = app.exec();
         canvas->assignPainter(nullptr);
-    }
+
     return result;
+    // QWidget seems to take double ownership of canvas and frees it doubled
 }

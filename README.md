@@ -1,16 +1,27 @@
 cg2sandbox
 ==========
 
-### General Remarks
+### Table of Contents
 
-#### Requirements
+ * [General Remarks](#general-remarks)
+  * [Requirements](#requirements)
+  * [Disclaimer](#disclaimer)
+ * [Build Instructions](#build-instructions)
+  * [Windows](#windows)
+  * [Linux](#linux)
+  * [OS X](#os-x)
+ * [Third Party Libraries](#third-party-libraries)
 
-+ CMake 2.8.11
+## General Remarks
+
+### Requirements
+
++ CMake 2.8.10
 + Qt 5.1
-+ OpenGL support >= 3.2 (3.1 or below might work in some cases)
++ OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL_320```)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
 
-#### Disclaimer
+### Disclaimer
 
 + FOR ASSESSMENT WE BUILD YOUR SUBMISSION IN WINDOWS WITH MSVC11 ONLY!
 + WE OFFICIALLY SUPPORT WINDOWS WITH MSVC11 ONLY!
@@ -20,11 +31,13 @@ We are dedicated to provide a framework that is working on all common desktop pl
 
 ## Build Instructions
 
-### Windows - General Requirements
+### Windows
+
+General Requirements:
 
 + install cmake from
     http://www.cmake.org/cmake/resources/software.html
-+ install qt5 from (for this exercise we used visual studio 2012 x64, but older version should work fine...)
++ install qt5.1 from (for this exercise we used visual studio 2012 x64 and 2013 x64)
 	http://qt-project.org/downloads
 + install visual studio or qt creator
 
@@ -42,7 +55,7 @@ We are dedicated to provide a framework that is working on all common desktop pl
 + Specify path to build binaries (recommended in extra build directory) -> "build" folder
 + Press configure and generate
 + Open solution with batch
-+ setup working directory of exercise executable to ".." for each configuration you want to start your program in
++ setup working directory of cg2sandbox to ".." for each configuration you want to run
 + compile and run as required...
 
 
@@ -87,31 +100,37 @@ We are dedicated to provide a framework that is working on all common desktop pl
 + ./build/exercise1
 
 
-### Linux (tested on Ubuntu 12.10 x64)
+### Linux
+
+Only tested on Ubuntu 13.04 x64.
 
 ####  Gathering Requirements
 
-+ install cmake, this should give you 2.8.9 or above ...
-+ if version is below you probably need to update to a newer version or compile cmake for youself
-+ sudo apt-get install cmake 
-+ download qt 5.0.2
++ install cmake, this should give you 2.8.10 or above (in Ubuntu 13.04)
+	+ sudo apt-get install cmake
++ install a C++ compiler with support for C++11 (GCC 4.7 or higher is recommended)
+	+ e.g. for Ubuntu 12.04:
+		- add-apt-repository -y ppa:george-edison55/gcc4.7-precise
+		- apt-get -y install gcc-4.7 g++-4.7
++ download qt 5.1.0 (http://qt-project.org/downloads)
 + suppose the filename is qt.run (replace appropriately)
 + in downloaded folder do:
 	+ chmod u+x qt.run
-	+ ./qt.run
+	+ sudo ./qt.run
 
 #### Building and Running an Exercise
 
-+ in your cg2 exercise1 (or exercise#) source folder do:
+in your cg2 exercise1 (or exercise#) source folder do:
 + mkdir build
 + cd build
-+ cmake -DCMAKE_PREFIX_PATH="/opt/Qt5.1.0/5.1.0/gcc_64" ..  # this worked for us...
++ PATH="/opt/Qt5.1.0/5.1.0/gcc_64/bin;$PATH" cmake ..  # this worked for us...
+	+ you might need to set the newer compiler manually: -DCMAKE_CXX_COMPILER=/usr/bin/gcc-4.7
 + make
 + cd ..
 + ./build/exercise1
 
 
-### MacOS
+### OS X
 
 #### Building and Running an Exercise
 
@@ -123,8 +142,11 @@ We are dedicated to provide a framework that is working on all common desktop pl
 
 
 ## Third Party Libraries
+In order to make the libraries compile with our compiler setup, the following modifications had to be made:
 
-### Assimp Modifications
+The following modifications where made in order to get things running. Note: these are not modifications you need to do when using this repo.
+
+### Assimp Modifications 
 
 ##### assimp/CMakeLists.txt
 

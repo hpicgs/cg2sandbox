@@ -1,9 +1,9 @@
-#version 330
+#version 140
 
 uniform mat4 transform;
 
-layout (location = 0) in vec3 a_vertex;
-layout (location = 1) in vec3 a_normal;
+in vec3 a_vertex;
+in vec3 a_normal;
 
 flat out vec3 v_normal;
 

@@ -1,6 +1,6 @@
-#version 330
+#version 140
 
-layout (location = 0) out vec4 fragColor;
+out vec4 fragColor;
 
 flat in vec3 v_normal;
 

@@ -85,24 +85,27 @@ void Painter::paint(float timef)
 
     switch (mode())
     {
-    case Mode1:
+    case PaintMode1:
         paint_1_1(timef);
         break;
 
-    case Mode2:
+    case PaintMode2:
         paint_1_2(timef);
         break;
 
-    case Mode3:
+    case PaintMode3:
         paint_1_3(timef);
         break;
 
-    case Mode4:
+    case PaintMode4:
         paint_1_4(timef);
         break;
 
-    case Mode5:
+    case PaintMode5:
         paint_1_5(timef);
+        break;
+
+    case PaintMode0:
         break;
 
     default:
@@ -135,3 +138,4 @@ void Painter::paint_1_4(float timef)
 void Painter::paint_1_5(float timef)
 {
 }
+
