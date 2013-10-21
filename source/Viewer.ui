@@ -36,7 +36,6 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="separator"/>
     <addaction name="quitAction"/>
    </widget>
    <widget class="QMenu" name="helpMenu">
@@ -45,7 +44,15 @@
     </property>
     <addaction name="aboutAction"/>
    </widget>
+   <widget class="QMenu" name="controlMenu">
+    <property name="title">
+     <string>&amp;Control</string>
+    </property>
+    <addaction name="toggleTimeAction"/>
+    <addaction name="restartTimeAction"/>
+   </widget>
    <addaction name="fileMenu"/>
+   <addaction name="controlMenu"/>
    <addaction name="viewMenu"/>
    <addaction name="helpMenu"/>
   </widget>
@@ -86,7 +93,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Toggle Full Screen</string>
+    <string>Toggle &amp;Full Screen</string>
    </property>
    <property name="shortcut">
     <string>F11</string>
@@ -351,7 +358,7 @@
   </action>
   <action name="toggleSwapIntervalAction">
    <property name="text">
-    <string>Toggle Swap Interval</string>
+    <string>Toggle &amp;Swap Interval</string>
    </property>
    <property name="shortcut">
     <string>F10</string>
@@ -365,7 +372,23 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Adaptive Grid</string>
+    <string>Show Adaptive &amp;Grid</string>
+   </property>
+   <property name="shortcut">
+    <string>G</string>
+   </property>
+  </action>
+  <action name="toggleTimeAction">
+   <property name="text">
+    <string>&amp;Toggle Time</string>
+   </property>
+   <property name="shortcut">
+    <string>T</string>
+   </property>
+  </action>
+  <action name="restartTimeAction">
+   <property name="text">
+    <string>&amp;Restart Time</string>
    </property>
   </action>
  </widget>

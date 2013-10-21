@@ -28,7 +28,7 @@ Canvas::Canvas(
 , m_swapInterval(VerticalSyncronization)
 , m_repaintTimer(new QBasicTimer())
 , m_fpsTimer(nullptr)
-, m_time(new CyclicTime(0.0L, 60.0)) // this is one day in 60 seconds (1d/1h)
+, m_time(nullptr)
 , m_swapts(0.0)
 , m_swaps(0)
 , m_update(false)
@@ -124,9 +124,6 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
 
     m_context->doneCurrent();
-
-    m_time->setf(0.0);
-    m_time->start();
 }
 
 void Canvas::resizeEvent(QResizeEvent * event)
@@ -211,7 +208,7 @@ void Canvas::timerEvent(QTimerEvent * event)
     paintGL();
 }
 
-void Canvas::assignPainter(AbstractPainter * painter)
+void Canvas::setPainter(AbstractPainter * painter)
 {
     if (m_painter == painter)
         return;
@@ -230,6 +227,16 @@ void Canvas::assignPainter(AbstractPainter * painter)
     m_context->doneCurrent();
 
     m_navigation->setCoordinateProvider(m_painter);
+}
+
+void Canvas::setTime(CyclicTime * time)
+{
+    m_time = time;
+}
+
+CyclicTime * Canvas::time()
+{
+    return m_time;
 }
 
 bool Canvas::verifyExtensions() const
