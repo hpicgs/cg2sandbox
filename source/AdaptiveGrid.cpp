@@ -15,7 +15,7 @@
 
 const char * AdaptiveGrid::s_vsSource =
    
-    "#version 150\n"
+    "#version 140\n"
     "uniform mat4 transform;\n"
     "uniform vec2 distance;\n"
     "in vec4 a_vertex;\n"
@@ -35,7 +35,7 @@ const char * AdaptiveGrid::s_vsSource =
 
 const char * AdaptiveGrid::s_fsSource = 
 
-    "#version 150\n"
+    "#version 140\n"
     "\n"
     "uniform vec2 distance;\n"
     "uniform float znear;\n"
