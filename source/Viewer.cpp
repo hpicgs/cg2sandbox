@@ -80,7 +80,7 @@ void Viewer::restore()
 
 
     assert(m_canvas);
-    bool enable = s.value(SETTINGS_ADAPTIVE_GRID).toBool();
+    bool enable = s.value(SETTINGS_ADAPTIVE_GRID, true).toBool();
     m_canvas->setAdaptiveGrid(enable);
     m_ui->showAdaptiveGridAction->setChecked(enable);
 }
