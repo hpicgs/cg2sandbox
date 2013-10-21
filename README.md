@@ -92,7 +92,11 @@ We are dedicated to provide a framework that is working on all common desktop pl
 ####  Gathering Requirements
 
 + install cmake, this should give you 2.8.9 or above ...
-+ if version is below you probably need to update to a newer version or compile cmake for youself
+	+ if version is below you probably need to update to a newer version or compile cmake for youself
++ install a C++ compiler with support for C++11 (GCC 4.7 or higher is recommended)
+	+ e.g. for Ubuntu 12.04:
+		- add-apt-repository -y ppa:george-edison55/gcc4.7-precise
+		- apt-get -y install gcc-4.7 g++-4.7
 + sudo apt-get install cmake 
 + download qt 5.1.0
 + suppose the filename is qt.run (replace appropriately)
@@ -106,6 +110,7 @@ We are dedicated to provide a framework that is working on all common desktop pl
 + mkdir build
 + cd build
 + cmake -DCMAKE_PREFIX_PATH="/opt/Qt5.1.0/5.1.0/gcc_64" ..  # this worked for us...
+	+ you might need to set the newer compiler manually: -DCMAKE_CXX_COMPILER=/usr/bin/gcc-4.7
 + make
 + cd ..
 + ./build/exercise1
@@ -123,6 +128,7 @@ We are dedicated to provide a framework that is working on all common desktop pl
 
 
 ## Third Party Libraries
+In order to make the libraries compile with our compiler setup, the following modifications had to be made:
 
 The following modifications where made in order to get things running. Note: these are not modifications you need to do when using this repo.
 

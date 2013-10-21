@@ -83,10 +83,18 @@ void Painter::paint(float timef)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (m_program->isLinked())
-    {
-        m_program->bind();
-        m_cube->draw(*this);
-        m_program->release();
-    }
+	switch (m_mode)
+	{
+	case DEMO_MODE:
+		{
+			if (m_program->isLinked())
+			{
+				m_program->bind();
+				m_cube->draw(*this);
+				m_program->release();
+			}
+		}
+		break;
+	default: break;
+	}
 }

@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include <QStringList>
+#include <QKeyEvent>
 
 #include "Camera.h"
 
@@ -9,7 +10,7 @@
 
 
 AbstractPainter::AbstractPainter()
-: m_camera(nullptr)
+: m_camera(nullptr), m_mode(DEMO_MODE)
 {
 }
  
@@ -95,4 +96,19 @@ const QVector3D AbstractPainter::objAt(
 
     // unproject this point back to object space
     return (viewProjectionInverted * p).toVector3DAffine();
+}
+
+void AbstractPainter::keyPressEvent(QKeyEvent * event)
+{
+	switch (event->key())
+	{
+	case Qt::Key_1:
+		break;
+	case Qt::Key_2:
+		break;
+	case Qt::Key_3:
+		break;
+	default:
+		break;
+	}
 }
