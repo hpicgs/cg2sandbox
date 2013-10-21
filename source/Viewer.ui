@@ -29,7 +29,8 @@
     </property>
     <addaction name="toggleFullScreenAction"/>
     <addaction name="toggleSwapIntervalAction"/>
-    <addaction name="specifyResolutionAction"/>
+    <addaction name="separator"/>
+    <addaction name="showAdaptiveGridAction"/>
    </widget>
    <widget class="QMenu" name="fileMenu">
     <property name="title">
@@ -129,7 +130,7 @@
   </action>
   <action name="quitAction">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>&amp;Close</string>
@@ -354,6 +355,17 @@
    </property>
    <property name="shortcut">
     <string>F10</string>
+   </property>
+  </action>
+  <action name="showAdaptiveGridAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Adaptive Grid</string>
    </property>
   </action>
  </widget>

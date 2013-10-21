@@ -52,6 +52,9 @@ public:
     void setSwapInterval(SwapInterval swapInterval);
     static const QString swapIntervalToString(SwapInterval swapInterval);
 
+    void setAdaptiveGrid(bool enable);
+    bool adaptiveGrid() const;
+
 public slots:
     void toggleSwapInterval();
     
@@ -117,4 +120,5 @@ protected:
     bool m_update; // checked in paintGL, if true, update of program gets triggered
 
     bool m_continuousRepaint;
+    bool m_showAdaptiveGrid;
 };

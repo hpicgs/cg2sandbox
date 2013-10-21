@@ -27,12 +27,13 @@ Canvas::Canvas(
 , m_navigation(new Navigation(*m_camera))
 , m_swapInterval(VerticalSyncronization)
 , m_repaintTimer(new QBasicTimer())
-, m_continuousRepaint(false)
 , m_fpsTimer(nullptr)
 , m_time(new CyclicTime(0.0L, 60.0)) // this is one day in 60 seconds (1d/1h)
 , m_swapts(0.0)
 , m_swaps(0)
 , m_update(false)
+, m_continuousRepaint(false)
+, m_showAdaptiveGrid(true)
 {
     setSurfaceType(OpenGLSurface); 
 
@@ -165,7 +166,8 @@ void Canvas::paintGL()
         m_painter->update(programsWithInvalidatedUniforms);
 
 	m_painter->paint(m_time->getf(true));
-    m_grid->draw(*this);
+    if (m_showAdaptiveGrid)
+        m_grid->draw(*this);
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();
@@ -339,6 +341,15 @@ const QString Canvas::swapIntervalToString(SwapInterval swapInterval)
     }
 }
 
+void Canvas::setAdaptiveGrid(bool enable)
+{
+    m_showAdaptiveGrid = enable;
+}
+
+bool Canvas::adaptiveGrid() const
+{
+    return m_showAdaptiveGrid;
+}
 
 void Canvas::keyPressEvent(QKeyEvent * event)
 {

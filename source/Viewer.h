@@ -11,6 +11,9 @@ class QLabel;
 class QSurfaceFormat;
 class QShortcut;
 
+class Canvas;
+class AbstractPainter;
+
 
 class Viewer : public QMainWindow
 {
@@ -18,13 +21,11 @@ class Viewer : public QMainWindow
 
 public:
     Viewer(
-        QWidget * parent = nullptr
+        const QSurfaceFormat & format
+    ,   QWidget * parent = nullptr
     ,   Qt::WindowFlags flags = NULL);
 
     virtual ~Viewer();
-
-signals:
-    void toggleSwapInterval();
 
 public slots:
     void fpsChanged(float fps);
@@ -37,9 +38,24 @@ protected slots:
     void toggleFullScreen();
 
     void on_toggleSwapIntervalAction_triggered(bool checked);
+    void toggleSwapInterval();
+
+    void on_showAdaptiveGridAction_triggered(bool checked);
+
+    void on_quitAction_triggered(bool checked);
+
+protected:
+    void setup();
+    void setupCanvas(const QSurfaceFormat & format);
+
+    void store();
+    void restore();
 
 protected:
 	const QScopedPointer<Ui_Viewer> m_ui;
+
+    Canvas * m_canvas;
+    AbstractPainter * m_painter;
 
     QLabel * m_fpsLabel;
     QLabel * m_mouseLabel;

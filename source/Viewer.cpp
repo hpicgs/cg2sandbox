@@ -1,6 +1,7 @@
 
 #include <sstream>
 #include <iomanip>
+#include <cassert>
 
 
 #include <QOpenGLContext>
@@ -10,6 +11,8 @@
 #include <QVector3D>
 
 #include "Application.h"
+#include "Canvas.h"
+#include "Painter.h"
 #include "Viewer.h"
 
 #include "ui_Viewer.h"
@@ -19,20 +22,74 @@ namespace
 {
     const QString SETTINGS_GEOMETRY ("Geometry");
     const QString SETTINGS_STATE    ("State");
+    
+    const QString SETTINGS_ADAPTIVE_GRID("ShowAdaptiveGrid");
 }
 
 Viewer::Viewer(
-    QWidget * parent,
-    Qt::WindowFlags flags)
+    const QSurfaceFormat & format
+,   QWidget * parent
+,    Qt::WindowFlags flags)
 
 : QMainWindow(parent, flags)
 , m_ui(new Ui_Viewer)
+, m_canvas(nullptr)
+, m_painter(nullptr)
 , m_fullscreenShortcut(nullptr)
 , m_swapIntervalShortcut(nullptr)
 {
     m_ui->setupUi(this);
     setWindowTitle(Application::title());
 
+    setup();
+    setupCanvas(format);
+
+    restore();
+};
+
+
+Viewer::~Viewer()
+{
+    store();
+
+    setCentralWidget(nullptr);
+
+    m_canvas->assignPainter(nullptr);
+    delete m_painter;
+    delete m_canvas;
+}
+
+void Viewer::restore()
+{
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QSettings s;
+
+    restoreGeometry(s.value(SETTINGS_GEOMETRY).toByteArray());
+    restoreState(s.value(SETTINGS_STATE).toByteArray());
+
+    m_ui->menubar->setVisible(!isFullScreen());
+    m_ui->statusbar->setVisible(!isFullScreen());
+    m_fullscreenShortcut->setEnabled(isFullScreen());
+    m_swapIntervalShortcut->setEnabled(isFullScreen());
+
+    assert(m_canvas);
+    bool enable = s.value(SETTINGS_ADAPTIVE_GRID).toBool();
+    m_canvas->setAdaptiveGrid(enable);
+    m_ui->showAdaptiveGridAction->setChecked(enable);
+}
+
+void Viewer::store()
+{
+    QSettings s;
+    s.setValue(SETTINGS_GEOMETRY, saveGeometry());
+    s.setValue(SETTINGS_STATE, saveState());
+
+    assert(m_canvas);
+    s.setValue(SETTINGS_ADAPTIVE_GRID, m_canvas->adaptiveGrid());
+}
+
+void Viewer::setup()
+{
     m_fullscreenShortcut = new QShortcut(m_ui->toggleFullScreenAction->shortcut(), this);
     connect(m_fullscreenShortcut, &QShortcut::activated, this, &Viewer::toggleFullScreen);
 
@@ -47,25 +104,29 @@ Viewer::Viewer(
     m_ui->statusbar->addPermanentWidget(m_timeLabel);
     m_fpsLabel = new QLabel("fps", m_ui->statusbar);
     m_ui->statusbar->addPermanentWidget(m_fpsLabel);
+}
 
-
-    QSettings::setDefaultFormat(QSettings::IniFormat);
-    QSettings s;
-
-    restoreGeometry(s.value(SETTINGS_GEOMETRY).toByteArray());
-    restoreState(s.value(SETTINGS_STATE).toByteArray());
-
-    m_ui->menubar->setVisible(!isFullScreen());
-    m_ui->statusbar->setVisible(!isFullScreen());
-    m_fullscreenShortcut->setEnabled(isFullScreen());
-    m_swapIntervalShortcut->setEnabled(isFullScreen());
-};
-
-Viewer::~Viewer()
+void Viewer::setupCanvas(const QSurfaceFormat & format)
 {
-    QSettings s;
-    s.setValue(SETTINGS_GEOMETRY, saveGeometry());
-    s.setValue(SETTINGS_STATE, saveState());
+    m_canvas = new Canvas(format);
+    m_canvas->setContinuousRepaint(true, 0);
+    m_canvas->setSwapInterval(Canvas::VerticalSyncronization);
+
+    connect(m_canvas, &Canvas::fpsUpdate, this, &Viewer::fpsChanged);
+    connect(m_canvas, &Canvas::objUpdate, this, &Viewer::objChanged);
+    connect(m_canvas, &Canvas::timeUpdate, this, &Viewer::timeChanged);
+    connect(m_canvas, &Canvas::mouseUpdate, this, &Viewer::mouseChanged);
+
+    m_painter = new Painter();
+    m_canvas->assignPainter(m_painter);
+
+    QWidget * widget = QWidget::createWindowContainer(m_canvas);
+    widget->setMinimumSize(1, 1);
+    widget->setAutoFillBackground(false); // Important for overdraw, not occluding the scene.
+    widget->setFocusPolicy(Qt::TabFocus);
+
+    setCentralWidget(widget);
+    show();
 }
 
 void Viewer::fpsChanged(float fps)
@@ -117,5 +178,22 @@ void Viewer::toggleFullScreen()
 
 void Viewer::on_toggleSwapIntervalAction_triggered(bool checked)
 {
-    emit toggleSwapInterval();
+    toggleSwapInterval();
+}
+
+void Viewer::toggleSwapInterval()
+{
+    assert(m_canvas);
+    m_canvas->toggleSwapInterval();
+}
+
+void Viewer::on_showAdaptiveGridAction_triggered(bool checked)
+{
+    assert(m_canvas);
+    m_canvas->setAdaptiveGrid(checked);
+}
+
+void Viewer::on_quitAction_triggered(bool checked)
+{
+    QApplication::quit();
 }
