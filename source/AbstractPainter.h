@@ -17,6 +17,22 @@ class AbstractPainter : public AbstractCoordinateProvider
     , protected OpenGLFunctions
 {
 public:
+    // ToDo: perhaps come up with better identifers here.
+    enum PaintMode
+    {
+        Mode0
+    ,   Mode1
+    ,   Mode2
+    ,   Mode3
+    ,   Mode4
+    ,   Mode5
+    ,   Mode6
+    ,   Mode7
+    ,   Mode8
+    ,   Mode9
+    };
+
+public:
     AbstractPainter();
     virtual ~AbstractPainter();
 
@@ -46,6 +62,9 @@ public:
     virtual void update() = 0;
     virtual void update(const QList<QOpenGLShaderProgram *> & programs) = 0;
 
+    void setMode(PaintMode mode);
+    PaintMode mode() const;
+
     // AbstractCoordinateProvider interface
 
     virtual const float depthAt(const QPointF & windowCoordinates);
@@ -62,4 +81,5 @@ public:
 
 protected:
     Camera * m_camera;
+    PaintMode m_mode;
 };

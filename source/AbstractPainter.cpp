@@ -10,6 +10,7 @@
 
 AbstractPainter::AbstractPainter()
 : m_camera(nullptr)
+, m_mode(Mode1)
 {
 }
  
@@ -95,4 +96,14 @@ const QVector3D AbstractPainter::objAt(
 
     // unproject this point back to object space
     return (viewProjectionInverted * p).toVector3DAffine();
+}
+
+void AbstractPainter::setMode(PaintMode mode)
+{
+    m_mode = mode;
+}
+
+AbstractPainter::PaintMode AbstractPainter::mode() const
+{
+    return m_mode;
 }

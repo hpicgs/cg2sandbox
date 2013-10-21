@@ -83,10 +83,55 @@ void Painter::paint(float timef)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    switch (mode())
+    {
+    case Mode1:
+        paint_1_1(timef);
+        break;
+
+    case Mode2:
+        paint_1_2(timef);
+        break;
+
+    case Mode3:
+        paint_1_3(timef);
+        break;
+
+    case Mode4:
+        paint_1_4(timef);
+        break;
+
+    case Mode5:
+        paint_1_5(timef);
+        break;
+
+    default:
+        break;
+    }
+}
+
+void Painter::paint_1_1(float timef)
+{
     if (m_program->isLinked())
     {
         m_program->bind();
         m_cube->draw(*this);
         m_program->release();
     }
+}
+
+void Painter::paint_1_2(float timef)
+{
+}
+
+void Painter::paint_1_3(float timef)
+{
+}
+
+void Painter::paint_1_4(float timef)
+{
+}
+
+void Painter::paint_1_5(float timef)
+{
 }

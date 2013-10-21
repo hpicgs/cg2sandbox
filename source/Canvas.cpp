@@ -349,6 +349,9 @@ void Canvas::keyPressEvent(QKeyEvent * event)
 }
 void Canvas::keyReleaseEvent(QKeyEvent * event)
 {
+    if (m_painter && Qt::Key_0 <= event->key() && event->key() <= Qt::Key_9)
+        m_painter->setMode(static_cast<AbstractPainter::PaintMode>(event->key() - Qt::Key_0));
+
     if (!m_navigation)
         return;
 

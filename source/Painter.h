@@ -29,6 +29,13 @@ public:
     virtual void update(const QList<QOpenGLShaderProgram *> & programs);
 
 protected:
+    void paint_1_1(float timef);
+    void paint_1_2(float timef);
+    void paint_1_3(float timef);
+    void paint_1_4(float timef);
+    void paint_1_5(float timef);
+
+protected:
     Camera * m_camera;
 
     UnitCube * m_cube;

@@ -50,7 +50,6 @@ int main(int argc, char* argv[])
 
         result = app.exec();
         canvas->assignPainter(nullptr);
-
     }
     return result;
 }
