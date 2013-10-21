@@ -10,7 +10,7 @@
 
 AbstractPainter::AbstractPainter()
 : m_camera(nullptr)
-, m_mode(Mode1)
+, m_mode(PaintMode1)
 {
 }
  

@@ -346,19 +346,15 @@ void Canvas::keyPressEvent(QKeyEvent * event)
         return;
 
     m_navigation->keyPressEvent(event);
-
-	// forward event to painter for exercise mode switching
-	m_painter->keyPressEvent(event);
 }
+
 void Canvas::keyReleaseEvent(QKeyEvent * event)
 {
     if (m_painter && Qt::Key_0 <= event->key() && event->key() <= Qt::Key_9)
         m_painter->setMode(static_cast<AbstractPainter::PaintMode>(event->key() - Qt::Key_0));
 
-    if (!m_navigation)
-        return;
-
-    m_navigation->keyReleaseEvent(event);
+    if (m_navigation)
+        m_navigation->keyReleaseEvent(event);
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent * event)

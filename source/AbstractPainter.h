@@ -20,16 +20,16 @@ public:
     // ToDo: perhaps come up with better identifers here.
     enum PaintMode
     {
-        Mode0
-    ,   Mode1
-    ,   Mode2
-    ,   Mode3
-    ,   Mode4
-    ,   Mode5
-    ,   Mode6
-    ,   Mode7
-    ,   Mode8
-    ,   Mode9
+        PaintMode0
+    ,   PaintMode1
+    ,   PaintMode2
+    ,   PaintMode3
+    ,   PaintMode4
+    ,   PaintMode5
+    ,   PaintMode6
+    ,   PaintMode7
+    ,   PaintMode8
+    ,   PaintMode9
     };
 
 public:
