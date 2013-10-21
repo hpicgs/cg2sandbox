@@ -1,16 +1,27 @@
 cg2sandbox
 ==========
 
-### General Remarks
+### Table of Contents
 
-#### Requirements
+ * [General Remarks](#general-remarks)
+  * [Requirements](#requirements)
+  * [Disclaimer](#disclaimer)
+ * [Build Instructions](#build-instructions)
+  * [Windows](#windows)
+  * [Linux](#linux)
+  * [OS X](#os-x)
+ * [Third Party Libraries](#third-party-libraries)
+
+## General Remarks
+
+### Requirements
 
 + CMake 2.8.10
 + Qt 5.1
 + OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL_320```)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
 
-#### Disclaimer
+### Disclaimer
 
 + FOR ASSESSMENT WE BUILD YOUR SUBMISSION IN WINDOWS WITH MSVC11 ONLY!
 + WE OFFICIALLY SUPPORT WINDOWS WITH MSVC11 ONLY!
@@ -20,7 +31,9 @@ We are dedicated to provide a framework that is working on all common desktop pl
 
 ## Build Instructions
 
-### Windows - General Requirements
+### Windows
+
+General Requirements:
 
 + install cmake from
     http://www.cmake.org/cmake/resources/software.html
@@ -87,7 +100,9 @@ We are dedicated to provide a framework that is working on all common desktop pl
 + ./build/exercise1
 
 
-### Linux (tested on Ubuntu 13.04 x64)
+### Linux
+
+Only tested on Ubuntu 13.04 x64.
 
 ####  Gathering Requirements
 
@@ -115,7 +130,7 @@ in your cg2 exercise1 (or exercise#) source folder do:
 + ./build/exercise1
 
 
-### MacOS
+### OS X
 
 #### Building and Running an Exercise
 
