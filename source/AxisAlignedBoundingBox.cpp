@@ -49,7 +49,7 @@ const QVector3D & AxisAlignedBoundingBox::center() const
     return m_center;
 }
 
-const float_t AxisAlignedBoundingBox::radius() const
+const float AxisAlignedBoundingBox::radius() const
 {
     return m_radius;
 }
