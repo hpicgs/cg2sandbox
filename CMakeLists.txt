@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.10 FATAL_ERROR)
 
 set(META_PROJECT_NAME        "cg2sandbox")
 set(META_VERSION_MAJOR       "cg2ws1314")
-set(META_EXERCISE            "0")
+set(META_EXERCISE            "1")
 set(META_AUTHOR1_MATNR       "000000")
 set(META_AUTHOR2_MATNR       "000000")
 set(META_VERSION             "${META_VERSION_MAJOR}.${META_EXERCISE}.${META_AUTHOR1_MATNR}.${META_AUTHOR2_MATNR}")
@@ -205,6 +205,8 @@ set(sources
     ${source_path}/OpenGLFunctions.h
     ${source_path}/Painter.cpp
     ${source_path}/Painter.h
+    ${source_path}/Terrain.cpp
+    ${source_path}/Terrain.h
     ${source_path}/Viewer.cpp
     ${source_path}/Viewer.h
     ${source_path}/Viewer.ui
