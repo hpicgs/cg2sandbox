@@ -133,7 +133,7 @@ option(ASSIMP_BUILD_STATIC "Build ASSIMP static libraries" ON)
 option(ASSIMP_BUILD_EXAMPLES "Build ASSIMP examples" OFF)
 
 # The ASSIMP library.
-add_subdirectory(assimp)
+#add_subdirectory(assimp)
 
 
 # Include directories
@@ -171,10 +171,7 @@ add_executable(${target} ${sources} ${uihs})
 
 qt5_use_modules(${target} Core OpenGL Gui Widgets)
 
-target_link_libraries(${target}
-    assimp
-    zlib
-)
+#target_link_libraries(${target} assimp zlib)
 
 set_target_properties(${target}
     PROPERTIES
