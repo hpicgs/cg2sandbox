@@ -280,7 +280,7 @@ void Painter::paint_1_2(float timef)
         terrain->draw(*this);
         program->release();
 
-        glBindTexture(GL_TEXTURE_2D, NULL);
+        glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
     }
 }
@@ -304,11 +304,11 @@ void Painter::paint_1_3(float timef)
         terrain->draw(*this);
         program->release();
 
-        glBindTexture(GL_TEXTURE_2D, NULL);
+        glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, NULL);
+        glBindTexture(GL_TEXTURE_2D, 0);
         glDisable(GL_TEXTURE_2D);
     }
 }
