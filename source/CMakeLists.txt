@@ -14,6 +14,8 @@ set(sources
     OpenGLFunctions.h
     Painter.cpp
     Painter.h
+    Terrain.cpp
+    Terrain.h
     Viewer.cpp
     Viewer.h
     Viewer.ui
