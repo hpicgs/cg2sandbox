@@ -206,7 +206,7 @@ void MessageHandler::printf(
     // Print to Console
 
     if(m_printToConsole[type])
-        fprintf(stderr, qPrintable(message));
+        fputs(qPrintable(message), stderr);
 
     // Print to File
 
