@@ -1,87 +1,54 @@
 
 set(sources
-    main.cpp
+    source/main.cpp
 
     # based on or targeted for glwhite
-    AbstractPainter.cpp
-    AbstractPainter.h
-    Application.cpp
-    Application.h
-    Canvas.cpp
-    Canvas.h
-    MessageHandler.cpp
-    MessageHandler.h
-    OpenGLFunctions.h
-    Painter.cpp
-    Painter.h
-    Viewer.cpp
-    Viewer.h
-    Viewer.ui
+    source/AbstractPainter.cpp
+    source/AbstractPainter.h
+    source/Application.cpp
+    source/Application.h
+    source/Canvas.cpp
+    source/Canvas.h
+    source/MessageHandler.cpp
+    source/MessageHandler.h
+    source/OpenGLFunctions.h
+    source/Painter.cpp
+    source/Painter.h
+    source/Viewer.cpp
+    source/Viewer.h
+    source/Viewer.ui
 
-    FileAssociatedShader.cpp
-    FileAssociatedShader.h
-    
-    CachedValue.h
-    CachedValue.hpp
+    source/FileAssociatedShader.cpp
+    source/FileAssociatedShader.h
+
+    source/CachedValue.h
+    source/CachedValue.hpp
 
     # based on or targeted for libglow
-    AdaptiveGrid.cpp
-    AdaptiveGrid.h
-    AutoTimer.cpp
-    AutoTimer.h
-    ChronoTimer.cpp
-    ChronoTimer.h
-	MathMacros.h
-    Plane3.cpp
-    Plane3.h
-    Timer.cpp
-    Timer.h
-    UnitCube.cpp
-    UnitCube.h
+    source/AdaptiveGrid.cpp
+    source/AdaptiveGrid.h
+    source/AutoTimer.cpp
+    source/AutoTimer.h
+    source/ChronoTimer.cpp
+    source/ChronoTimer.h
+	source/MathMacros.h
+    source/Plane3.cpp
+    source/Plane3.h
+    source/Timer.cpp
+    source/Timer.h
+    source/UnitCube.cpp
+    source/UnitCube.h
 
-    AbstractCoordinateProvider.h
-    AxisAlignedBoundingBox.cpp
-    AxisAlignedBoundingBox.h
-    Camera.cpp
-    Camera.h
-    CyclicTime.cpp
-    CyclicTime.h
-    Navigation.cpp
-    Navigation.h
-    NavigationMath.cpp
-    NavigationMath.h    
-)
+    source/AbstractCoordinateProvider.h
+    source/AxisAlignedBoundingBox.cpp
+    source/AxisAlignedBoundingBox.h
+    source/Camera.cpp
+    source/Camera.h
+    source/CyclicTime.cpp
+    source/CyclicTime.h
+    source/Navigation.cpp
+    source/Navigation.h
+    source/NavigationMath.cpp
+    source/NavigationMath.h
 
-# Group source files
-set(SANDBOX_SOURCE_GROUP "Source Files")
-source_group_by_path(${source_path} "\\\\.h$|\\\\.hpp$|\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$" 
-    ${SANDBOX_SOURCE_GROUP} ${sources})
-
-# wrap ui files and group wrap headers
-list_extract(uis "\\\\.ui$" ${sources})
-qt5_wrap_ui(uihs ${uis})
-
-source_group_by_path(${CMAKE_CURRENT_BINARY_DIR} "\\\\.h$" 
-    ${SANDBOX_SOURCE_GROUP} ${uihs})
-
-
-# Build library
-add_executable(${target} ${sources} ${uihs})
-
-qt5_use_modules(${target} Core OpenGL Gui Widgets)
-
-target_link_libraries(${target}
-    assimp
-    zlib
-)
-
-set_target_properties(${target}
-    PROPERTIES
-    LINKER_LANGUAGE CXX
-    COMPILE_DEFINITIONS_DEBUG   "${DEFAULT_COMPILE_DEFS_DEBUG}"
-    COMPILE_DEFINITIONS_RELEASE "${DEFAULT_COMPILE_DEFS_RELEASE}"
-    COMPILE_FLAGS               "${DEFAULT_COMPILE_FLAGS}"
-    LINK_FLAGS_DEBUG            "${DEFAULT_LINKER_FLAGS_DEBUG}"
-    LINK_FLAGS_RELEASE          "${DEFAULT_LINKER_FLAGS_RELEASE}"
-    DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
-)
+    PARENT_SCOPE)
