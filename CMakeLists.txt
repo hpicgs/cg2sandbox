@@ -19,6 +19,8 @@ option(OPTION_LIMIT_CONFIGS  "Generate limited configs (Release; Debug)" ON)
 option(OPTION_LOCAL_INSTALL  "Install to a local directory instead of the system" OFF)
 option(OPTION_NO_OPENGL_320  "Try using the 3.0 OpenGL profile in evil compatibility mode." OFF)
 
+set(CMAKE_INSTALL_LOCAL_ONLY OFF)
+
 # CMAKE CONFIGURATION
 
 set(SANDBOX_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -87,45 +89,6 @@ endif()
 # Install locations
 
 set(project ${META_PROJECT_NAME})
-if(WIN32)
-    set(INSTALL_BIN           ".")                      # C:\Programme\<project>
-    set(INSTALL_SHARED        ".")                      # C:\Programme\<project>
-    set(INSTALL_LIB           "lib")                    # C:\Programme\<project>\lib
-    set(INSTALL_INCLUDE       "include")                # C:\Programme\<project>\include
-    set(INSTALL_DOC           "doc")                    # C:\Programme\<project>\doc
-    set(INSTALL_APPLICATIONS  "")                       # Not available under Windows
-    set(INSTALL_ICONS         "")                       # Not available under Windows
-    set(INSTALL_INIT          "")                       # Not available under Windows
-    set(INSTALL_DATA          ".")                      # C:\Programme\<project>
-    set(INSTALL_EXAMPLES      ".")                      # C:\Programme\<project>
-elseif(LINUX)
-    set(INSTALL_BIN           "bin")                    # /usr/[local]/bin
-    set(INSTALL_SHARED        "lib")                    # /usr/[local]/lib
-    set(INSTALL_LIB           "lib")                    # /usr/[local]/lib
-    set(INSTALL_INCLUDE       "include")                # /usr/[local]/include
-    set(INSTALL_DOC           "share/doc/${project}")   # /usr/[local]/share/doc/<project>
-    set(INSTALL_APPLICATIONS  "share/applications")     # /usr/[local]/share/applications
-    set(INSTALL_ICONS         "share/pixmaps")          # /usr/[local]/share/pixmaps
-    set(INSTALL_INIT          "/etc/init")              # /etc/init (upstart init scripts)
-    set(INSTALL_DATA          "share/${project}")       # /usr/[local]/share/<project>
-    set(INSTALL_EXAMPLES      "share/${project}")       # /usr/[local]/share/<project>
-
-    # Adjust target paths for Local installs
-    if(OPTION_LOCAL_INSTALL)
-        # Put binaries in root directory and keep data directory name
-        set(INSTALL_BIN                       ".")           # /<INSTALL_PREFIX>
-        set(INSTALL_DATA                      ".")           # /<INSTALL_PREFIX>
-
-        # We have to change the RPATH of binaries to achieve a usable local install.
-        # [TODO] For binaries, "$ORIGIN/lib" is right, so that libraries are found in ./lib.
-        #        However, I have not yet tested what happens when libraries use other libraries.
-        #        In that case, they might need the rpath $ORIGIN instead ...
-        set(CMAKE_SKIP_BUILD_RPATH            FALSE)         # Use automatic rpath for build
-        set(CMAKE_BUILD_WITH_INSTALL_RPATH    FALSE)         # Use specific rpath for INSTALL
-        set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)         # NO automatic rpath for INSTALL
-        set(CMAKE_INSTALL_RPATH               "$ORIGIN/lib") # Libraries are relative to binary
-    endif()
-endif()
 
 
 # Target
@@ -185,113 +148,32 @@ if(OPTION_NO_OPENGL_320)
     add_definitions("-DNO_OPENGL_320")
 endif()
 
-set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/source")
+add_subdirectory(source)
 
-# Generate meta-header
-configure_file(${source_path}/version.h.in version.h)
-
-set(sources
-    ${source_path}/main.cpp
-
-    # based on or targeted for glwhite
-    ${source_path}/AbstractPainter.cpp
-    ${source_path}/AbstractPainter.h
-    ${source_path}/Application.cpp
-    ${source_path}/Application.h
-    ${source_path}/Canvas.cpp
-    ${source_path}/Canvas.h
-    ${source_path}/MessageHandler.cpp
-    ${source_path}/MessageHandler.h
-    ${source_path}/OpenGLFunctions.h
-    ${source_path}/Painter.cpp
-    ${source_path}/Painter.h
-    ${source_path}/Viewer.cpp
-    ${source_path}/Viewer.h
-    ${source_path}/Viewer.ui
-
-    ${source_path}/FileAssociatedShader.cpp
-    ${source_path}/FileAssociatedShader.h
+# PACKAGING
     
-    ${source_path}/CachedValue.h
-    ${source_path}/CachedValue.hpp
+# Package information
 
-    # based on or targeted for libglow
-    ${source_path}/AdaptiveGrid.cpp
-    ${source_path}/AdaptiveGrid.h
-    ${source_path}/AutoTimer.cpp
-    ${source_path}/AutoTimer.h
-    ${source_path}/ChronoTimer.cpp
-    ${source_path}/ChronoTimer.h
-	${source_path}/MathMacros.h
-    ${source_path}/Plane3.cpp
-    ${source_path}/Plane3.h
-    ${source_path}/Timer.cpp
-    ${source_path}/Timer.h
-    ${source_path}/UnitCube.cpp
-    ${source_path}/UnitCube.h
+set(CPACK_PACKAGE_NAME                  "${META_PROJECT_NAME}")
+set(CPACK_PACKAGE_VERSION               "${META_VERSION}")
+set(CPACK_PACKAGE_VERSION_MAJOR         "${META_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR         "${META_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH         "${META_AUTHOR1_MATNR}.${META_AUTHOR2_MATNR}")
+set(CPACK_PACKAGE_RELOCATABLE           OFF)
 
-    ${source_path}/AbstractCoordinateProvider.h
-    ${source_path}/AxisAlignedBoundingBox.cpp
-    ${source_path}/AxisAlignedBoundingBox.h
-    ${source_path}/Camera.cpp
-    ${source_path}/Camera.h
-    ${source_path}/CyclicTime.cpp
-    ${source_path}/CyclicTime.h
-    ${source_path}/Navigation.cpp
-    ${source_path}/Navigation.h
-    ${source_path}/NavigationMath.cpp
-    ${source_path}/NavigationMath.h    
+# Package name
+    
+set(CPACK_SOURCE_GENERATOR "ZIP")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+SET(CPACK_SOURCE_INSTALLED_DIRECTORIES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/source;/source;${CMAKE_CURRENT_SOURCE_DIR}/data;/data")
+
+get_filename_component(CPACK_PATH ${CMAKE_COMMAND} PATH)
+set(CPACK_COMMAND "${CPACK_PATH}/cpack")
+
+add_custom_target(pack
+    COMMAND ${CPACK_COMMAND} --config ${CMAKE_BINARY_DIR}/CPackSourceConfig.cmake
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
-# Group source files
-set(SANDBOX_SOURCE_GROUP "Source Files")
-source_group_by_path(${source_path} "\\\\.h$|\\\\.hpp$|\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$" 
-    ${SANDBOX_SOURCE_GROUP} ${sources})
-
-# wrap ui files and group wrap headers
-list_extract(uis "\\\\.ui$" ${sources})
-qt5_wrap_ui(uihs ${uis})
-
-source_group_by_path(${CMAKE_CURRENT_BINARY_DIR} "\\\\.h$" 
-    ${SANDBOX_SOURCE_GROUP} ${uihs})
-
-
-# Build library
-add_executable(${target} ${sources} ${uihs})
-
-qt5_use_modules(${target} Core OpenGL Gui Widgets)
-
-target_link_libraries(${target}
-    assimp
-    zlib
-)
-
-set_target_properties(${target}
-    PROPERTIES
-    LINKER_LANGUAGE CXX
-    COMPILE_DEFINITIONS_DEBUG   "${DEFAULT_COMPILE_DEFS_DEBUG}"
-    COMPILE_DEFINITIONS_RELEASE "${DEFAULT_COMPILE_DEFS_RELEASE}"
-    COMPILE_FLAGS               "${DEFAULT_COMPILE_FLAGS}"
-    LINK_FLAGS_DEBUG            "${DEFAULT_LINKER_FLAGS_DEBUG}"
-    LINK_FLAGS_RELEASE          "${DEFAULT_LINKER_FLAGS_RELEASE}"
-    DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
-)
-
-# Deployment
-install(TARGETS ${target}
-    RUNTIME DESTINATION ${INSTALL_BIN}
-    LIBRARY DESTINATION ${INSTALL_SHARED}
-    ARCHIVE DESTINATION ${INSTALL_LIB}
-)
-#install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE})
-
-install(FILES LICENSE AUTHORS DESTINATION .)
-
-# DEPLOYMENT
-
-# Data files
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
-    DESTINATION ${INSTALL_DATA})
-
-# Packaging
-add_subdirectory(packages)
+include(CPack)
