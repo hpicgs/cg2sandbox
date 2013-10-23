@@ -54,7 +54,7 @@ public:
 
 	/** Float time in the intervall [0;1]
     */
-    inline const t_longf getf() const;
+    inline const t_longf getf() const { return m_timef[1]; }
 
 	const t_longf getf(bool updateFirst);
 
