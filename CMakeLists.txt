@@ -150,6 +150,40 @@ endif()
 
 add_subdirectory(source)
 
+# Group source files
+set(SANDBOX_SOURCE_GROUP "Source Files")
+source_group_by_path(${source_path} "\\\\.h$|\\\\.hpp$|\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$" 
+    ${SANDBOX_SOURCE_GROUP} ${sources})
+
+# wrap ui files and group wrap headers
+list_extract(uis "\\\\.ui$" ${sources})
+qt5_wrap_ui(uihs ${uis})
+
+source_group_by_path(${CMAKE_CURRENT_BINARY_DIR} "\\\\.h$" 
+    ${SANDBOX_SOURCE_GROUP} ${uihs})
+
+
+# Build library
+add_executable(${target} ${sources} ${uihs})
+
+qt5_use_modules(${target} Core OpenGL Gui Widgets)
+
+target_link_libraries(${target}
+    assimp
+    zlib
+)
+
+set_target_properties(${target}
+    PROPERTIES
+    LINKER_LANGUAGE CXX
+    COMPILE_DEFINITIONS_DEBUG   "${DEFAULT_COMPILE_DEFS_DEBUG}"
+    COMPILE_DEFINITIONS_RELEASE "${DEFAULT_COMPILE_DEFS_RELEASE}"
+    COMPILE_FLAGS               "${DEFAULT_COMPILE_FLAGS}"
+    LINK_FLAGS_DEBUG            "${DEFAULT_LINKER_FLAGS_DEBUG}"
+    LINK_FLAGS_RELEASE          "${DEFAULT_LINKER_FLAGS_RELEASE}"
+    DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
+)
+
 # PACKAGING
 
 # Package information
