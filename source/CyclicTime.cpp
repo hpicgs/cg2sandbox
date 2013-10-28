@@ -100,11 +100,6 @@ const t_longf CyclicTime::getf(const bool updateFirst)
 	return m_timef[1];
 }
 
-const t_longf CyclicTime::getf() const
-{
-    return m_timef[1];
-}
-
 const time_t CyclicTime::gett() const
 {
     return m_time[1] + utcOffset();

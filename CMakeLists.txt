@@ -148,11 +148,14 @@ if(OPTION_NO_OPENGL_320)
     add_definitions("-DNO_OPENGL_320")
 endif()
 
+configure_file(source/version.h.in version.h)
+
 add_subdirectory(source)
 
 # Group source files
 set(SANDBOX_SOURCE_GROUP "Source Files")
-source_group_by_path(${source_path} "\\\\.h$|\\\\.hpp$|\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$" 
+source_group_by_path(
+    ${CMAKE_CURRENT_SOURCE_DIR}/source "\\\\.h$|\\\\.hpp$|\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$" 
     ${SANDBOX_SOURCE_GROUP} ${sources})
 
 # wrap ui files and group wrap headers
@@ -185,7 +188,7 @@ set_target_properties(${target}
 )
 
 # PACKAGING
-    
+
 # Package information
 
 set(CPACK_PACKAGE_NAME                  "${META_PROJECT_NAME}")
