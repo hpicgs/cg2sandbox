@@ -17,18 +17,18 @@ const char * AdaptiveGrid::s_vsSource =
    
     "#version 140\n"
     "uniform mat4 transform;\n"
-    "uniform vec2 distance;\n"
+    "uniform vec2 viewPlaneDistance;\n"
     "in vec4 a_vertex;\n"
     "flat out float v_type;\n" 
     "out vec3 v_vertex;\n"
     "\n"
     "void main()\n"
     "{\n"
-    "    float m = 1.0 - distance[1];\n"
+    "    float m = 1.0 - viewPlaneDistance[1];\n"
     "    float t = a_vertex.w;\n"
     "    vec4 vertex = transform * vec4(a_vertex.xyz, 1.0);\n"
     "    v_vertex = vertex.xyz;\n"
-    "    // interpolate minor grid lines alpha based on distance\n"
+    "    // interpolate minor grid lines alpha based on viewPlaneDistance\n"
     "    v_type =  mix(1.0 - t, 1.0 - 2.0 * m * t, step(a_vertex.w, 0.7998));\n"
     "    gl_Position = vertex;\n"
     "}\n";
@@ -37,7 +37,7 @@ const char * AdaptiveGrid::s_fsSource =
 
     "#version 140\n"
     "\n"
-    "uniform vec2 distance;\n"
+    "uniform vec2 viewPlaneDistance;\n"
     "uniform float znear;\n"
     "uniform float zfar; \n"
     "uniform vec3 color; \n"
@@ -58,7 +58,7 @@ const char * AdaptiveGrid::s_fsSource =
     "   z = - znear * z / (zfar * z - zfar - znear * z);\n"
 	"\n"
     "   float g = mix(t, 1.0, z * z);\n"
-    "   float l = clamp(8.0 - length(v_vertex) / distance[0], 0.0, 1.0);\n"
+    "   float l = clamp(8.0 - length(v_vertex) / viewPlaneDistance[0], 0.0, 1.0);\n"
     "   fragColor = vec4(color, l * (1.0 - g * g));\n"
     "}\n";
 
@@ -204,7 +204,7 @@ void AdaptiveGrid::update(
     offset.scale(distance);
 
 	m_program->bind();
-    m_program->setUniformValue("distance", QVector2D(l, mod(distancelog, 1.f)));
+    m_program->setUniformValue("viewPlaneDistance", QVector2D(l, mod(distancelog, 1.f)));
 	m_program->setUniformValue("transform", modelViewProjection * offset);
 	m_program->release();
 } 

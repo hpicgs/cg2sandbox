@@ -16,7 +16,7 @@ cg2sandbox
 
 ### Requirements
 
-+ CMake 2.8.10
++ CMake 2.8.12
 + Qt 5.1
 + OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL_320```)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
