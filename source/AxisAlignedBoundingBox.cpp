@@ -7,6 +7,7 @@
 AxisAlignedBoundingBox::AxisAlignedBoundingBox()
 :   m_urb(QVector3D(-FLT_MAX,-FLT_MAX,-FLT_MAX))
 ,   m_llf(QVector3D(+FLT_MAX,+FLT_MAX,+FLT_MAX))
+,	m_radius(0.f)
 {
 }
 
