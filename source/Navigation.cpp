@@ -243,8 +243,8 @@ void Navigation::scaleAtMouse(
     const QPoint & mouse
 ,   float scale)
 {
-    const QVector3D ln = m_camera.eye();
-    const QVector3D lf = m_camera.center();
+    const QVector3D& ln = m_camera.eye();
+    const QVector3D& lf = m_camera.center();
 
     bool intersects;
 
@@ -275,8 +275,8 @@ void Navigation::scaleAtMouse(
 
 void Navigation::resetScaleAtMouse(const QPoint & mouse)
 {
-    const QVector3D ln = m_camera.eye();
-    const QVector3D lf = m_camera.center();
+    const QVector3D& ln = m_camera.eye();
+    const QVector3D& lf = m_camera.center();
 
     // set the distance between pointed position in the scene and camera to 
     // default distance
@@ -297,8 +297,8 @@ void Navigation::resetScaleAtMouse(const QPoint & mouse)
 
 void Navigation::scaleAtCenter(float scale)
 {
-    const QVector3D ln = m_camera.eye();
-    const QVector3D lf = m_camera.center();
+    const QVector3D& ln = m_camera.eye();
+    const QVector3D& lf = m_camera.center();
 
     bool intersects;
     QVector3D i = NavigationMath::rayPlaneIntersection(intersects, ln, lf);
