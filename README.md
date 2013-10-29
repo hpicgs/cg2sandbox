@@ -20,6 +20,7 @@ cg2sandbox
 + Qt 5.1
 + OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL_320```)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
++ Partial C++11 support (as provided by MSVC11:  http://wiki.apache.org/stdcxx/C++0xCompilerSupport)
 
 ### Disclaimer
 
@@ -46,7 +47,7 @@ General Requirements:
 
 #### Prerequisites
 
-+ Having a Visual Studio installed (MSVC10 or UP)
++ Having a Visual Studio installed (MSVC11 or UP)
 
 #### Building and Running an Exercise
 
