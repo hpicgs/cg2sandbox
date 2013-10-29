@@ -210,6 +210,8 @@ set(sources
     ${source_path}/Viewer.h
     ${source_path}/Viewer.ui
 
+	${source_path}/FileAssociatedAsset.cpp
+    ${source_path}/FileAssociatedAsset.h
     ${source_path}/FileAssociatedShader.cpp
     ${source_path}/FileAssociatedShader.h
     

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <QObject>
+#include "FileAssociatedAsset.h"
 #include <QOpenGLShader>
 #include <QMap>
 #include <QList>
@@ -13,7 +13,7 @@ class QFileSystemWatcher;
 /** ToDo: does not work for multiple contexts yet... 
 */
 
-class FileAssociatedShader : public QObject
+class FileAssociatedShader : public FileAssociatedAsset
 {
 public:
     static QOpenGLShader * getOrCreate(
@@ -27,12 +27,7 @@ public:
     */
     static QList<QOpenGLShaderProgram *> process();
 
-protected:
-    static FileAssociatedShader * instance();
-
 protected slots:
-    void fileChanged(const QString & path);
-
     void shaderDestroyed(QObject * object);
     void programDestroyed(QObject * object);
 
@@ -43,10 +38,4 @@ private:
 protected:
     static QMap<QString, QOpenGLShader *> s_shaderByFilePath;
     static QMultiMap<QOpenGLShader *, QOpenGLShaderProgram *> s_programsByShader;
-
-    static QQueue<QString> s_queue;
-
-    QFileSystemWatcher * m_fileSystemWatcher;
-
-    static FileAssociatedShader * s_instance;
 };
