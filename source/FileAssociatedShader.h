@@ -21,6 +21,7 @@ public:
     ,   const QString & fileName
     ,   QOpenGLShaderProgram & program);
 
+
     /** This processes the queue of files with shaders associated by 
         recompiling those and relinking related programs.
         Note: This requires context to be made current!

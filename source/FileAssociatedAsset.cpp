@@ -3,6 +3,7 @@
 #include <QList>
 #include <QQueue>
 
+
 #include "FileAssociatedAsset.h"
 
 QQueue<QString> FileAssociatedAsset::s_queue;
@@ -38,4 +39,9 @@ void FileAssociatedAsset::fileChanged(const QString & filePath)
 QFileSystemWatcher * const FileAssociatedAsset::fileSystemWatcher()
 {
 	return instance()->m_fileSystemWatcher;
+}
+
+void FileAssociatedAsset::addResourcePath(const QString & filePath)
+{
+	m_fileSystemWatcher->addPath(filePath);
 }

@@ -11,6 +11,8 @@ public:
     static FileAssociatedAsset * instance();
 	static QFileSystemWatcher * const fileSystemWatcher();
 
+	void addResourcePath(const QString & fileName);
+
 public slots:
     void fileChanged(const QString & path);
 

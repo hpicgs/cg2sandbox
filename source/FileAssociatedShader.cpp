@@ -1,10 +1,8 @@
 
 #include <cassert>
-
 #include <QFileSystemWatcher>
-#include <QFileInfo>
 #include <QTextStream>
-
+#include <QFileInfo>
 #include "FileAssociatedShader.h"
 
 QMap<QString, QOpenGLShader *> FileAssociatedShader::s_shaderByFilePath;
@@ -24,25 +22,23 @@ QOpenGLShader * FileAssociatedShader::getOrCreate(
 ,   const QString & fileName
 ,   QOpenGLShaderProgram & program)
 {
-    QFileInfo fi(fileName);
-
-    if(!fi.exists())
-    {
-        qWarning() << fileName << " does not exist: shader is without source and associated file.";
-        return nullptr;
-    }
-
-    QString filePath(fi.absoluteFilePath());
-
     QOpenGLShader * shader(nullptr);
- 
+	
+	QFileInfo fi(fileName);
+	if (!fi.exists())
+	{
+		qWarning() << fileName << " does not exist: shader is without source and associated file.";
+		return shader;
+	}
+
+	QString filePath(fi.absoluteFilePath());
     if (s_shaderByFilePath.contains(filePath))
     {
         shader = s_shaderByFilePath[filePath];
     }
     else
     {
-        fileSystemWatcher()->addPath(filePath);
+		instance()->addResourcePath(filePath);
 
         shader = new QOpenGLShader(type);
         shader->compileSourceFile(filePath);
@@ -129,7 +125,7 @@ QList<QOpenGLShaderProgram *> FileAssociatedShader::process()
         s_queue.removeFirst();
 
         QOpenGLShader * shader(s_shaderByFilePath[filePath]);
-        assert(nullptr != shader);
+        assert(shader != nullptr);
 
         qDebug() << "Recompiling" << filePath;
 
