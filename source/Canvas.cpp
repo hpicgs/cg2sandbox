@@ -93,7 +93,11 @@ const GLint Canvas::queryi(const GLenum penum)
 void Canvas::initializeGL(const QSurfaceFormat & format)
 {
     m_context->setFormat(format);
-    m_context->create();
+    if (!m_context->create())
+	{
+		qCritical() << "Errors during creation of OpenGL context.";
+		return;
+	}
 
     m_context->makeCurrent(this);
     if (!initializeOpenGLFunctions())
