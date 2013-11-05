@@ -95,6 +95,7 @@ void Painter::paint(float timef)
 			}
 		}
 		break;
+	// add other case statements for other exercise modes here.
 	default: break;
 	}
 }

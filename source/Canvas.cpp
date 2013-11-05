@@ -237,7 +237,7 @@ bool Canvas::verifyExtensions() const
 
     if (!m_context->isValid())
     {
-        qWarning("Extensions cannot be veryfied due to invalid context.");
+        qWarning("Extensions cannot be verified due to invalid context.");
         return false;
     }
 

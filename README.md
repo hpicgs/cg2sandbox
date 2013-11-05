@@ -27,7 +27,7 @@ cg2sandbox
 + FOR ASSESSMENT WE BUILD YOUR SUBMISSION IN WINDOWS WITH MSVC11 ONLY!
 + WE OFFICIALLY SUPPORT WINDOWS WITH MSVC11 ONLY!
 + Still, if you have problems on other platforms please let us know. 
-We are dedicated to provide a framework that is working on all common desktop plattforms.
+We are dedicated to provide a framework that is working on all common desktop platforms.
 
 
 ## Build Instructions
