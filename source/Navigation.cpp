@@ -525,11 +525,11 @@ void Navigation::mouseDoubleClickEvent(QMouseEvent * event)
 
 void Navigation::wheelEvent(QWheelEvent * event)
 {
-    static const float wheelNormalizationFactor = 1.f / 120.f;
     event->ignore();
 
     if (m_mode == NoInteraction)
     {
+		static const float wheelNormalizationFactor = 1.f / 120.f;
         scaleAtMouse(event->pos(),
             - event->delta() * wheelNormalizationFactor * DEFAULT_SCALE_STEP);
         event->accept();
