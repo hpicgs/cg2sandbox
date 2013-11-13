@@ -47,14 +47,14 @@ public:
 	void reset(bool update = false); ///< Resets the time to initial value (secondsPerCycle remain unchanged).
 	void stop (bool update = false); ///< Stops and resets the time.
 
-    inline const t_longf getSecondsPerCycle() const;
+    inline const t_longf getSecondsPerCycle() const { return m_secondsPerCycle; }
 
 	const t_longf setSecondsPerCycle(const t_longf secondsPerCycle);
 
 
 	/** Float time in the intervall [0;1]
     */
-    inline const t_longf getf() const;
+    inline const t_longf getf() const { return m_timef[1]; }
 
 	const t_longf getf(bool updateFirst);
 

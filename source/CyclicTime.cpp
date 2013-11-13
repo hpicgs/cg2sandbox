@@ -71,11 +71,6 @@ CyclicTime::~CyclicTime()
 	delete m_timer;
 }
 
-const t_longf CyclicTime::getSecondsPerCycle() const
-{
-    return m_secondsPerCycle;
-}
-
 inline long double CyclicTime::elapsed() const
 {
     return m_timer->elapsed() * 1e-9f;
@@ -98,11 +93,6 @@ const t_longf CyclicTime::getf(const bool updateFirst)
 		update();
 
 	return m_timef[1];
-}
-
-const t_longf CyclicTime::getf() const
-{
-    return m_timef[1];
 }
 
 const time_t CyclicTime::gett() const
