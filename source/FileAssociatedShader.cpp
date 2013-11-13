@@ -118,23 +118,9 @@ void FileAssociatedShader::programDestroyed(QObject * object)
 
 QList<QOpenGLShaderProgram *> FileAssociatedShader::process()
 {
+    repairWatchedFiles();
+
     QList<QOpenGLShaderProgram *> programsWithInvalidatedUniforms;
-
-	{
-		auto inst = static_cast<FileAssociatedShader*>(instance());
-		auto watchedFiles = inst->fileSystemWatcher()->files();
-		if (watchedFiles.count() != inst->s_shaderByFilePath.count())
-		{
-			for (auto path : inst->s_shaderByFilePath.keys())
-			{
-				if (!watchedFiles.contains(path) && QFileInfo(path).exists())
-				{
-					inst->m_fileSystemWatcher->addPath(path);
-				}
-			}
-		}
-	}
-
     while (!s_queue.isEmpty())
     {
         QString filePath = s_queue.first();
@@ -168,4 +154,18 @@ QList<QOpenGLShaderProgram *> FileAssociatedShader::process()
     }
 
     return programsWithInvalidatedUniforms;
+}
+
+void FileAssociatedShader::repairWatchedFiles()
+{
+    QSet<QString> expectedWatchedFiles = s_shaderByFilePath.keys().toSet();
+    QSet<QString> actualWatchedFiles = fileSystemWatcher()->files().toSet();
+
+    for (const QString& path : expectedWatchedFiles - actualWatchedFiles)
+    {
+        if (QFileInfo(path).exists())
+        {
+            fileSystemWatcher()->addPath(path);
+        }
+    }
 }
