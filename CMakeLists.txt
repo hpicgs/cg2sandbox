@@ -214,6 +214,8 @@ set(sources
     ${source_path}/FileAssociatedAsset.h
     ${source_path}/FileAssociatedShader.cpp
     ${source_path}/FileAssociatedShader.h
+    ${source_path}/FileAssociatedTexture.cpp
+    ${source_path}/FileAssociatedTexture.h
     
     ${source_path}/CachedValue.h
     ${source_path}/CachedValue.hpp
@@ -225,6 +227,8 @@ set(sources
     ${source_path}/AutoTimer.h
     ${source_path}/ChronoTimer.cpp
     ${source_path}/ChronoTimer.h
+    ${source_path}/Icosahedron.cpp
+    ${source_path}/Icosahedron.h
 	${source_path}/MathMacros.h
     ${source_path}/Plane3.cpp
     ${source_path}/Plane3.h
@@ -232,7 +236,9 @@ set(sources
     ${source_path}/Timer.h
     ${source_path}/UnitCube.cpp
     ${source_path}/UnitCube.h
-
+    ${source_path}/ScreenAlignedQuad.cpp
+    ${source_path}/ScreenAlignedQuad.h
+    
     ${source_path}/AbstractCoordinateProvider.h
     ${source_path}/AxisAlignedBoundingBox.cpp
     ${source_path}/AxisAlignedBoundingBox.h
