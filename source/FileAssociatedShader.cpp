@@ -3,6 +3,7 @@
 #include <QFileSystemWatcher>
 #include <QTextStream>
 #include <QFileInfo>
+#include <QStringList>
 #include "FileAssociatedShader.h"
 
 QMap<QString, QOpenGLShader *> FileAssociatedShader::s_shaderByFilePath;
@@ -117,8 +118,9 @@ void FileAssociatedShader::programDestroyed(QObject * object)
 
 QList<QOpenGLShaderProgram *> FileAssociatedShader::process()
 {
-    QList<QOpenGLShaderProgram *> programsWithInvalidatedUniforms;
+    repairWatchedFiles();
 
+    QList<QOpenGLShaderProgram *> programsWithInvalidatedUniforms;
     while (!s_queue.isEmpty())
     {
         QString filePath = s_queue.first();
@@ -152,4 +154,18 @@ QList<QOpenGLShaderProgram *> FileAssociatedShader::process()
     }
 
     return programsWithInvalidatedUniforms;
+}
+
+void FileAssociatedShader::repairWatchedFiles()
+{
+    QSet<QString> expectedWatchedFiles = s_shaderByFilePath.keys().toSet();
+    QSet<QString> actualWatchedFiles = fileSystemWatcher()->files().toSet();
+
+    for (const QString& path : expectedWatchedFiles - actualWatchedFiles)
+    {
+        if (QFileInfo(path).exists())
+        {
+            fileSystemWatcher()->addPath(path);
+        }
+    }
 }

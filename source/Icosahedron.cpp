@@ -3,8 +3,8 @@
 #include <iterator>
 
 #include <QVector3D>
-#include <QOpenGLVertexArrayObject.h>
-#include <QOpenGLBuffer.h>
+#include <QOpenGLVertexArrayObject>
+#include <QOpenGLBuffer>
 
 #include "Icosahedron.h"
 
