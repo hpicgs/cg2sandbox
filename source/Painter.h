@@ -37,6 +37,13 @@ protected:
     //void paint_1_5(float timef);
     //...
 
+    void paint_2_1(float timef);
+    void paint_2_2(float timef);
+    void paint_2_3(float timef);
+    void paint_2_4(float timef);
+    //void paint_2_5(float timef);
+    //...
+
 protected:
     GLuint getOrCreateTexture(const QString & fileName);
 
