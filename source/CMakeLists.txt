@@ -20,9 +20,13 @@ set(sources
     source/Viewer.h
     source/Viewer.ui
 
+    source/FileAssociatedAsset.cpp
+    source/FileAssociatedAsset.h
     source/FileAssociatedShader.cpp
     source/FileAssociatedShader.h
-    
+    source/FileAssociatedTexture.cpp
+    source/FileAssociatedTexture.h
+
     source/CachedValue.h
     source/CachedValue.hpp
 
@@ -33,9 +37,13 @@ set(sources
     source/AutoTimer.h
     source/ChronoTimer.cpp
     source/ChronoTimer.h
+    source/Icosahedron.cpp
+    source/Icosahedron.h
 	source/MathMacros.h
     source/Plane3.cpp
     source/Plane3.h
+    source/ScreenAlignedQuad.cpp
+    source/ScreenAlignedQuad.h
     source/Timer.cpp
     source/Timer.h
     source/UnitCube.cpp
