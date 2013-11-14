@@ -364,6 +364,13 @@ void Canvas::keyPressEvent(QKeyEvent * event)
         return;
 
     m_navigation->keyPressEvent(event);
+
+    if (!event->isAccepted())
+    {
+        m_context->makeCurrent(this);
+        m_painter->keyPressEvent(event);
+        m_context->doneCurrent();
+    }
 }
 
 void Canvas::keyReleaseEvent(QKeyEvent * event)

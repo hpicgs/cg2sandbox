@@ -107,3 +107,7 @@ AbstractPainter::PaintMode AbstractPainter::mode() const
 {
     return m_mode;
 }
+
+void AbstractPainter::keyPressEvent(QKeyEvent * event)
+{
+}
