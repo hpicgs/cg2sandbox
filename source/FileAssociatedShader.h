@@ -39,4 +39,6 @@ private:
 protected:
     static QMap<QString, QOpenGLShader *> s_shaderByFilePath;
     static QMultiMap<QOpenGLShader *, QOpenGLShaderProgram *> s_programsByShader;
+
+    static void repairWatchedFiles();
 };

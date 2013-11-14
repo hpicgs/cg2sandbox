@@ -47,7 +47,7 @@ public:
 	void reset(bool update = false); ///< Resets the time to initial value (secondsPerCycle remain unchanged).
 	void stop (bool update = false); ///< Stops and resets the time.
 
-    inline const t_longf getSecondsPerCycle() const;
+    inline const t_longf getSecondsPerCycle() const { return m_secondsPerCycle; }
 
 	const t_longf setSecondsPerCycle(const t_longf secondsPerCycle);
 
