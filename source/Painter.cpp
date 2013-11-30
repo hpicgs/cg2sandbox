@@ -473,7 +473,7 @@ void Painter::paint_3_3_shadowmap(float timef)
 
 
     program->bind();
-    // program->setUniformValue("viewProjection", L);
+    program->setUniformValue("viewProjection", L);
     program->release();
 
     m_hpicgs->draw(*this, *program);
