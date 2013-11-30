@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.10 FATAL_ERROR)
 
 set(META_PROJECT_NAME        "cg2sandbox")
 set(META_VERSION_MAJOR       "cg2ws1314")
-set(META_EXERCISE            "1")
+set(META_EXERCISE            "3")
 set(META_AUTHOR1_MATNR       "000000")
 set(META_AUTHOR2_MATNR       "000000")
 set(META_VERSION             "${META_VERSION_MAJOR}.${META_EXERCISE}.${META_AUTHOR1_MATNR}.${META_AUTHOR2_MATNR}")
@@ -133,14 +133,14 @@ option(ASSIMP_BUILD_STATIC "Build ASSIMP static libraries" ON)
 option(ASSIMP_BUILD_EXAMPLES "Build ASSIMP examples" OFF)
 
 # The ASSIMP library.
-#add_subdirectory(assimp)
+add_subdirectory(assimp)
 
 
 # Include directories
 include_directories(
     ${CMAKE_BINARY_DIR} # for Meta.h
 #    ${OPENGL_INCLUDE_DIR}
-    ${ASSIMP_INCLUDE_PATH}
+    assimp/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 
@@ -171,7 +171,7 @@ add_executable(${target} ${sources} ${uihs})
 
 qt5_use_modules(${target} Core OpenGL Gui Widgets)
 
-#target_link_libraries(${target} assimp zlib)
+target_link_libraries(${target} assimp zlib)
 
 set_target_properties(${target}
     PROPERTIES

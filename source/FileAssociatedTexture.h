@@ -24,10 +24,12 @@ public:
 	static GLuint getOrCreate2D(
 		const QString & fileName
     ,   OpenGLFunctions & gl
-	,	const GLenum wrap_s = GL_CLAMP
-	,	const GLenum wrap_t = GL_CLAMP
-	,	const GLenum mag_filter = GL_LINEAR
-    ,   const GLenum min_filter = GL_LINEAR);
+	,	const GLenum wrap_s = GL_CLAMP_TO_EDGE
+    ,   const GLenum wrap_t = GL_CLAMP_TO_EDGE
+    ,   const GLenum mag_filter = GL_LINEAR_MIPMAP_NEAREST
+    ,   const GLenum min_filter = GL_LINEAR_MIPMAP_NEAREST);
+
+    static void clean(OpenGLFunctions & gl);
 
 	/** filePaths should contain a questionmark '?' that is replaced
 		by cubemap extensions 'px', 'nx', 'py', etc. 
@@ -36,8 +38,8 @@ public:
 	static GLuint getOrCreateCube(
         const QString & fileNames
     ,   OpenGLFunctions & gl
-    ,	const GLenum mag_filter = GL_LINEAR
-    ,   const GLenum min_filter = GL_LINEAR
+    ,	const GLenum mag_filter = GL_LINEAR_MIPMAP_NEAREST
+    ,   const GLenum min_filter = GL_LINEAR_MIPMAP_NEAREST
 	);
 
 	static void process(OpenGLFunctions & gl);

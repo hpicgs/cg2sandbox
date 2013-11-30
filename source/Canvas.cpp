@@ -123,6 +123,8 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
 
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
 
+    glEnable(GL_DEPTH_TEST);
+
     m_context->doneCurrent();
 }
 
@@ -162,9 +164,13 @@ void Canvas::paintGL()
     else
         m_painter->update(programsWithInvalidatedUniforms);
 
-	m_painter->paint(m_time->getf(true));
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
     if (m_showAdaptiveGrid)
         m_grid->draw(*this);
+
+    m_painter->paint(m_time->getf(true));
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();
