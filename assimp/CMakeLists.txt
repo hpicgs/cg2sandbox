@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 2.6 )
 PROJECT( Assimp )
 
 # Define here the needed parameters
-set (ASSIMP_SV_REVISION 1264)
+set (ASSIMP_SV_REVISION 255)
 set (ASSIMP_VERSION_MAJOR 3)
 set (ASSIMP_VERSION_MINOR 0)
 set (ASSIMP_VERSION_PATCH ${ASSIMP_SV_REVISION}) # subversion revision?
