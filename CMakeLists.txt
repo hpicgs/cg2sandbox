@@ -171,7 +171,7 @@ add_executable(${target} ${sources} ${uihs})
 
 qt5_use_modules(${target} Core OpenGL Gui Widgets)
 
-target_link_libraries(${target} assimp zlib)
+target_link_libraries(${target} assimp)
 
 set_target_properties(${target}
     PROPERTIES

@@ -18,6 +18,7 @@ int main(int argc, char * argv[])
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
 #endif
+    format.setDepthBufferSize(24);
 
     QScopedPointer<Viewer> viewer(new Viewer(format));
     result = app.exec();
