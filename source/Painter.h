@@ -11,9 +11,8 @@ class QOpenGLShader;
 class QOpenGLShaderProgram;
 
 class Camera;
-class Terrain;
 class ScreenAlignedQuad;
-class AssimpScene;
+class PatchedTerrain;
 
 
 class Painter : public AbstractPainter
@@ -39,14 +38,7 @@ protected:
     void bindEnvMaps(GLenum target);
     void unbindEnvMaps(GLenum target);
 
-    void paint_3_1(float timef);
-    void paint_3_1_scene(bool shadow, float timef);
-    void paint_3_1_label(const QMatrix4x4 & viewProjection, float timef);
-    void paint_3_2(float timef); 
-    void paint_3_2_label(const QMatrix4x4 & viewProjection, float timef);
-    void paint_3_3(float timef);
-    void paint_3_3_shadowmap(float timef);
-    void paint_3_4(float timef);
+    void paint_4_1(float timef);
 
 protected:
     QOpenGLShaderProgram * createBasicShaderProgram(
@@ -58,6 +50,24 @@ protected:
     ,   const QString & geometryShaderFileName
     ,   const QString & fragmentShaderFileName);
 
+    void patchify();
+    void patchify(
+        float extend
+    ,   float x
+    ,   float z
+    ,   int level);
+   
+    float height(
+        const float x
+    ,   const float z) const;
+
+    bool cull(
+        const QVector4D & v0
+    ,   const QVector4D & v1
+    ,   const QVector4D & v2);
+
+    // ...
+
 protected:
     Camera * m_camera;
 
@@ -68,21 +78,23 @@ protected:
     QMap<int, QOpenGLShaderProgram *> m_programs;
     QList<QOpenGLShader *> m_shaders;
 
-    AssimpScene * m_hpicgs;
-    AssimpScene * m_plane;
-    AssimpScene * m_portcc;
+    PatchedTerrain * m_terrain;
 
-    QVector3D m_light;
+    std::vector<unsigned short> m_heights;
 
-    ScreenAlignedQuad * m_hpicgsLabel;
-    ScreenAlignedQuad * m_portccLabel;
+    float m_yScale;
+    float m_yOffset;
 
-    GLuint m_hpicgsLabelAM;
-    GLuint m_portccLabelAM;
+    GLuint m_height;
+    GLuint m_normals;
+    GLuint m_diffuse;
+    GLuint m_detail;
+    GLuint m_detailn;
 
-    GLuint m_hpicgsLabelDM;
-    GLuint m_portccLabelDM;
+    bool m_drawLineStrips;
+    bool m_debug;
 
-    GLuint m_depthFbo;
-    GLuint m_depthTex;
+    float m_precission;
+    int m_level;
+    QVector3D m_cachedEye;
 };

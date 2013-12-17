@@ -21,7 +21,18 @@ class Painter;
 class FileAssociatedTexture : public QObject
 {
 public:
-	static GLuint getOrCreate2D(
+    static GLuint getOrCreate2Dus16(
+		const QString & fileName
+    ,   const int width
+    ,   const int height
+    ,   OpenGLFunctions & gl
+    ,   std::vector<unsigned short> * data = nullptr
+	,	const GLenum wrap_s = GL_CLAMP_TO_EDGE
+    ,   const GLenum wrap_t = GL_CLAMP_TO_EDGE
+    ,   const GLenum mag_filter = GL_LINEAR_MIPMAP_NEAREST
+    ,   const GLenum min_filter = GL_LINEAR_MIPMAP_NEAREST);
+
+    static GLuint getOrCreate2D(
 		const QString & fileName
     ,   OpenGLFunctions & gl
 	,	const GLenum wrap_s = GL_CLAMP_TO_EDGE
@@ -56,17 +67,24 @@ protected:
         const QString & filePath
     ,   bool forceReload = false);
 
-    static GLuint loadTexture2D(
+    static GLuint image2D(
 		GLuint texture
 	,	const QImage & image
 	,	OpenGLFunctions & gl);
-	static GLuint loadTexture2D(
+
+    static GLuint image2D(
+        GLuint texture
+    ,   const int width
+    ,   const int height
+    ,   const unsigned short * data
+    ,   OpenGLFunctions & gl);
+
+	static GLuint setupTexture2D(
 		GLuint texture
 	,	const GLenum wrap_s
 	,	const GLenum wrap_t
 	,	const GLenum mag_filter
 	,	const GLenum min_filter
-	,	const QImage & image
 	,	OpenGLFunctions & gl);
 
 	static GLuint loadTextureCube(

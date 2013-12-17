@@ -4,6 +4,7 @@
 #include <QWindow>
 
 #include <QList>
+#include <QPoint>
 #include <QScopedPointer>
 
 #include "OpenGLFunctions.h"
@@ -17,6 +18,7 @@ class QKeyEvent;
 class AbstractPainter;
 class Camera;
 class Navigation;
+class FlightNavigation;
 class Timer;
 class CyclicTime;
 class AdaptiveGrid;
@@ -25,6 +27,12 @@ class AdaptiveGrid;
 class Canvas : public QWindow, protected OpenGLFunctions
 {
     Q_OBJECT
+
+    enum NavigationIdentifer
+    {
+        WorldInHand
+    ,   Flight
+    };
 
 public:
     enum SwapInterval
@@ -106,7 +114,12 @@ protected:
 
     AbstractPainter * m_painter;
     QScopedPointer<Camera> m_camera;
-    QScopedPointer<Navigation> m_navigation;
+
+    NavigationIdentifer m_navigation;
+
+    QScopedPointer<Navigation> m_worldInHandNav;
+    QScopedPointer<FlightNavigation> m_flightNav;
+    QPoint m_lastMousePos;
 
     SwapInterval m_swapInterval;    ///< required for toggle
 

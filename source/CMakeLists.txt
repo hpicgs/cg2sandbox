@@ -53,6 +53,9 @@ set(sources
     source/UnitCube.cpp
     source/UnitCube.h
 
+	source/PatchedTerrain.cpp
+	source/PatchedTerrain.h
+
     source/AbstractCoordinateProvider.h
     source/AxisAlignedBoundingBox.cpp
     source/AxisAlignedBoundingBox.h
@@ -64,5 +67,7 @@ set(sources
     source/Navigation.h
     source/NavigationMath.cpp
     source/NavigationMath.h
+    source/FlightNavigation.cpp
+    source/FlightNavigation.h
 
     PARENT_SCOPE)

@@ -10,6 +10,7 @@
 #include "AdaptiveGrid.h"
 #include "FileAssociatedShader.h"
 #include "Camera.h"
+#include "FlightNavigation.h"
 #include "Navigation.h"
 #include "NavigationMath.h"
 #include "Timer.h"
@@ -24,7 +25,9 @@ Canvas::Canvas(
 , m_context(new QOpenGLContext)
 , m_painter(nullptr)
 , m_camera(new Camera())
-, m_navigation(new Navigation(*m_camera))
+, m_navigation(WorldInHand)
+, m_worldInHandNav(new Navigation(*m_camera))
+, m_flightNav(new FlightNavigation(&*m_camera))
 , m_swapInterval(VerticalSyncronization)
 , m_repaintTimer(new QBasicTimer())
 , m_fpsTimer(nullptr)
@@ -35,12 +38,15 @@ Canvas::Canvas(
 , m_continuousRepaint(false)
 , m_showAdaptiveGrid(true)
 {
+    m_flightNav->setMouseSpeed(10.f);
+    m_flightNav->setMoveSpeed(0.02f);
+
     setSurfaceType(OpenGLSurface); 
 
     create();
 
     m_camera->setFovy(40.0);
-    m_navigation->reset();
+    m_worldInHandNav->reset();
 
     initializeGL(format);
 }
@@ -166,11 +172,10 @@ void Canvas::paintGL()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    m_painter->paint(m_time->getf(true));
 
     if (m_showAdaptiveGrid)
         m_grid->draw(*this);
-
-    m_painter->paint(m_time->getf(true));
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();
@@ -232,7 +237,7 @@ void Canvas::setPainter(AbstractPainter * painter)
 
     m_context->doneCurrent();
 
-    m_navigation->setCoordinateProvider(m_painter);
+    m_worldInHandNav->setCoordinateProvider(m_painter);
 }
 
 void Canvas::setTime(CyclicTime * time)
@@ -366,11 +371,41 @@ bool Canvas::adaptiveGrid() const
 
 void Canvas::keyPressEvent(QKeyEvent * event)
 {
-    if (!m_navigation)
-        return;
+    if (event->key() == Qt::Key_F) // toggle nav
+    {
+        m_navigation = m_navigation == WorldInHand ? Flight : WorldInHand;
+        if(m_navigation == Flight)
+            setCursor(QCursor(Qt::BlankCursor));
+        else
+            unsetCursor();
+    }
 
-    m_navigation->keyPressEvent(event);
-
+    if (m_navigation == WorldInHand)
+    {
+        m_worldInHandNav->keyPressEvent(event);
+    }
+    else
+    {
+        switch (event->key())
+        {
+        case Qt::Key_Up:
+        case Qt::Key_W:
+            m_flightNav->moveForward();
+            break;
+        case Qt::Key_Left:
+        case Qt::Key_A:
+            m_flightNav->moveLeft();
+            break;
+        case Qt::Key_Down:
+        case Qt::Key_S:
+            m_flightNav->moveBackward();
+            break;
+        case Qt::Key_Right:
+        case Qt::Key_D:
+            m_flightNav->moveRight();
+            break;
+        }
+    }
     if (!event->isAccepted())
     {
         m_context->makeCurrent(this);
@@ -384,17 +419,31 @@ void Canvas::keyReleaseEvent(QKeyEvent * event)
     if (m_painter && Qt::Key_0 <= event->key() && event->key() <= Qt::Key_9)
         m_painter->setMode(static_cast<AbstractPainter::PaintMode>(event->key() - Qt::Key_0));
 
-    if (m_navigation)
-        m_navigation->keyReleaseEvent(event);
+    if (m_navigation == WorldInHand)
+        m_worldInHandNav->keyReleaseEvent(event);
+    else
+    {
+
+    }
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent * event)
 {
-    if (!m_navigation)
-        return;
-
     m_context->makeCurrent(this);
-    m_navigation->mouseMoveEvent(event);
+
+    if (m_navigation == WorldInHand)
+    {
+        m_worldInHandNav->mouseMoveEvent(event);
+    }
+    else
+    {
+        m_flightNav->mouseMove((event->pos() - m_lastMousePos));
+        m_lastMousePos = QPoint(width() / 2, height() / 2);
+        event->accept();
+
+        QPoint glob = mapToGlobal(QPoint(width() / 2, height() / 2));
+        QCursor::setPos(glob);
+    }
 
     emit mouseUpdate(event->pos());
     if (m_painter)
@@ -409,40 +458,56 @@ void Canvas::mouseMoveEvent(QMouseEvent * event)
 
 void Canvas::mousePressEvent(QMouseEvent * event)
 {
-    if (!m_navigation)
-        return;
+    if (m_navigation == WorldInHand)
+    {
+        m_context->makeCurrent(this);
+        m_worldInHandNav->mousePressEvent(event);
+        m_context->doneCurrent();
+    }
+    else
+    {
 
-    m_context->makeCurrent(this);
-    m_navigation->mousePressEvent(event);
-    m_context->doneCurrent();
+    }
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent * event)
 {
-    if (!m_navigation)
-        return;
+    if (m_navigation == WorldInHand)
+    {
+        m_context->makeCurrent(this);
+        m_worldInHandNav->mouseReleaseEvent(event);
+        m_context->doneCurrent();
+    }
+    else
+    {
 
-    m_context->makeCurrent(this);
-    m_navigation->mouseReleaseEvent(event);
-    m_context->doneCurrent();
+    }
 }
 
 void Canvas::mouseDoubleClickEvent(QMouseEvent * event)
 {
-    if (!m_navigation)
-        return;
+    if (m_navigation == WorldInHand)
+    {
+        m_context->makeCurrent(this);
+        m_worldInHandNav->mouseDoubleClickEvent(event);
+        m_context->doneCurrent();
+    }
+    else
+    {
 
-    m_context->makeCurrent(this);
-    m_navigation->mouseDoubleClickEvent(event);
-    m_context->doneCurrent();
+    }
 }
 
 void Canvas::wheelEvent(QWheelEvent * event)
 {
-    if (!m_navigation)
-        return;
+    if (m_navigation == WorldInHand)
+    {
+        m_context->makeCurrent(this);
+        m_worldInHandNav->wheelEvent(event);
+        m_context->doneCurrent();
+    }
+    else
+    {
 
-    m_context->makeCurrent(this);
-    m_navigation->wheelEvent(event);
-    m_context->doneCurrent();
+    }
 }
