@@ -37,8 +37,8 @@ set(sources
     source/AutoTimer.h
     source/DistanceTransform.cpp
     source/DistanceTransform.h
-    source/AssimpScene.cpp
-    source/AssimpScene.h
+    #source/AssimpScene.cpp
+    #source/AssimpScene.h
     source/ChronoTimer.cpp
     source/ChronoTimer.h
     source/Icosahedron.cpp

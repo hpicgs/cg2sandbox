@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <fstream>
 
+#include <QDebug>
 #include <QFileSystemWatcher>
 #include <QFileInfo>
 #include <QTextStream>

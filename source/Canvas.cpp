@@ -172,7 +172,7 @@ void Canvas::paintGL()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_painter->paint(m_time->getf(true));
+    m_painter->paint(m_time->getNonModf(true));
 
     if (m_showAdaptiveGrid)
         m_grid->draw(*this);
