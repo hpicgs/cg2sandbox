@@ -157,6 +157,7 @@ find_package(Qt5Core    5.1 REQUIRED)
 find_package(Qt5Gui     5.1 REQUIRED)
 find_package(Qt5Widgets 5.1 REQUIRED) # this is important in order to get uic working 
 find_package(Qt5OpenGL  5.1 REQUIRED)
+find_package(ZLIB           REQUIRED)
 
 
 # assimp
@@ -177,6 +178,7 @@ add_subdirectory(assimp)
 include_directories(
     ${CMAKE_BINARY_DIR} # for Meta.h
 #    ${OPENGL_INCLUDE_DIR}
+    ${ZLIB_INCLUDE_DIRS}
     ${ASSIMP_INCLUDE_PATH}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs)
@@ -272,7 +274,7 @@ qt5_use_modules(${target} Core OpenGL Gui Widgets)
 
 target_link_libraries(${target}
     assimp
-    zlib
+    ${ZLIB_LIBRARIES}
 )
 
 set_target_properties(${target}
