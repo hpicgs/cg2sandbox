@@ -22,7 +22,7 @@ class CyclicTime;
 class AdaptiveGrid;
 
 
-class Canvas : public QWindow, protected OpenGLFunctions
+class Canvas : public QWindow
 {
     Q_OBJECT
 
@@ -97,6 +97,7 @@ signals:
 
 protected:
     QScopedPointer<QOpenGLContext> m_context;
+    OpenGLFunctions * m_functions;
 
     AbstractPainter * m_painter;
     QScopedPointer<Camera> m_camera;

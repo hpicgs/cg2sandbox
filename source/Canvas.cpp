@@ -22,6 +22,7 @@ Canvas::Canvas(
 ,   QScreen * screen)
 : QWindow(screen)
 , m_context(new QOpenGLContext)
+, m_functions(nullptr)
 , m_painter(nullptr)
 , m_camera(new Camera())
 , m_navigation(new Navigation(*m_camera))
@@ -76,7 +77,7 @@ bool Canvas::continuousRepaint() const
 
 const QString Canvas::querys(const GLenum penum) 
 {
-    const QString result = reinterpret_cast<const char*>(glGetString(penum));
+    const QString result = reinterpret_cast<const char*>(m_functions->glGetString(penum));
     //glError();
 
     return result;
@@ -85,7 +86,7 @@ const QString Canvas::querys(const GLenum penum)
 const GLint Canvas::queryi(const GLenum penum)
 {
     GLint result;
-    glGetIntegerv(penum, &result);
+    m_functions->glGetIntegerv(penum, &result);
 
     return result;
 }
@@ -100,7 +101,12 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
 	}
 
     m_context->makeCurrent(this);
-    if (!initializeOpenGLFunctions())
+
+    m_functions = dynamic_cast<OpenGLFunctions*>(m_context->versionFunctions<OpenGLFunctions>());
+
+    assert(m_functions != nullptr);
+
+    if (!m_functions->initializeOpenGLFunctions())
     {
         qCritical() << "Initializing OpenGL failed.";
         return;
@@ -121,7 +127,7 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
 
     verifyExtensions(); // false if no painter ...
 
-    m_grid.reset(new AdaptiveGrid(*this));
+    m_grid.reset(new AdaptiveGrid(*m_functions));
     m_grid->setNearFar(m_camera->zNear(), m_camera->zFar());
 
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
@@ -169,7 +175,7 @@ void Canvas::paintGL()
         m_painter->update(programsWithInvalidatedUniforms);
 
 	m_painter->paint(m_time->getf(true));
-    m_grid->draw(*this);
+    m_grid->draw(*m_functions);
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();
