@@ -19,6 +19,8 @@ option(OPTION_LIMIT_CONFIGS  "Generate limited configs (Release; Debug)" ON)
 option(OPTION_LOCAL_INSTALL  "Install to a local directory instead of the system" OFF)
 option(OPTION_NO_OPENGL_320  "Try using the 3.0 OpenGL profile in evil compatibility mode." OFF)
 
+set(CMAKE_INSTALL_LOCAL_ONLY OFF)
+
 # CMAKE CONFIGURATION
 
 set(SANDBOX_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
