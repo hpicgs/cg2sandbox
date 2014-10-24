@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 2.8.10 FATAL_ERROR)
 
+# Test for minimum required CMake version 2.8.12
+cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-# PROJECT DESCRIPTION
-
+#
+# Project description and (meta) information
+#
 set(META_PROJECT_NAME        "cg2sandbox")
-set(META_VERSION_MAJOR       "cg2ws1314")
+set(META_PROJECT_DESCRIPTION "Computer Graphics 2 Exercise Sandbox")
+set(META_VERSION_MAJOR       "cg2ws1415")
 set(META_EXERCISE            "0")
 set(META_AUTHOR1_MATNR       "000000")
 set(META_AUTHOR2_MATNR       "000000")
@@ -12,49 +15,53 @@ set(META_VERSION             "${META_VERSION_MAJOR}.${META_EXERCISE}.${META_AUTH
 set(META_AUTHOR_ORGANIZATION "hpicgs group")
 set(META_AUTHOR_DOMAIN       "https://moodle.hpi3d.de/")
 
+string(TOUPPER ${META_PROJECT_NAME} META_PROJECT_NAME_UPPER)
 
-# OPTIONS
 
-option(OPTION_LIMIT_CONFIGS  "Generate limited configs (Release; Debug)" ON)
-option(OPTION_LOCAL_INSTALL  "Install to a local directory instead of the system" OFF)
+# Limit supported configuration types
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Limited Configs" FORCE)
+
+# Set project name and type (C/C++)
+project(${META_PROJECT_NAME} C CXX)
+
+
+#
+# Configuration options
+#
+
+option(OPTION_PORTABLE_INSTALL  "Install into a self-contained directory." ON)
 option(OPTION_NO_OPENGL_320  "Try using the 3.0 OpenGL profile in evil compatibility mode." OFF)
 
-set(CMAKE_INSTALL_LOCAL_ONLY OFF)
+#
+# CMake configuration:
+# 
 
-# CMAKE CONFIGURATION
-
-set(SANDBOX_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-
-# Include cmake modules from ./cmake
+# Append the path to the custom cmake modules from this project to the CMAKE_MODULE_PATH.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
-# Find the WinSDK libs
-if (WIN32)
-    set(CMAKE_PREFIX_PATH "C:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x64")
-    cmake_policy(SET CMP0020 NEW)
-endif (WIN32)
 
 # Set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-# Set configuration types
-if(OPTION_LIMIT_CONFIGS)
-    set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Limited Configs" FORCE)
-endif()
 
-# Project
-project(${META_PROJECT_NAME} C CXX)
-
-# Generate folders
+# Generate folders for IDE targets (e.g., VisualStudio solutions)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Put projects in root folder by default
+set(IDE_FOLDER "")  
 
 # Include custom cmake functions
 include(cmake/Custom.cmake)
+include(cmake/GitRevision.cmake)
 
 
-# PLATFORM AND ARCHITECTURE
+# set(CMAKE_INSTALL_LOCAL_ONLY OFF)
+
+
+#
+# Platform and architecture setup
+#
 
 # Architecture (32/64 bit)
 set(X64 OFF)
@@ -62,249 +69,99 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(X64 ON)
 endif()
 
-# Check for linux
-if(UNIX AND NOT APPLE)
-    set(LINUX 1)
+# Setup platform specifics (compile flags, etc., ...)
+
+# This policy was introduced in 3.0.0 and does not allow for COMPILER_DEFINITIONS_<Config>,
+# anymore, but instead requires generator expressions like $<CONFIG:Debug> ... 
+# For now the current compile-flag, -definitions, and linker-flags setup shall remain as is.
+if(POLICY CMP0043)
+    cmake_policy(SET CMP0043 OLD)
 endif()
 
-# Setup platform specifics (compile flags, etc., ...)
 if(MSVC)
-    message(STATUS "Configuring for platform Windows/MSVC.")
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/PlatformWindowsMSVC.cmake)
 elseif(WIN32 AND CMAKE_COMPILER_IS_GNUCXX)
-    message(STATUS "Configuring for platform Windows/GCC.")
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/PlatformWindowsGCC.cmake)
-elseif(LINUX AND CMAKE_COMPILER_IS_GNUCXX)
-    message(STATUS "Configuring for platform Linux/GCC.")
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/PlatformLinuxGCC.cmake)
 elseif(APPLE)
-    message(STATUS "Configuring for platform MacOS.")
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/PlatformMacOS.cmake)
+elseif(UNIX)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/PlatformLinuxGCC.cmake)
 else()
-    # Unsupported system/compiler
     message(WARNING "Unsupported platform/compiler combination")
 endif()
 
 
-# Install locations
+
+
+#
+# Deployment/installation setup
+#
 
 set(project ${META_PROJECT_NAME})
 if(WIN32)
-    set(INSTALL_BIN           ".")                      # C:\Programme\<project>
-    set(INSTALL_SHARED        ".")                      # C:\Programme\<project>
-    set(INSTALL_LIB           "lib")                    # C:\Programme\<project>\lib
-    set(INSTALL_INCLUDE       "include")                # C:\Programme\<project>\include
-    set(INSTALL_DOC           "doc")                    # C:\Programme\<project>\doc
-    set(INSTALL_APPLICATIONS  "")                       # Not available under Windows
-    set(INSTALL_ICONS         "")                       # Not available under Windows
-    set(INSTALL_INIT          "")                       # Not available under Windows
-    set(INSTALL_DATA          ".")                      # C:\Programme\<project>
-    set(INSTALL_EXAMPLES      ".")                      # C:\Programme\<project>
-elseif(LINUX)
-    set(INSTALL_BIN           "bin")                    # /usr/[local]/bin
-    set(INSTALL_SHARED        "lib")                    # /usr/[local]/lib
-    set(INSTALL_LIB           "lib")                    # /usr/[local]/lib
-    set(INSTALL_INCLUDE       "include")                # /usr/[local]/include
-    set(INSTALL_DOC           "share/doc/${project}")   # /usr/[local]/share/doc/<project>
-    set(INSTALL_APPLICATIONS  "share/applications")     # /usr/[local]/share/applications
-    set(INSTALL_ICONS         "share/pixmaps")          # /usr/[local]/share/pixmaps
-    set(INSTALL_INIT          "/etc/init")              # /etc/init (upstart init scripts)
-    set(INSTALL_DATA          "share/${project}")       # /usr/[local]/share/<project>
-    set(INSTALL_EXAMPLES      "share/${project}")       # /usr/[local]/share/<project>
+    set(INSTALL_ROOT ".")                       # C:\Programme\<project>
+    set(INSTALL_DATA "bin")                     # C:\Programme\<project>
+    set(INSTALL_SOURCE ".")                     # C:\Programme\<project>
+    set(INSTALL_BIN "bin")                      # C:\Programme\<project>
+    set(INSTALL_SHARED ".")                     # C:\Programme\<project>
+    set(INSTALL_LIB "lib")                      # C:\Programme\<project>\lib
+    set(INSTALL_INCLUDE "include")              # C:\Programme\<project>\include
+    set(INSTALL_DOC "doc")                      # C:\Programme\<project>\doc
+    set(INSTALL_SHORTCUTS ".")                  # Not available under Windows
+    set(INSTALL_ICONS ".")                      # Not available under Windows
+    set(INSTALL_INIT ".")                       # Not available under Windows
 
-    # Adjust target paths for Local installs
-    if(OPTION_LOCAL_INSTALL)
+else()
+    set(INSTALL_ROOT "share/${project}")        # /usr/[local]/share/<project>
+    set(INSTALL_DATA "share/${project}")        # /usr/[local]/share/<project>
+    set(INSTALL_SOURCE "share/${project}")        # /usr/[local]/share/<project>
+    set(INSTALL_BIN "bin")                      # /usr/[local]/bin
+    set(INSTALL_SHARED "lib")                   # /usr/[local]/lib
+    set(INSTALL_LIB "lib")                      # /usr/[local]/lib
+    set(INSTALL_INCLUDE "include")              # /usr/[local]/include
+    set(INSTALL_DOC "share/doc/${project}")     # /usr/[local]/share/doc/<project>
+    set(INSTALL_SHORTCUTS "share/applications") # /usr/[local]/share/applications
+    set(INSTALL_ICONS "share/pixmaps")          # /usr/[local]/share/pixmaps
+    set(INSTALL_INIT "/etc/init")               # /etc/init (upstart init scripts)
+
+    # Adjust target paths for portable installs
+    if(OPTION_PORTABLE_INSTALL)
         # Put binaries in root directory and keep data directory name
-        set(INSTALL_BIN                       ".")           # /<INSTALL_PREFIX>
-        set(INSTALL_DATA                      ".")           # /<INSTALL_PREFIX>
+        set(INSTALL_ROOT ".")                   # /<INSTALL_PREFIX>
+        set(INSTALL_DATA ".")                   # /<INSTALL_PREFIX>
+        set(INSTALL_SOURCE ".")                   # /<INSTALL_PREFIX>
+        set(INSTALL_BIN ".")                    # /<INSTALL_PREFIX>
 
         # We have to change the RPATH of binaries to achieve a usable local install.
         # [TODO] For binaries, "$ORIGIN/lib" is right, so that libraries are found in ./lib.
-        #        However, I have not yet tested what happens when libraries use other libraries.
-        #        In that case, they might need the rpath $ORIGIN instead ...
-        set(CMAKE_SKIP_BUILD_RPATH            FALSE)         # Use automatic rpath for build
-        set(CMAKE_BUILD_WITH_INSTALL_RPATH    FALSE)         # Use specific rpath for INSTALL
-        set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)         # NO automatic rpath for INSTALL
-        set(CMAKE_INSTALL_RPATH               "$ORIGIN/lib") # Libraries are relative to binary
+        # However, I have not yet tested what happens when libraries use other libraries.
+        # In that case, they might need the rpath $ORIGIN instead ...
+        set(CMAKE_SKIP_BUILD_RPATH FALSE)            # Use automatic rpath for build
+        set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)    # Use specific rpath for INSTALL
+        set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE) # NO automatic rpath for INSTALL
+        set(CMAKE_INSTALL_RPATH "$ORIGIN/lib")       # Libraries are relative to binary
     endif()
 endif()
 
+# Install the project meta files
+# install(FILES template-config.cmake DESTINATION ${INSTALL_ROOT})
+# install(FILES AUTHORS DESTINATION               ${INSTALL_ROOT})
+# install(FILES LICENSE DESTINATION               ${INSTALL_ROOT})
 
-# Target
-set(target cg2sandbox)
+# Install the data directory including the data files it contains.
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/source DESTINATION ${INSTALL_SOURCE})
 
-# Find externals
-#find_package(OpenGL REQUIRED)
-
-# qt5
-
-set(CMAKE_AUTOMOC ON)
-set(AUTOMOC_MOC_OPTIONS PROPERTIES FOLDER CMakeAutomocTargets)
-
-# Probably works in the next cmake release -> http://www.cmake.org/Bug/view.php?id=13788
-# What we do not want is automocs beside the project -> http://www.cmake.org/Bug/view.php?id=13688
-
-set_property(GLOBAL PROPERTY AUTOMOC_FOLDER CMakeAutomocTargets)
-
-# try to find either qt4 or qt5, favoring qt5
-# good resource: http://www.kdab.com/using-cmake-with-qt-5/
-
-# http://qt-project.org/forums/viewthread/30006/
-
-if (MSVC)
-	cmake_policy(SET CMP0020 NEW)
-endif()
-
-find_package(Qt5Core    5.1 REQUIRED)
-find_package(Qt5Gui     5.1 REQUIRED)
-find_package(Qt5Widgets 5.1 REQUIRED) # this is important in order to get uic working 
-find_package(Qt5OpenGL  5.1 REQUIRED)
-find_package(ZLIB           REQUIRED)
+# Add a revision file containing the git-head tag for cpack and install. The function
+# "create_revision_file (...)" is defined in cmake/GitRevision.cmake
+create_revision_file(${CMAKE_BINARY_DIR}/revision ${INSTALL_ROOT})
 
 
-# assimp
+#
+# Include subdirectories that contain project sources, documentation files, and packaging scripts
+#
 
-set(ASSIMP_INSTALL_BY_DEFAULT OFF)
-
-option(ASSIMP_INSTALL "Install ASSIMP libs, includes, and CMake scripts" ${ASSIMP_INSTALL_BY_DEFAULT})
-option(ASSIMP_INSTALL_DOC "Install ASSIMP documentation" OFF)
-option(ASSIMP_BUILD_SHARED "Build ASSIMP shared libraries" OFF)
-option(ASSIMP_BUILD_STATIC "Build ASSIMP static libraries" ON)
-option(ASSIMP_BUILD_EXAMPLES "Build ASSIMP examples" OFF)
-
-# The ASSIMP library.
-add_subdirectory(assimp)
-
-
-# Include directories
-include_directories(
-    ${CMAKE_BINARY_DIR} # for Meta.h
-#    ${OPENGL_INCLUDE_DIR}
-    ${ZLIB_INCLUDE_DIRS}
-    ${ASSIMP_INCLUDE_PATH}
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs)
-
-if(OPTION_NO_OPENGL_320)
-    add_definitions("-DNO_OPENGL_320")
-endif()
-
-set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/source")
-
-# Generate meta-header
-configure_file(${source_path}/version.h.in version.h)
-
-set(sources
-    ${source_path}/main.cpp
-
-    # based on or targeted for glwhite
-    ${source_path}/AbstractPainter.cpp
-    ${source_path}/AbstractPainter.h
-    ${source_path}/Application.cpp
-    ${source_path}/Application.h
-    ${source_path}/Canvas.cpp
-    ${source_path}/Canvas.h
-    ${source_path}/MessageHandler.cpp
-    ${source_path}/MessageHandler.h
-    ${source_path}/OpenGLFunctions.h
-    ${source_path}/Painter.cpp
-    ${source_path}/Painter.h
-	${source_path}/PainterMode.h
-    ${source_path}/Viewer.cpp
-    ${source_path}/Viewer.h
-    ${source_path}/Viewer.ui
-
-	${source_path}/FileAssociatedAsset.cpp
-    ${source_path}/FileAssociatedAsset.h
-    ${source_path}/FileAssociatedShader.cpp
-    ${source_path}/FileAssociatedShader.h
-    ${source_path}/FileAssociatedTexture.cpp
-    ${source_path}/FileAssociatedTexture.h
-    
-    ${source_path}/CachedValue.h
-    ${source_path}/CachedValue.hpp
-
-    # based on or targeted for libglow
-    ${source_path}/AdaptiveGrid.cpp
-    ${source_path}/AdaptiveGrid.h
-    ${source_path}/AutoTimer.cpp
-    ${source_path}/AutoTimer.h
-    ${source_path}/ChronoTimer.cpp
-    ${source_path}/ChronoTimer.h
-    ${source_path}/Icosahedron.cpp
-    ${source_path}/Icosahedron.h
-	${source_path}/MathMacros.h
-    ${source_path}/Plane3.cpp
-    ${source_path}/Plane3.h
-    ${source_path}/Timer.cpp
-    ${source_path}/Timer.h
-    ${source_path}/UnitCube.cpp
-    ${source_path}/UnitCube.h
-    ${source_path}/ScreenAlignedQuad.cpp
-    ${source_path}/ScreenAlignedQuad.h
-    
-    ${source_path}/AbstractCoordinateProvider.h
-    ${source_path}/AxisAlignedBoundingBox.cpp
-    ${source_path}/AxisAlignedBoundingBox.h
-    ${source_path}/Camera.cpp
-    ${source_path}/Camera.h
-    ${source_path}/CyclicTime.cpp
-    ${source_path}/CyclicTime.h
-    ${source_path}/Navigation.cpp
-    ${source_path}/Navigation.h
-    ${source_path}/NavigationMath.cpp
-    ${source_path}/NavigationMath.h    
-)
-
-# Group source files
-set(SANDBOX_SOURCE_GROUP "Source Files")
-source_group_by_path(${source_path} "\\\\.h$|\\\\.hpp$|\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$" 
-    ${SANDBOX_SOURCE_GROUP} ${sources})
-
-# wrap ui files and group wrap headers
-list_extract(uis "\\\\.ui$" ${sources})
-qt5_wrap_ui(uihs ${uis})
-
-source_group_by_path(${CMAKE_CURRENT_BINARY_DIR} "\\\\.h$" 
-    ${SANDBOX_SOURCE_GROUP} ${uihs})
-
-
-# Build library
-add_executable(${target} ${sources} ${uihs})
-
-qt5_use_modules(${target} Core OpenGL Gui Widgets)
-
-target_link_libraries(${target}
-    assimp
-    ${ZLIB_LIBRARIES}
-)
-
-set_target_properties(${target}
-    PROPERTIES
-    LINKER_LANGUAGE CXX
-    COMPILE_DEFINITIONS_DEBUG   "${DEFAULT_COMPILE_DEFS_DEBUG}"
-    COMPILE_DEFINITIONS_RELEASE "${DEFAULT_COMPILE_DEFS_RELEASE}"
-    COMPILE_FLAGS               "${DEFAULT_COMPILE_FLAGS}"
-    LINK_FLAGS_DEBUG            "${DEFAULT_LINKER_FLAGS_DEBUG}"
-    LINK_FLAGS_RELEASE          "${DEFAULT_LINKER_FLAGS_RELEASE}"
-    DEBUG_POSTFIX               "d${DEBUG_POSTFIX}"
-)
-
-# Deployment
-install(TARGETS ${target}
-    RUNTIME DESTINATION ${INSTALL_BIN}
-    LIBRARY DESTINATION ${INSTALL_SHARED}
-    ARCHIVE DESTINATION ${INSTALL_LIB}
-)
-#install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${INSTALL_INCLUDE})
-
-install(FILES LICENSE AUTHORS DESTINATION .)
-
-# DEPLOYMENT
-
-# Data files
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data
-    DESTINATION ${INSTALL_DATA})
-
-# Packaging
+add_subdirectory(thirdparty)
+add_subdirectory(source)
+add_subdirectory(docs)
 add_subdirectory(packages)
