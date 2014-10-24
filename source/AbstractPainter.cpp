@@ -2,7 +2,6 @@
 #include <cassert>
 
 #include <QStringList>
-#include <QKeyEvent>
 
 #include "Camera.h"
 
@@ -10,7 +9,8 @@
 
 
 AbstractPainter::AbstractPainter()
-: m_camera(nullptr), m_mode(DEMO_MODE)
+: m_camera(nullptr)
+, m_mode(PaintMode1)
 {
 }
  
@@ -98,23 +98,12 @@ const QVector3D AbstractPainter::objAt(
     return (viewProjectionInverted * p).toVector3DAffine();
 }
 
-void AbstractPainter::keyPressEvent(QKeyEvent * event)
+void AbstractPainter::setMode(PaintMode mode)
 {
-	switch (event->key())
-	{
-	case Qt::Key_0:
-		m_mode = DEMO_MODE;
-		break;
-	case Qt::Key_1:
-		m_mode = EXERCISE_1;
-		break;
-	case Qt::Key_2:
-		m_mode = EXERCISE_2;
-		break;
-	case Qt::Key_3:
-		m_mode = EXERCISE_3;
-		break;
-	default:
-		break;
-	}
+    m_mode = mode;
+}
+
+AbstractPainter::PaintMode AbstractPainter::mode() const
+{
+    return m_mode;
 }

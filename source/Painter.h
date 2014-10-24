@@ -2,6 +2,7 @@
 #pragma once
 
 #include <QMatrix4x4>
+#include <QMap>
 
 #include "AbstractPainter.h"
 
@@ -10,7 +11,6 @@ class QOpenGLShaderProgram;
 
 class Camera;
 class UnitCube;
-
 
 class Painter : public AbstractPainter
 {
@@ -29,11 +29,22 @@ public:
     virtual void update(const QList<QOpenGLShaderProgram *> & programs);
 
 protected:
+    void paint_1_1(float timef);
+
+protected:
+    GLuint getOrCreateTexture(const QString & fileName);
+
+    QOpenGLShaderProgram * createBasicShaderProgram(
+        const QString & vertexShaderFileName
+    ,   const QString & fragmentShaderFileName);
+
+protected:
     Camera * m_camera;
 
-    UnitCube * m_cube;
-    QOpenGLShaderProgram * m_program;
+    UnitCube * m_cube; // Note: This is for the test rendering
 
-    QOpenGLShader * m_fragShader;
-    QOpenGLShader * m_vertShader;
+    QList<QMatrix4x4> m_transforms;
+
+    QMap<int, QOpenGLShaderProgram *> m_programs;
+    QList<QOpenGLShader *> m_shaders;
 };

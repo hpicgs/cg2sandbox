@@ -6,11 +6,9 @@
 
 #include "OpenGLFunctions.h"
 #include "AbstractCoordinateProvider.h"
-#include "PainterMode.h"
 
 class QStringList;
 class QOpenGLShaderProgram;
-class QKeyEvent;
 
 class Camera;
 
@@ -18,6 +16,22 @@ class Camera;
 class AbstractPainter : public AbstractCoordinateProvider
     , protected OpenGLFunctions
 {
+public:
+    // ToDo: perhaps come up with better identifers here.
+    enum PaintMode
+    {
+        PaintMode0
+    ,   PaintMode1
+    ,   PaintMode2
+    ,   PaintMode3
+    ,   PaintMode4
+    ,   PaintMode5
+    ,   PaintMode6
+    ,   PaintMode7
+    ,   PaintMode8
+    ,   PaintMode9
+    };
+
 public:
     AbstractPainter();
     virtual ~AbstractPainter();
@@ -48,6 +62,9 @@ public:
     virtual void update() = 0;
     virtual void update(const QList<QOpenGLShaderProgram *> & programs) = 0;
 
+    void setMode(PaintMode mode);
+    PaintMode mode() const;
+
     // AbstractCoordinateProvider interface
 
     virtual const float depthAt(const QPointF & windowCoordinates);
@@ -62,10 +79,7 @@ public:
     ,   const float depth
     ,   const QMatrix4x4 & viewProjectionInverted);
 
-	virtual void keyPressEvent(QKeyEvent * event);
-
 protected:
     Camera * m_camera;
-
-	PainterMode m_mode;
+    PaintMode m_mode;
 };

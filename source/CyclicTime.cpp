@@ -71,6 +71,11 @@ CyclicTime::~CyclicTime()
 	delete m_timer;
 }
 
+const t_longf CyclicTime::getSecondsPerCycle() const
+{
+    return m_secondsPerCycle;
+}
+
 inline long double CyclicTime::elapsed() const
 {
     return m_timer->elapsed() * 1e-9f;
@@ -78,9 +83,9 @@ inline long double CyclicTime::elapsed() const
 
 void CyclicTime::update()
 {
-    const t_longf elapsed = TimeCycling == m_mode ? this->elapsed() : m_lastModeChangeTime;
+    const t_longf elapsed = (TimeCycling == m_mode ? this->elapsed() : m_lastModeChangeTime);
 
-    const t_longf elapsedTimef = m_secondsPerCycle > 0.f ? this->elapsed() / m_secondsPerCycle : 0.f;
+    const t_longf elapsedTimef = m_secondsPerCycle > 0.f ? elapsed / m_secondsPerCycle : 0.f;
 
 	m_timef[1] = frac(m_timef[0] + elapsedTimef + m_offset);
 
@@ -173,7 +178,7 @@ const time_t CyclicTime::sett(
 const t_longf CyclicTime::setSecondsPerCycle(const t_longf secondsPerCycle)
 {
 	// intepret elapsed seconds within new cycle time
-    const t_longf elapsed = TimeCycling == m_mode ? this->elapsed() : m_lastModeChangeTime;
+    const t_longf elapsed = (TimeCycling == m_mode ? this->elapsed() : m_lastModeChangeTime);
 
 	if(m_secondsPerCycle > 0.f)
 		m_offset += elapsed / m_secondsPerCycle;

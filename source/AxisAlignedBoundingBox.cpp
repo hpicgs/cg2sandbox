@@ -7,7 +7,7 @@
 AxisAlignedBoundingBox::AxisAlignedBoundingBox()
 :   m_urb(QVector3D(-FLT_MAX,-FLT_MAX,-FLT_MAX))
 ,   m_llf(QVector3D(+FLT_MAX,+FLT_MAX,+FLT_MAX))
-,	m_radius(0.f)
+,   m_radius(0.0f)
 {
 }
 
@@ -50,7 +50,7 @@ const QVector3D & AxisAlignedBoundingBox::center() const
     return m_center;
 }
 
-const float_t AxisAlignedBoundingBox::radius() const
+const float AxisAlignedBoundingBox::radius() const
 {
     return m_radius;
 }

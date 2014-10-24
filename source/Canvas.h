@@ -46,11 +46,17 @@ public:
     void setContinuousRepaint(bool enable, int msec = 1000 / 60);
 	bool continuousRepaint() const;
 
-    void assignPainter(AbstractPainter * painter);
+    void setPainter(AbstractPainter * painter);
     AbstractPainter * painter();
+
+    void setTime(CyclicTime * time);
+    CyclicTime * time();
 
     void setSwapInterval(SwapInterval swapInterval);
     static const QString swapIntervalToString(SwapInterval swapInterval);
+
+    void setAdaptiveGrid(bool enable);
+    bool adaptiveGrid() const;
 
 public slots:
     void toggleSwapInterval();
@@ -108,7 +114,7 @@ protected:
     QScopedPointer<QBasicTimer> m_repaintTimer;
     QScopedPointer<Timer> m_fpsTimer;
 
-    QScopedPointer<CyclicTime> m_time; ///< this is used as "game time"
+    CyclicTime * m_time; ///< is given and controlled by parent (i.e., viewer)
 
     QScopedPointer<AdaptiveGrid> m_grid;
 
@@ -118,4 +124,5 @@ protected:
     bool m_update; // checked in paintGL, if true, update of program gets triggered
 
     bool m_continuousRepaint;
+    bool m_showAdaptiveGrid;
 };

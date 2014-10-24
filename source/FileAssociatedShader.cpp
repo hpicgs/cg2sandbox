@@ -1,21 +1,31 @@
 
 #include <cassert>
+
 #include <QFileSystemWatcher>
 #include <QTextStream>
 #include <QFileInfo>
-#include <QStringList>
+
 #include "FileAssociatedShader.h"
+
 
 QMap<QString, QOpenGLShader *> FileAssociatedShader::s_shaderByFilePath;
 QMultiMap<QOpenGLShader *, QOpenGLShaderProgram *> FileAssociatedShader::s_programsByShader;
 
+
 FileAssociatedShader::FileAssociatedShader()
-{}
+{
+    connect(m_fileSystemWatcher, &QFileSystemWatcher::fileChanged
+        , this, &FileAssociatedShader::fileChanged);
+}
 
 FileAssociatedShader::~FileAssociatedShader()
 {
+    delete m_fileSystemWatcher;
+
     s_shaderByFilePath.clear();
     s_programsByShader.clear();
+
+    s_queue.clear();
 }
 
 QOpenGLShader * FileAssociatedShader::getOrCreate(
@@ -23,16 +33,18 @@ QOpenGLShader * FileAssociatedShader::getOrCreate(
 ,   const QString & fileName
 ,   QOpenGLShaderProgram & program)
 {
-    QOpenGLShader * shader(nullptr);
-	
-	QFileInfo fi(fileName);
-	if (!fi.exists())
-	{
-		qWarning() << fileName << " does not exist: shader is without source and associated file.";
-		return shader;
-	}
+    QFileInfo fi(fileName);
 
-	QString filePath(fi.absoluteFilePath());
+    if(!fi.exists())
+    {
+        qWarning() << fileName << " does not exist: shader is without source and associated file.";
+        return nullptr;
+    }
+
+    QString filePath(fi.absoluteFilePath());
+
+    QOpenGLShader * shader(nullptr);
+ 
     if (s_shaderByFilePath.contains(filePath))
     {
         shader = s_shaderByFilePath[filePath];
@@ -44,23 +56,13 @@ QOpenGLShader * FileAssociatedShader::getOrCreate(
         shader = new QOpenGLShader(type);
         shader->compileSourceFile(filePath);
 
-        connect(
-			shader,
-			&QOpenGLShader::destroyed,
-			static_cast<FileAssociatedShader*>(instance()),
-			&FileAssociatedShader::shaderDestroyed);
-
+        connect(shader, &QOpenGLShader::destroyed, static_cast<FileAssociatedShader*>(instance()), &FileAssociatedShader::shaderDestroyed);
         s_shaderByFilePath.insert(filePath, shader);
     }
 
     if (!s_programsByShader.contains(shader, &program))
     {
-        connect(
-			&program,
-			&QOpenGLShaderProgram::destroyed,
-			static_cast<FileAssociatedShader*>(instance()),
-			&FileAssociatedShader::programDestroyed);
-
+        connect(&program, &QOpenGLShaderProgram::destroyed, static_cast<FileAssociatedShader*>(instance()), &FileAssociatedShader::programDestroyed);
         s_programsByShader.insert(shader, &program);
 
         program.addShader(shader);
@@ -84,11 +86,7 @@ void FileAssociatedShader::shaderDestroyed(QObject * object)
     // disconnect from all programs that have no file associated shaders anymore...
     for (QOpenGLShaderProgram * program : affectedPrograms)
         if (s_programsByShader.keys(program).isEmpty())
-            disconnect(
-				program,
-				&QOpenGLShaderProgram::destroyed,
-				static_cast<FileAssociatedShader*>(instance()),
-				&FileAssociatedShader::programDestroyed);
+            disconnect(program, &QOpenGLShaderProgram::destroyed, static_cast<FileAssociatedShader*>(instance()), &FileAssociatedShader::programDestroyed);
 }
 
 void FileAssociatedShader::programDestroyed(QObject * object)
@@ -109,18 +107,14 @@ void FileAssociatedShader::programDestroyed(QObject * object)
             fileSystemWatcher()->removePath(filePath);
             s_shaderByFilePath.remove(filePath);
 
-			disconnect(shader,
-				&QOpenGLShader::destroyed,
-				static_cast<FileAssociatedShader*>(instance()),
-				&FileAssociatedShader::shaderDestroyed);
+            disconnect(shader, &QOpenGLShader::destroyed, static_cast<FileAssociatedShader*>(instance()), &FileAssociatedShader::shaderDestroyed);
         }
 }
 
 QList<QOpenGLShaderProgram *> FileAssociatedShader::process()
 {
-    repairWatchedFiles();
-
     QList<QOpenGLShaderProgram *> programsWithInvalidatedUniforms;
+
     while (!s_queue.isEmpty())
     {
         QString filePath = s_queue.first();

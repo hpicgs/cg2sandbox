@@ -1,10 +1,5 @@
 #pragma once
 
-
-#include <qgl.h>
-
-#include <QVector3D>
-
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 

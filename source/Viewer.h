@@ -11,6 +11,10 @@ class QLabel;
 class QSurfaceFormat;
 class QShortcut;
 
+class Canvas;
+class CyclicTime;
+class AbstractPainter;
+
 
 class Viewer : public QMainWindow
 {
@@ -18,13 +22,11 @@ class Viewer : public QMainWindow
 
 public:
     Viewer(
-        QWidget * parent = nullptr
+        const QSurfaceFormat & format
+    ,   QWidget * parent = nullptr
     ,   Qt::WindowFlags flags = NULL);
 
     virtual ~Viewer();
-
-signals:
-    void toggleSwapInterval();
 
 public slots:
     void fpsChanged(float fps);
@@ -35,17 +37,40 @@ public slots:
 protected slots:
     void on_toggleFullScreenAction_triggered(bool checked);
     void toggleFullScreen();
-
     void on_toggleSwapIntervalAction_triggered(bool checked);
+    void toggleSwapInterval();
+    void on_showAdaptiveGridAction_triggered(bool checked);
+    void toggleAdaptiveGrid();
+    void on_toggleTimeAction_triggered(bool checked);
+    void toggleTime();
+
+    void on_restartTimeAction_triggered(bool checked);
+    void on_quitAction_triggered(bool checked);
+
+protected:
+    void setup();
+    void setupCanvas(const QSurfaceFormat & format);
+
+    void store();
+    void restore();
+
+    void updateAfterFullScreenToggle();
 
 protected:
 	const QScopedPointer<Ui_Viewer> m_ui;
+
+    Canvas * m_canvas;
+    AbstractPainter * m_painter;
+
+    CyclicTime * m_time;
 
     QLabel * m_fpsLabel;
     QLabel * m_mouseLabel;
     QLabel * m_timeLabel;
     QLabel * m_objLabel;
 
-    QShortcut * m_fullscreenShortcut;
-    QShortcut * m_swapIntervalShortcut;
+    QScopedPointer<QShortcut> m_fullscreenShortcut;
+    QScopedPointer<QShortcut> m_swapIntervalShortcut;
+    QScopedPointer<QShortcut> m_adaptiveGridShortcut;
+    QScopedPointer<QShortcut> m_toggleTimeShortcut;
 };

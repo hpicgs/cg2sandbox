@@ -28,12 +28,13 @@ Canvas::Canvas(
 , m_navigation(new Navigation(*m_camera))
 , m_swapInterval(VerticalSyncronization)
 , m_repaintTimer(new QBasicTimer())
-, m_continuousRepaint(false)
 , m_fpsTimer(nullptr)
-, m_time(new CyclicTime(0.0L, 60.0)) // this is one day in 60 seconds (1d/1h)
+, m_time(nullptr)
 , m_swapts(0.0)
 , m_swaps(0)
 , m_update(false)
+, m_continuousRepaint(false)
+, m_showAdaptiveGrid(true)
 {
     setSurfaceType(OpenGLSurface); 
 
@@ -133,9 +134,6 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
 
     m_context->doneCurrent();
-
-    m_time->setf(0.0);
-    m_time->start();
 }
 
 void Canvas::resizeEvent(QResizeEvent * event)
@@ -175,7 +173,8 @@ void Canvas::paintGL()
         m_painter->update(programsWithInvalidatedUniforms);
 
 	m_painter->paint(m_time->getf(true));
-    m_grid->draw(*m_functions);
+    if (m_showAdaptiveGrid)
+        m_grid->draw(*m_functions);
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();
@@ -219,7 +218,7 @@ void Canvas::timerEvent(QTimerEvent * event)
     paintGL();
 }
 
-void Canvas::assignPainter(AbstractPainter * painter)
+void Canvas::setPainter(AbstractPainter * painter)
 {
     if (m_painter == painter)
         return;
@@ -238,6 +237,16 @@ void Canvas::assignPainter(AbstractPainter * painter)
     m_context->doneCurrent();
 
     m_navigation->setCoordinateProvider(m_painter);
+}
+
+void Canvas::setTime(CyclicTime * time)
+{
+    m_time = time;
+}
+
+CyclicTime * Canvas::time()
+{
+    return m_time;
 }
 
 bool Canvas::verifyExtensions() const
@@ -349,6 +358,15 @@ const QString Canvas::swapIntervalToString(SwapInterval swapInterval)
     }
 }
 
+void Canvas::setAdaptiveGrid(bool enable)
+{
+    m_showAdaptiveGrid = enable;
+}
+
+bool Canvas::adaptiveGrid() const
+{
+    return m_showAdaptiveGrid;
+}
 
 void Canvas::keyPressEvent(QKeyEvent * event)
 {
@@ -356,16 +374,15 @@ void Canvas::keyPressEvent(QKeyEvent * event)
         return;
 
     m_navigation->keyPressEvent(event);
-
-	// forward event to painter for exercise mode switching
-	m_painter->keyPressEvent(event);
 }
+
 void Canvas::keyReleaseEvent(QKeyEvent * event)
 {
-    if (!m_navigation)
-        return;
+    if (m_painter && Qt::Key_0 <= event->key() && event->key() <= Qt::Key_9)
+        m_painter->setMode(static_cast<AbstractPainter::PaintMode>(event->key() - Qt::Key_0));
 
-    m_navigation->keyReleaseEvent(event);
+    if (m_navigation)
+        m_navigation->keyReleaseEvent(event);
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent * event)
