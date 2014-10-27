@@ -5,8 +5,8 @@
 
 #ifdef NO_OPENGL_320
 
-#include <QOpenGLFunctions_3_0>
-class OpenGLFunctions : public QOpenGLFunctions_3_0
+#include <QOpenGLFunctions_3_1>
+class OpenGLFunctions : public QOpenGLFunctions_3_1
 {
 };
 
