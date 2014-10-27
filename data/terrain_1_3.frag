@@ -31,7 +31,7 @@ void main()
 	// ...
 	
 	//float i = ... ;
-	//fragColor = mix(texture2D(ground, uv0), texture2D(ground, uv1), i);
+	//fragColor = mix(texture(ground, uv0), texture2D(ground, uv1), i);
 	
 	fragColor = vec4(vec3(0.0), 1.0);
 	

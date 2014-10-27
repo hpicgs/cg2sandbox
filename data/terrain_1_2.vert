@@ -15,7 +15,7 @@ void main()
 	// Tip: note that your terrain might/should be in range [0,1] which 
 	// accidentally could be interpreted as texture coordinates ...
 	
-	// use texture2D function to access a sampler2D object
+	// use texture function to access a sampler2D object
 	
 	// ...
 
