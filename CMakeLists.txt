@@ -29,7 +29,6 @@ project(${META_PROJECT_NAME} C CXX)
 # Configuration options
 #
 
-option(OPTION_PORTABLE_INSTALL  "Install into a self-contained directory." ON)
 option(OPTION_NO_OPENGL_320  "Try using the 3.0 OpenGL profile in evil compatibility mode." OFF)
 
 #
@@ -54,9 +53,6 @@ set(IDE_FOLDER "")
 # Include custom cmake functions
 include(cmake/Custom.cmake)
 include(cmake/GitRevision.cmake)
-
-
-# set(CMAKE_INSTALL_LOCAL_ONLY OFF)
 
 
 #
@@ -149,12 +145,13 @@ endif()
 # install(FILES LICENSE DESTINATION               ${INSTALL_ROOT})
 
 # Install the data directory including the data files it contains.
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA})
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/source DESTINATION ${INSTALL_SOURCE})
+#install(DIRECTORY ${CMAKE_SOURCE_DIR}/data DESTINATION "/")
+#install(DIRECTORY ${CMAKE_SOURCE_DIR}/source DESTINATION "/")
 
 # Add a revision file containing the git-head tag for cpack and install. The function
 # "create_revision_file (...)" is defined in cmake/GitRevision.cmake
 create_revision_file(${CMAKE_BINARY_DIR}/revision ${INSTALL_ROOT})
+#install(FILES "${CMAKE_BINARY_DIR}/revision" DESTINATION "/")
 
 
 #

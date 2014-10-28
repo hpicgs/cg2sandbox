@@ -60,22 +60,20 @@ if(EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake")
 
     # Package name
 
-    set(CPACK_PACKAGE_FILE_NAME "${package_name}-${CPACK_PACKAGE_VERSION}")
+    set(CPACK_SOURCE_PACKAGE_FILE_NAME "${package_name}-${CPACK_PACKAGE_VERSION}")
 
     # Install files
 
     set(CPACK_INSTALL_CMAKE_PROJECTS        "${CMAKE_BINARY_DIR};${project_root};ALL;/")
     set(CPACK_PACKAGE_INSTALL_DIRECTORY     "${package_name}")
     set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY  "${package_name}")
-    if(NOT WIN32 AND NOT OPTION_PORTABLE_INSTALL)
-        set(CPACK_INSTALL_PREFIX            "/usr/")
-    endif()
 
 
     # Set generator
 
-    set(CPACK_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/CPackConfig-${project_name}.cmake")
-    set(CPACK_GENERATOR ${OPTION_PACK_GENERATOR})
+    set(CPACK_SOURCE_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/CPackSourceConfig-${project_name}.cmake")
+    set(CPACK_SOURCE_GENERATOR ${OPTION_PACK_GENERATOR})
+    set(CPACK_SOURCE_INSTALLED_DIRECTORIES "${CMAKE_SOURCE_DIR}/source;/source;${CMAKE_SOURCE_DIR}/data;/data")
 
 
     # CPack
@@ -94,7 +92,7 @@ endif()
 
 add_custom_target(
     pack-${project_name}
-    COMMAND ${CPACK_COMMAND} --config ${CMAKE_BINARY_DIR}/CPackConfig-${project_name}.cmake
+    COMMAND ${CPACK_COMMAND} --config ${CMAKE_BINARY_DIR}/CPackSourceConfig-${project_name}.cmake
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 set_target_properties(pack-${project_name} PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD 1)

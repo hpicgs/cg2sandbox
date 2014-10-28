@@ -158,13 +158,3 @@ set_target_properties(${target}
     LINK_FLAGS_DEBUG            "${DEFAULT_LINKER_FLAGS_DEBUG}"
     LINK_FLAGS_RELEASE          "${DEFAULT_LINKER_FLAGS_RELEASE}"
     DEBUG_POSTFIX               "d${DEBUG_POSTFIX}")
-
-#
-# Deployment
-#
-
-install(TARGETS ${target}
-    RUNTIME DESTINATION ${INSTALL_BIN}
-#   LIBRARY DESTINATION ${INSTALL_SHARED}
-#   ARCHIVE DESTINATION ${INSTALL_LIB}
-)
