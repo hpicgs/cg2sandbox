@@ -265,7 +265,7 @@ void Painter::paint_1_1(float /*timef*/)
     }
 }
 
-void Painter::paint_1_2(float timef)
+void Painter::paint_1_2(float /*timef*/)
 {
     QOpenGLShaderProgram * program(m_programs[PaintMode2]);
     Terrain * terrain(m_terrains[1]);
@@ -285,7 +285,7 @@ void Painter::paint_1_2(float timef)
     }
 }
 
-void Painter::paint_1_3(float timef)
+void Painter::paint_1_3(float /*timef*/)
 {
     QOpenGLShaderProgram * program(m_programs[PaintMode3]);
     Terrain * terrain(m_terrains[1]);
@@ -313,7 +313,7 @@ void Painter::paint_1_3(float timef)
     }
 }
 
-void Painter::paint_1_4(float timef)
+void Painter::paint_1_4(float /*timef*/)
 {
     // ... 
 }

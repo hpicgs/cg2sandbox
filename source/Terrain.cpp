@@ -37,8 +37,8 @@ Terrain::Terrain(
 }
 
 void Terrain::draw(
-	OpenGLFunctions & gl
-,	const GLenum mode)
+    OpenGLFunctions & /*gl*/
+,	const GLenum /*mode*/)
 {
     // Task_1_1 - ToDo Begin
 
@@ -61,10 +61,10 @@ void Terrain::draw(
 }
 
 void Terrain::strip(
-	const unsigned short size
-,	QOpenGLBuffer & vertices
-,	QOpenGLBuffer & indices
-,	const GLuint primitiveRestartIndex)
+    const unsigned short /*size*/
+,	QOpenGLBuffer & /*vertices*/
+,	QOpenGLBuffer & /*indices*/
+,	const GLuint /*primitiveRestartIndex*/)
 {
     // Task_1_1 - ToDo Begin
 
