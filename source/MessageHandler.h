@@ -24,14 +24,15 @@ public:
 
     static void setPrintToConsole(const bool enable);
     static void setPrintToConsole(
-        const QtMsgType type
-    ,   const bool enable);    static const bool printsToConsole(const QtMsgType type);
+        QtMsgType type
+    ,   bool enable);
+    static bool printsToConsole(QtMsgType type);
 
     static void setPrintToFile(const bool enable);
     static void setPrintToFile(
         const QtMsgType type
     ,   const bool enable);
-    static const bool printsToFile(const QtMsgType type);
+    static bool printsToFile(QtMsgType type);
 
     static void setFileName(const QString & fileName);
     static const QString fileName();

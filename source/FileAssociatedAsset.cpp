@@ -36,7 +36,7 @@ void FileAssociatedAsset::fileChanged(const QString & filePath)
     s_queue.append(filePath);
 }
 
-QFileSystemWatcher * const FileAssociatedAsset::fileSystemWatcher()
+QFileSystemWatcher * FileAssociatedAsset::fileSystemWatcher()
 {
 	return instance()->m_fileSystemWatcher;
 }

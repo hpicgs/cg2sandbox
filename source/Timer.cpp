@@ -20,7 +20,7 @@ void Timer::update() const
     m_chrono->update();
 }
 
-const bool Timer::paused() const
+bool Timer::paused() const
 {
     return m_chrono->paused();
 }
@@ -45,7 +45,7 @@ void Timer::reset()
     m_chrono->reset();
 }
 
-const long double Timer::elapsed() const
+long double Timer::elapsed() const
 {
     return m_chrono->elapsed();
 }
@@ -55,7 +55,7 @@ void Timer::setAutoUpdating(const bool auto_update)
     m_chrono->setAutoUpdating(auto_update);
 }
 
-const bool Timer::autoUpdating() const
+bool Timer::autoUpdating() const
 {
     return m_chrono->autoUpdating();
 }

@@ -85,7 +85,7 @@ void Camera::setUp(const QVector3D & up)
     dirty();
 }
 
-const float Camera::zNear() const
+float Camera::zNear() const
 {
     return m_zNear;
 }
@@ -101,7 +101,7 @@ void Camera::setZNear(const float zNear)
     dirty();
 }
 
-const float Camera::zFar() const
+float Camera::zFar() const
 {
     return m_zFar;
 }
@@ -117,7 +117,7 @@ void Camera::setZFar(const float zFar)
     dirty();
 }
 
-const float Camera::fovy() const
+float Camera::fovy() const
 {
     return m_fovy;
 }

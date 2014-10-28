@@ -176,7 +176,7 @@ void Viewer::objChanged(const QVector3D & obj)
         .arg(obj.z() > 0 ? " " : "").arg(obj.z()));
 }
 
-void Viewer::on_toggleFullScreenAction_triggered(bool checked)
+void Viewer::on_toggleFullScreenAction_triggered(bool /*checked*/)
 {
     toggleFullScreen();
 }
@@ -204,7 +204,7 @@ void Viewer::updateAfterFullScreenToggle()
     m_toggleTimeShortcut->setEnabled(isFullScreen());
 }
 
-void Viewer::on_toggleSwapIntervalAction_triggered(bool checked)
+void Viewer::on_toggleSwapIntervalAction_triggered(bool /*checked*/)
 {
     toggleSwapInterval();
 }
@@ -227,7 +227,7 @@ void Viewer::toggleAdaptiveGrid()
     m_canvas->setAdaptiveGrid(!m_canvas->adaptiveGrid());
 }
 
-void Viewer::on_toggleTimeAction_triggered(bool checked)
+void Viewer::on_toggleTimeAction_triggered(bool /*checked*/)
 {
     toggleTime();
 }
@@ -240,7 +240,7 @@ void Viewer::toggleTime()
         m_time->pause();
 }
 
-void Viewer::on_restartTimeAction_triggered(bool checked)
+void Viewer::on_restartTimeAction_triggered(bool /*checked*/)
 {
     const bool wasRunning(m_time->isRunning());
     m_time->reset();
@@ -249,7 +249,7 @@ void Viewer::on_restartTimeAction_triggered(bool checked)
         m_time->start();
 }
 
-void Viewer::on_quitAction_triggered(bool checked)
+void Viewer::on_quitAction_triggered(bool /*checked*/)
 {
     QApplication::quit();
 }

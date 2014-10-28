@@ -67,16 +67,16 @@ public:
 
     // AbstractCoordinateProvider interface
 
-    virtual const float depthAt(const QPointF & windowCoordinates);
+    virtual float depthAt(const QPointF & windowCoordinates);
 
     virtual const QVector3D objAt(
         const QPointF & windowCoordinates);
     const QVector3D objAt(
         const QPointF & windowCoordinates
-    ,   const float depth);
+    ,   float depth);
     const QVector3D objAt(
         const QPointF & windowCoordinates
-    ,   const float depth
+    ,   float depth
     ,   const QMatrix4x4 & viewProjectionInverted);
 
 protected:

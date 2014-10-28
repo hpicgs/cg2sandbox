@@ -30,7 +30,7 @@ void ChronoTimer::update() const
     m_elapsed = nano(delta).count() + m_offset;
 }
 
-const bool ChronoTimer::paused() const
+bool ChronoTimer::paused() const
 {
     return m_paused;
 }
@@ -72,7 +72,7 @@ void ChronoTimer::reset()
     m_tp = m_t0;
 }
 
-const long double ChronoTimer::elapsed() const
+long double ChronoTimer::elapsed() const
 {
     if(m_auto)
         update();
@@ -85,7 +85,7 @@ void ChronoTimer::setAutoUpdating(const bool auto_update)
     m_auto = auto_update;
 }
 
-const bool ChronoTimer::autoUpdating() const
+bool ChronoTimer::autoUpdating() const
 {
     return m_auto;
 }

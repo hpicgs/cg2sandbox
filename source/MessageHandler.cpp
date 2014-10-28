@@ -123,7 +123,7 @@ void MessageHandler::setPrintToConsole(
     flags[type] = enable;
 }
 
-const bool MessageHandler::printsToConsole(const QtMsgType type)
+bool MessageHandler::printsToConsole(const QtMsgType type)
 {
     const typedPrintFlags &flags(instance()->m_printToConsole);
     if(!flags.contains(type))
@@ -146,7 +146,7 @@ void MessageHandler::setPrintToFile(
     flags[type] = enable;
 }
 
-const bool MessageHandler::printsToFile(const QtMsgType type)
+bool MessageHandler::printsToFile(const QtMsgType type)
 {
     const typedPrintFlags &flags(instance()->m_printToFile);
     if(!flags.contains(type))
@@ -157,7 +157,7 @@ const bool MessageHandler::printsToFile(const QtMsgType type)
 
 void MessageHandler::handle(
     QtMsgType type
-,   const QMessageLogContext & context
+,   const QMessageLogContext & /*context*/
 ,   const QString & message)
 {
     // Early exit if no output is required.
@@ -206,7 +206,7 @@ void MessageHandler::printf(
     // Print to Console
 
     if(m_printToConsole[type])
-        fprintf(stderr, qPrintable(message));
+        fputs(qPrintable(message), stderr);
 
     // Print to File
 

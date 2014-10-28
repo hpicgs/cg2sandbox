@@ -83,14 +83,14 @@ const QVector2D NavigationMath::raySquareIntersection(
 		return QVector2D(point.x() / ay, sign(point.y())) * length;
 }
 
-const bool NavigationMath::insideSquare(
+bool NavigationMath::insideSquare(
 	const QVector2D & point
 ,	const float length)
 {
 	return abs(point.x()) <= length && abs(point.y()) <= length;
 }
 
-const QVector2D NavigationMath::rayCircleIntersection(
+QVector2D NavigationMath::rayCircleIntersection(
 	bool & valid
 ,	const QVector2D & origin
 ,	const QVector2D & ray
@@ -127,19 +127,19 @@ const QVector2D NavigationMath::rayCircleIntersection(
 	return t * ray + origin;
 }
 
-const QVector2D NavigationMath::xz(const QVector3D & xyz) 
+QVector2D NavigationMath::xz(const QVector3D & xyz)
 {
 	return QVector2D(xyz.x(), xyz.z());
 }
 
-const float NavigationMath::angle(
+float NavigationMath::angle(
 	const QVector3D & a
 ,	const QVector3D & b) 
 {
 	return acos(QVector3D::dotProduct(a.normalized(), b.normalized()));
 }
 
-const bool NavigationMath::boundaryVisible(
+bool NavigationMath::boundaryVisible(
     const QMatrix4x4 & mvp
 ,   const AxisAlignedBoundingBox & b)
 {
@@ -170,7 +170,7 @@ const bool NavigationMath::boundaryVisible(
 	return true;
 }
 
-const bool NavigationMath::pointVisible(
+bool NavigationMath::pointVisible(
 	const QMatrix4x4 & mvp
 ,	const QVector3D & p)
 {
@@ -179,7 +179,7 @@ const bool NavigationMath::pointVisible(
     return qAbs<float>(t.x()) <= 1.0 && qAbs<float>(t.y()) <= 1.0;
 }
 
-const QVector3D NavigationMath::cameraWithPointInView(
+QVector3D NavigationMath::cameraWithPointInView(
 	const QVector3D & eye
 ,	const QVector3D & center
 ,	const QVector3D & up
@@ -196,7 +196,7 @@ const QVector3D NavigationMath::cameraWithPointInView(
 
 	// get both field of view vectors
 	const float vFov(rad(fovy));
-	const float hFov(2.0 * atan(tan(vFov * 0.5) * aspect));
+    //const float hFov(2.0 * atan(tan(vFov * 0.5) * aspect));
 
 	// closest point c
     const QVector3D c = eye + ray * distanceToClosestPoint(eye, center, point);
@@ -216,7 +216,7 @@ const QVector3D NavigationMath::cameraWithPointInView(
     return c - a * n;
 }
 
-const float NavigationMath::distanceToClosestPoint(
+float NavigationMath::distanceToClosestPoint(
 	const QVector3D & eye
 ,	const QVector3D & center
 ,	const QVector3D & point)
