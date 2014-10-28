@@ -65,8 +65,8 @@ protected slots:
     void cameraChanged();
 
 protected:
-    const QString querys(const GLenum penum);
-    const GLint queryi(const GLenum penum);
+    QString querys(GLenum penum);
+    GLint queryi(GLenum penum);
 
     virtual void initializeGL(const QSurfaceFormat & format);
 	virtual void paintGL();

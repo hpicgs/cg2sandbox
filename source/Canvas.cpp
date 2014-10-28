@@ -76,7 +76,7 @@ bool Canvas::continuousRepaint() const
 	return m_continuousRepaint;
 }
 
-const QString Canvas::querys(const GLenum penum) 
+QString Canvas::querys(GLenum penum)
 {
     const QString result = reinterpret_cast<const char*>(m_functions->glGetString(penum));
     //glError();
@@ -84,7 +84,7 @@ const QString Canvas::querys(const GLenum penum)
     return result;
 }
 
-const GLint Canvas::queryi(const GLenum penum)
+GLint Canvas::queryi(GLenum penum)
 {
     GLint result;
     m_functions->glGetIntegerv(penum, &result);
@@ -278,7 +278,7 @@ bool Canvas::verifyExtensions() const
     foreach(const QString & extension, unsupported)
         qWarning() << extension;
 
-    qWarning("");
+    qWarning() << "";
 
     return false;
 }

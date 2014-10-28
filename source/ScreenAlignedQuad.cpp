@@ -5,7 +5,7 @@
 
 ScreenAlignedQuad::ScreenAlignedQuad(
 	OpenGLFunctions & gl
-,	const GLuint vertexAttribLocation)
+,	const GLuint /*vertexAttribLocation*/)
 : m_vertices(QOpenGLBuffer::VertexBuffer)
 {
 	m_vao.create();

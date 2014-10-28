@@ -328,7 +328,7 @@ void Navigation::enforceTranslationConstraints(QVector3D & p) const
 }
 
 void Navigation::enforceRotationConstraints(
-    float & hAngle
+    float & /*hAngle*/
 ,   float & vAngle) const
 {
     // hAngle is not constrained, vAngle is.

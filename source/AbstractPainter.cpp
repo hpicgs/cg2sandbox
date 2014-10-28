@@ -47,7 +47,7 @@ Camera * AbstractPainter::camera()
     return m_camera;
 }
 
-const float AbstractPainter::depthAt(const QPointF & windowCoordinates)
+float AbstractPainter::depthAt(const QPointF & windowCoordinates)
 {
     const GLint x(static_cast<GLint>(windowCoordinates.x()));
     const GLint y(static_cast<GLint>(windowCoordinates.y()));

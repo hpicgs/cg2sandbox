@@ -160,7 +160,7 @@ void Painter::paint(float timef)
     }
 }
 
-void Painter::paint_1_1(float timef)
+void Painter::paint_1_1(float /*timef*/)
 {
     // ToDo: if you habe seen the cube, remove this!
     if (m_programs[TestProgram]->isLinked())
