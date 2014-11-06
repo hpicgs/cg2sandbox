@@ -24,8 +24,8 @@ public:
 	static GLuint getOrCreate2D(
 		const QString & fileName
     ,   OpenGLFunctions & gl
-	,	const GLenum wrap_s = GL_CLAMP
-	,	const GLenum wrap_t = GL_CLAMP
+    ,	const GLenum wrap_s = GL_CLAMP_TO_EDGE
+    ,	const GLenum wrap_t = GL_CLAMP_TO_EDGE
 	,	const GLenum mag_filter = GL_LINEAR
     ,   const GLenum min_filter = GL_LINEAR);
 

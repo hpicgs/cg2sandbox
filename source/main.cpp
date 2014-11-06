@@ -13,11 +13,13 @@ int main(int argc, char * argv[])
 
     QSurfaceFormat format;
 #ifdef NO_OPENGL_320
-    format.setVersion(3, 0);
+    format.setVersion(3, 1);
 #else
     format.setVersion(3, 2);
     format.setProfile(QSurfaceFormat::CoreProfile);
 #endif
+
+    format.setDepthBufferSize(24);
 
     QScopedPointer<Viewer> viewer(new Viewer(format));
     result = app.exec();
