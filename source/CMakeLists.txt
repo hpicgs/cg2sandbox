@@ -85,6 +85,7 @@ set(sources
     ${source_path}/Painter.cpp
     ${source_path}/Plane3.cpp
     ${source_path}/ScreenAlignedQuad.cpp
+    ${source_path}/Terrain.cpp
     ${source_path}/Timer.cpp
     ${source_path}/UnitCube.cpp
     ${source_path}/Viewer.cpp
@@ -116,6 +117,7 @@ set(headers
     ${include_path}/PainterMode.h
     ${include_path}/Plane3.h
     ${include_path}/ScreenAlignedQuad.h
+    ${include_path}/Terrain.h
     ${include_path}/Timer.h
     ${include_path}/UnitCube.h
     ${include_path}/version.h.in
