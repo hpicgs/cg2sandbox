@@ -16,18 +16,17 @@ cg2sandbox
 
 ### Requirements
 
-+ CMake 2.8.10
++ CMake 2.8.12
 + Qt 5.1
 + OpenGL support >= 3.2 (3.1 or below might work in some cases - use cmake option ```OPTION_NO_OPENGL_320```)
 + XCode/QtCreator/gcc/mingw/VisualStudio/etc..
-+ Partial C++11 support (as provided by MSVC11:  http://wiki.apache.org/stdcxx/C++0xCompilerSupport)
 
 ### Disclaimer
 
 + FOR ASSESSMENT WE BUILD YOUR SUBMISSION IN WINDOWS WITH MSVC11 ONLY!
 + WE OFFICIALLY SUPPORT WINDOWS WITH MSVC11 ONLY!
 + Still, if you have problems on other platforms please let us know. 
-We are dedicated to provide a framework that is working on all common desktop platforms.
+We are dedicated to provide a framework that is working on all common desktop plattforms.
 
 
 ## Build Instructions
@@ -47,7 +46,7 @@ General Requirements:
 
 #### Prerequisites
 
-+ Having a Visual Studio installed (MSVC11 or UP)
++ Having a Visual Studio installed (MSVC10 or UP)
 
 #### Building and Running an Exercise
 

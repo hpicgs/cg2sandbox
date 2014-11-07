@@ -31,13 +31,7 @@ void ScreenAlignedQuad::draw(OpenGLFunctions & gl)
 
 void ScreenAlignedQuad::strip(QOpenGLBuffer & vertices)
 {
-	float rawv[] =
-	{
-		+1.f, -1.f
-		, +1.f, +1.f
-		, -1.f, -1.f
-		, -1.f, +1.f
-	};
+	float rawv[] = { +1.f, -1.f , +1.f, +1.f , -1.f, -1.f , -1.f, +1.f };
 
 	vertices.bind();
 	vertices.allocate(rawv, sizeof(float)* 8);
