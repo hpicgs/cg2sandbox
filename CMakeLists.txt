@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8.10 FATAL_ERROR)
 # PROJECT DESCRIPTION
 
 set(META_PROJECT_NAME        "cg2sandbox")
-set(META_VERSION_MAJOR       "cg2ws1314")
+set(META_VERSION_MAJOR       "cg2ws1415")
 set(META_EXERCISE            "3")
 set(META_AUTHOR1_MATNR       "000000")
 set(META_AUTHOR2_MATNR       "000000")

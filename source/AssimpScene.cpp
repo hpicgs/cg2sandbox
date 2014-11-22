@@ -210,7 +210,7 @@ void AssimpScene::setupVAOs(
         retrieveColor(mtl, AI_MATKEY_COLOR_SPECULAR, material.specular, 0.0f, 0.0f, 0.0f, 1.0f);
         retrieveColor(mtl, AI_MATKEY_COLOR_EMISSIVE, material.emissive, 0.0f, 0.0f, 0.0f, 1.0f);
 
-        material.shininess = 0.f;
+        material.shininess = 5.f;
         unsigned int max;
         aiGetMaterialFloatArray(mtl, AI_MATKEY_SHININESS, &material.shininess, &max);
 
