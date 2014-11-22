@@ -44,9 +44,9 @@ protected:
     void paint_3_1_label(const QMatrix4x4 & viewProjection, float timef);
     void paint_3_2(float timef); 
     void paint_3_2_label(const QMatrix4x4 & viewProjection, float timef);
-    void paint_3_3(float timef);
+    void paint_3_3_lightView(float timef);
     void paint_3_3_shadowmap(float timef);
-    void paint_3_4(float timef);
+    void paint_3_3_scene(float timef);
 
 protected:
     QOpenGLShaderProgram * createBasicShaderProgram(

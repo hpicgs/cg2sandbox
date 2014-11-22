@@ -218,8 +218,8 @@ bool Painter::initialize()
     glBindFramebuffer(GL_FRAMEBUFFER, m_depthFbo);
 
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_depthTex, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
+//    glDrawBuffer(GL_NONE);
+//    glReadBuffer(GL_NONE);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         qDebug() << "depth fbo invalid";
@@ -356,9 +356,9 @@ void Painter::paint(float timef)
     case PaintMode2:
         paint_3_2(timef); break;
     case PaintMode3:
-        paint_3_3(timef); break;
+        paint_3_3_lightView(timef); break;
     case PaintMode4:
-        paint_3_4(timef); break;
+        paint_3_3_scene(timef); break;
         //paint_1_4(timef); break;
         //case PaintMode5:
         //    paint_1_5(timef); break;
@@ -482,10 +482,14 @@ void Painter::paint_3_3_shadowmap(float timef)
     paint_3_2_label(L, timef);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#ifdef __APPLE__
+    glViewport(0, 0, camera()->viewport().width()*2.0, camera()->viewport().height()*2.0);
+#else
     glViewport(0, 0, camera()->viewport().width(), camera()->viewport().height());
+#endif __APPLE__
 }
 
-void Painter::paint_3_3(float timef)
+void Painter::paint_3_3_lightView(float timef)
 {
     paint_3_3_shadowmap(timef);
 
@@ -501,7 +505,7 @@ void Painter::paint_3_3(float timef)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Painter::paint_3_4(float timef)
+void Painter::paint_3_3_scene(float timef)
 {
     paint_3_3_shadowmap(timef);
 
@@ -515,11 +519,12 @@ void Painter::paint_3_4(float timef)
 
     // Task_3_3 - ToDo Begin
 
-    // QMatrix4x4 ...
+    // QMatrix4x4 B...
+    // QMatrix4x4 L...
     
     program->bind();
     program->setUniformValue("light", m_light);
-    // program->setUniformValue("todo", ?);
+    // program->setUniformValue("biasedDepth", ?);
     program->release();
 
     // Task_3_3 - ToDo End
