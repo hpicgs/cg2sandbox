@@ -165,7 +165,7 @@ bool Painter::initialize()
 
     // same procedure again...
 
-    glGenRenderbuffers(1, &m_cubeDepthRB);
+    glGenTextures(1, &m_cubeDepthRB);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubeDepthRB);
     //glTexParameteri(..., ..., GL_NEAREST);
     //...
