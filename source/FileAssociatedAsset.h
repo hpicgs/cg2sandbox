@@ -9,7 +9,7 @@ class FileAssociatedAsset : public QObject
 {
 public:
     static FileAssociatedAsset * instance();
-	static QFileSystemWatcher * const fileSystemWatcher();
+    static QFileSystemWatcher * fileSystemWatcher();
 
 	void addResourcePath(const QString & fileName);
 

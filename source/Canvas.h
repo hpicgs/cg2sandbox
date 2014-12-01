@@ -22,7 +22,7 @@ class CyclicTime;
 class AdaptiveGrid;
 
 
-class Canvas : public QWindow, protected OpenGLFunctions
+class Canvas : public QWindow
 {
     Q_OBJECT
 
@@ -65,8 +65,8 @@ protected slots:
     void cameraChanged();
 
 protected:
-    const QString querys(const GLenum penum);
-    const GLint queryi(const GLenum penum);
+    QString querys(GLenum penum);
+    GLint queryi(GLenum penum);
 
     virtual void initializeGL(const QSurfaceFormat & format);
 	virtual void paintGL();
@@ -103,6 +103,7 @@ signals:
 
 protected:
     QScopedPointer<QOpenGLContext> m_context;
+    OpenGLFunctions * m_functions;
 
     AbstractPainter * m_painter;
     QScopedPointer<Camera> m_camera;

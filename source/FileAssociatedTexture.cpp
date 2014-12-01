@@ -189,7 +189,7 @@ GLuint FileAssociatedTexture::loadTexture2D(
 	, const QImage & image
 	, OpenGLFunctions & gl)
 {
-	if (texture == -1)
+    if (texture == static_cast<unsigned int>(-1))
 	{
 		gl.glGenTextures(1, &texture);
 		gl.glBindTexture(GL_TEXTURE_2D, texture);
@@ -224,7 +224,7 @@ GLuint FileAssociatedTexture::loadTextureCube(
 ,   const QMap<GLenum, QImage> & images
 ,   OpenGLFunctions & gl)
 {
-    if (texture == -1)
+    if (texture == static_cast<unsigned int>(-1))
     {
         gl.glGenTextures(1, &texture);
         gl.glBindTexture(GL_TEXTURE_CUBE_MAP, texture);

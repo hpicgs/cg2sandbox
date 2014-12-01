@@ -5,8 +5,9 @@
 
 
 AxisAlignedBoundingBox::AxisAlignedBoundingBox()
-:   m_urb(QVector3D(-FLT_MAX,-FLT_MAX,-FLT_MAX))
-,   m_llf(QVector3D(+FLT_MAX,+FLT_MAX,+FLT_MAX))
+:   m_llf(QVector3D(+FLT_MAX,+FLT_MAX,+FLT_MAX))
+,   m_urb(QVector3D(-FLT_MAX,-FLT_MAX,-FLT_MAX))
+,   m_radius(0.0f)
 {
 }
 
@@ -14,7 +15,7 @@ AxisAlignedBoundingBox::~AxisAlignedBoundingBox()
 {
 }
 
-const bool AxisAlignedBoundingBox::extend(const QVector3D & vertex)
+bool AxisAlignedBoundingBox::extend(const QVector3D & vertex)
 {
     const QVector3D llf(m_llf);
     const QVector3D urb(m_urb);
@@ -49,7 +50,7 @@ const QVector3D & AxisAlignedBoundingBox::center() const
     return m_center;
 }
 
-const float AxisAlignedBoundingBox::radius() const
+float AxisAlignedBoundingBox::radius() const
 {
     return m_radius;
 }
@@ -64,14 +65,14 @@ const QVector3D & AxisAlignedBoundingBox::urb() const
     return m_urb;
 }
 
-const bool AxisAlignedBoundingBox::inside(const QVector3D & vertex) const
+bool AxisAlignedBoundingBox::inside(const QVector3D & vertex) const
 {
     return vertex.x() >= m_llf.x() && vertex.x() <= m_urb.x()
         && vertex.y() >= m_llf.y() && vertex.y() <= m_urb.y()
         && vertex.z() >= m_llf.z() && vertex.z() <= m_urb.z();
 }
 
-const bool AxisAlignedBoundingBox::outside(const QVector3D & vertex) const
+bool AxisAlignedBoundingBox::outside(const QVector3D & vertex) const
 {
     return !inside(vertex);
 }

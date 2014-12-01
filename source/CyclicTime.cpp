@@ -7,7 +7,7 @@
 #include "CyclicTime.h"
 
 
-const long CyclicTime::utcOffset()
+long CyclicTime::utcOffset()
 {
 	long tz;
 
@@ -26,26 +26,26 @@ CyclicTime::CyclicTime(
 	t_longf time
 ,   t_longf secondsPerCycle)
 :   m_timer(new Timer())
-,   m_secondsPerCycle(secondsPerCycle)
-,   m_mode(TimePausing)
-,   m_offset(0.f)
-,   m_lastModeChangeTime(0.f)
 ,   m_utcOffset(0)
+,   m_offset(0.f)
+,   m_mode(TimePausing)
+,   m_lastModeChangeTime(0.f)
+,   m_secondsPerCycle(secondsPerCycle)
 {
 	initialize();
 	setf(time, true);
 }
 
 CyclicTime::CyclicTime(
-	const time_t & time
-,   const time_t & utcOffset
+    time_t & time
+,   time_t & utcOffset
 ,   t_longf secondsPerCycle)
 :   m_timer(new Timer())
-,   m_secondsPerCycle(secondsPerCycle)
-,   m_mode(TimePausing)
-,   m_offset(0.f)
-,   m_lastModeChangeTime(0.f)
 ,   m_utcOffset(utcOffset)
+,   m_offset(0.f)
+,   m_mode(TimePausing)
+,   m_lastModeChangeTime(0.f)
+,   m_secondsPerCycle(secondsPerCycle)
 {
     m_timer->setAutoUpdating(true);
 
@@ -71,6 +71,11 @@ CyclicTime::~CyclicTime()
 	delete m_timer;
 }
 
+t_longf CyclicTime::getSecondsPerCycle() const
+{
+    return m_secondsPerCycle;
+}
+
 inline long double CyclicTime::elapsed() const
 {
     return m_timer->elapsed() * 1e-9f;
@@ -87,7 +92,7 @@ void CyclicTime::update()
 	m_time[1] = fToSeconds(elapsedTimef + m_offset) + static_cast<time_t>(m_time[0]);
 }
 
-const t_longf CyclicTime::getf(const bool updateFirst)
+t_longf CyclicTime::getf(const bool updateFirst)
 {
 	if (updateFirst)
 		update();
@@ -95,14 +100,14 @@ const t_longf CyclicTime::getf(const bool updateFirst)
 	return m_timef[1];
 }
 
-const time_t CyclicTime::gett() const
+time_t CyclicTime::gett() const
 {
     return m_time[1] + utcOffset();
 }
 
-const t_longf CyclicTime::setf(
+t_longf CyclicTime::setf(
 	t_longf timef
-,   const bool forceUpdate)
+,   bool forceUpdate)
 {
 	timef = frac(timef);
 
@@ -138,12 +143,12 @@ const t_longf CyclicTime::setf(
 	return getf();
 }
 
-const t_longf CyclicTime::getNonModf(const bool updateFirst)
+t_longf CyclicTime::getNonModf(bool updateFirst)
 {
 	return secondsTof(gett(updateFirst));
 }
 
-const time_t CyclicTime::gett(const bool updateFirst)
+time_t CyclicTime::gett(bool updateFirst)
 {
 	if (updateFirst)
 		update();
@@ -151,9 +156,9 @@ const time_t CyclicTime::gett(const bool updateFirst)
 	return m_time[1] + utcOffset();
 }
 
-const time_t CyclicTime::sett(
+time_t CyclicTime::sett(
 	const time_t &time
-,   const bool forceUpdate)
+,   bool forceUpdate)
 {
 	time_t t = time - utcOffset();
 
@@ -170,7 +175,7 @@ const time_t CyclicTime::sett(
 	return gett();
 }
 
-const t_longf CyclicTime::setSecondsPerCycle(const t_longf secondsPerCycle)
+t_longf CyclicTime::setSecondsPerCycle(t_longf secondsPerCycle)
 {
 	// intepret elapsed seconds within new cycle time
     const t_longf elapsed = (TimeCycling == m_mode ? this->elapsed() : m_lastModeChangeTime);
@@ -186,17 +191,17 @@ const t_longf CyclicTime::setSecondsPerCycle(const t_longf secondsPerCycle)
 	return getSecondsPerCycle();
 }
 
-inline const t_longf CyclicTime::secondsTof(const time_t &time)
+t_longf CyclicTime::secondsTof(const time_t &time)
 {
 	return static_cast<t_longf>((time) / (60.0 * 60.0 * 24.0));
 }
 
-inline const time_t CyclicTime::fToSeconds(const t_longf time)
+time_t CyclicTime::fToSeconds(t_longf time)
 {
 	return static_cast<time_t>(time * 60.0 * 60.0 * 24.0 + 0.1);
 }
 
-const bool CyclicTime::isRunning() const
+bool CyclicTime::isRunning() const
 {
 	return TimeCycling == m_mode;
 }
@@ -249,12 +254,12 @@ void CyclicTime::stop(const bool forceUpdate)
 	reset(forceUpdate);
 }
 
-const time_t CyclicTime::getUtcOffset() const
+time_t CyclicTime::getUtcOffset() const
 {
 	return m_utcOffset;
 }
 
-const time_t CyclicTime::setUtcOffset(const time_t &utcOffset)
+time_t CyclicTime::setUtcOffset(const time_t &utcOffset)
 {
 	m_utcOffset = utcOffset;
 

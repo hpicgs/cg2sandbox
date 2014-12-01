@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include <QFileInfo>
-#include <qDebug>
+#include <QDebug>
 #include <QMatrix4x4>
 #include <QOpenGLShaderProgram>
 

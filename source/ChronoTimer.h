@@ -12,12 +12,12 @@ public:
     virtual ~ChronoTimer();
 
     void setAutoUpdating(const bool autoUpdate);
-    const bool autoUpdating() const;
+    bool autoUpdating() const;
 
-    const bool paused() const;
+    bool paused() const;
 
     void update() const;
-    const long double elapsed() const;
+    long double elapsed() const;
 
     void start();
     void pause();

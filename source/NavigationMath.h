@@ -43,34 +43,34 @@ public:
 		const QVector2D & point ///< ray points from point to root
 	,	float length = 1.f);
 
-	static const bool insideSquare(
+    static bool insideSquare(
 		const QVector2D & point ///< ray points from point to root
 	,	float length = 1.f);
 
-	static const QVector2D rayCircleIntersection(
+    static QVector2D rayCircleIntersection(
 		bool & valid
 	,	const QVector2D & origin
 	,	const QVector2D & ray
 	,	float radius = 1.f);
 
-	static const QVector2D xz(const QVector3D & xyz);
+    static QVector2D xz(const QVector3D & xyz);
 
-	static const float angle(
+    static float angle(
 		const QVector3D & a
 	,	const QVector3D & b);
 
-	static const bool boundaryVisible(
+    static bool boundaryVisible(
 		const QMatrix4x4 & modelViewProjection
     ,   const AxisAlignedBoundingBox & aabb);
 
-	static const bool pointVisible(
+    static bool pointVisible(
 		const QMatrix4x4 & modelViewProjection
 	,	const QVector3D & point);
 
     /** Calculates a camera eye position that is either equal or further away
         from the given camera center, ensured to have the given point in view.
     */
-	static const QVector3D cameraWithPointInView(
+    static QVector3D cameraWithPointInView(
 		const QVector3D & eye
 	,	const QVector3D & center
 	,	const QVector3D & up
@@ -78,7 +78,7 @@ public:
 	,	float aspect
 	,	const QVector3D & point);
 
-	static const float distanceToClosestPoint(
+    static float distanceToClosestPoint(
 		const QVector3D & camera
 	,	const QVector3D & center
 	,	const QVector3D & point);

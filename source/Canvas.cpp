@@ -22,6 +22,7 @@ Canvas::Canvas(
 ,   QScreen * screen)
 : QWindow(screen)
 , m_context(new QOpenGLContext)
+, m_functions(nullptr)
 , m_painter(nullptr)
 , m_camera(new Camera())
 , m_navigation(new Navigation(*m_camera))
@@ -75,18 +76,18 @@ bool Canvas::continuousRepaint() const
 	return m_continuousRepaint;
 }
 
-const QString Canvas::querys(const GLenum penum) 
+QString Canvas::querys(GLenum penum)
 {
-    const QString result = reinterpret_cast<const char*>(glGetString(penum));
+    const QString result = reinterpret_cast<const char*>(m_functions->glGetString(penum));
     //glError();
 
     return result;
 }
 
-const GLint Canvas::queryi(const GLenum penum)
+GLint Canvas::queryi(GLenum penum)
 {
     GLint result;
-    glGetIntegerv(penum, &result);
+    m_functions->glGetIntegerv(penum, &result);
 
     return result;
 }
@@ -94,10 +95,19 @@ const GLint Canvas::queryi(const GLenum penum)
 void Canvas::initializeGL(const QSurfaceFormat & format)
 {
     m_context->setFormat(format);
-    m_context->create();
+    if (!m_context->create())
+	{
+		qCritical() << "Errors during creation of OpenGL context.";
+		return;
+	}
 
     m_context->makeCurrent(this);
-    if (!initializeOpenGLFunctions())
+
+    m_functions = dynamic_cast<OpenGLFunctions*>(m_context->versionFunctions<OpenGLFunctions>());
+
+    assert(m_functions != nullptr);
+
+    if (!m_functions->initializeOpenGLFunctions())
     {
         qCritical() << "Initializing OpenGL failed.";
         return;
@@ -118,12 +128,10 @@ void Canvas::initializeGL(const QSurfaceFormat & format)
 
     verifyExtensions(); // false if no painter ...
 
-    m_grid.reset(new AdaptiveGrid(*this));
+    m_grid.reset(new AdaptiveGrid(*m_functions));
     m_grid->setNearFar(m_camera->zNear(), m_camera->zFar());
 
     connect(m_camera.data(), &Camera::changed, this, &Canvas::cameraChanged);
-
-    glEnable(GL_DEPTH_TEST);
 
     m_context->doneCurrent();
 }
@@ -164,13 +172,9 @@ void Canvas::paintGL()
     else
         m_painter->update(programsWithInvalidatedUniforms);
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
+	m_painter->paint(m_time->getf(true));
     if (m_showAdaptiveGrid)
-        m_grid->draw(*this);
-
-    m_painter->paint(m_time->getf(true));
+        m_grid->draw(*m_functions);
 
     m_context->swapBuffers(this);
     m_context->doneCurrent();
@@ -252,7 +256,7 @@ bool Canvas::verifyExtensions() const
 
     if (!m_context->isValid())
     {
-        qWarning("Extensions cannot be veryfied due to invalid context.");
+        qWarning("Extensions cannot be verified due to invalid context.");
         return false;
     }
 
@@ -274,7 +278,7 @@ bool Canvas::verifyExtensions() const
     foreach(const QString & extension, unsupported)
         qWarning() << extension;
 
-    qWarning("");
+    qWarning() << "";
 
     return false;
 }

@@ -30,13 +30,13 @@ public:
     const QVector3D & up() const;
     void setUp(const QVector3D & up);
 
-    const float zNear() const;
-    void setZNear(const float zNear);
-    const float zFar() const;
-    void setZFar(const float zFar);
+    float zNear() const;
+    void setZNear(float zNear);
+    float zFar() const;
+    void setZFar(float zFar);
 
-    const float fovy() const;
-    void setFovy(const float fovy);
+    float fovy() const;
+    void setFovy(float fovy);
 
     const QSize & viewport() const;
     void setViewport(const QSize & viewport);
