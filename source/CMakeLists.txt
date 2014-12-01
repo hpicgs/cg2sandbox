@@ -54,6 +54,10 @@ if (OPTION_BUILD_STATIC)
     add_definitions("-D${META_PROJECT_NAME_UPPER}_STATIC")
 endif()
 
+if (OPTION_NO_OPENGL_320)
+    add_definitions("-DNO_OPENGL_320")
+endif()
+
 #
 # Sources
 #
