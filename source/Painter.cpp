@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include <QKeyEvent>
+#include <QSet>
 
 #include "Terrain.h"
 #include "FileAssociatedShader.h"
@@ -54,7 +55,8 @@ Painter::Painter()
 Painter::~Painter()
 {
     qDeleteAll(m_programs);
-    qDeleteAll(m_shaders);
+    qDeleteAll(m_shaders.toSet());
+
 
     delete m_quad;
     delete m_hpicgs;
