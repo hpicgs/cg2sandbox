@@ -64,9 +64,9 @@ Painter::~Painter()
     delete m_hpicgsLabel;
     delete m_portccLabel;
 
-    if (-1 != m_depthTex)
+    if (-1 != static_cast<int>(m_depthTex))
         glDeleteTextures(1, &m_depthTex);
-    if (-1 != m_depthFbo)
+    if (-1 != static_cast<int>(m_depthFbo))
         glDeleteFramebuffers(1, &m_depthFbo);
 
     FileAssociatedTexture::clean(*this);
@@ -370,7 +370,7 @@ void Painter::paint(float timef)
 
 // Note: Feel free to remove your old code and start on minor cleanups and refactorings....
 
-void Painter::paint_3_1_scene(const bool shadow, float timef)
+void Painter::paint_3_1_scene(const bool shadow, float /*timef*/)
 {
     QOpenGLShaderProgram * program(m_programs[PaintMode1]);
 
@@ -392,7 +392,7 @@ void Painter::paint_3_1(float timef)
 
 void Painter::paint_3_1_label(
     const QMatrix4x4 & viewProjection
-,   float timef)
+,   float /*timef*/)
 {
     QOpenGLShaderProgram * program;
 
@@ -426,7 +426,7 @@ void Painter::paint_3_2(float timef)
 
 void Painter::paint_3_2_label(
     const QMatrix4x4 & viewProjection
-,   float timef)
+,   float /*timef*/)
 {
     QOpenGLShaderProgram * program;
 
@@ -482,11 +482,12 @@ void Painter::paint_3_3_shadowmap(float timef)
     paint_3_2_label(L, timef);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 #ifdef __APPLE__
     glViewport(0, 0, camera()->viewport().width()*2.0, camera()->viewport().height()*2.0);
 #else
     glViewport(0, 0, camera()->viewport().width(), camera()->viewport().height());
-#endif __APPLE__
+#endif
 }
 
 void Painter::paint_3_3_lightView(float timef)
