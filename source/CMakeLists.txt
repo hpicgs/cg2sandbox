@@ -29,7 +29,7 @@ find_package(Qt5OpenGL  5.1 REQUIRED)
 #
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/thirdparts/assimp/include
+    ${CMAKE_SOURCE_DIR}/thirdparty/assimp/include
 )
 
 include_directories(
