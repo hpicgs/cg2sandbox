@@ -2,6 +2,7 @@
 #pragma once
 
 #include <QSize>
+#include <QImage>
 
 // Signed Euclidean Distance Transform
 

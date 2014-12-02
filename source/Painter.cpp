@@ -98,7 +98,7 @@ bool Painter::initialize()
     m_programs[PaintMode1] = program;
     program->bindAttributeLocation("a_vertex", 0);
     program->bindAttributeLocation("a_normal", 1);
-    program->bindAttributeLocation("a_texc", 2);    
+    program->bindAttributeLocation("a_texc", 2);
     program->link();
 
     // load labeling shaders and resources
@@ -208,7 +208,7 @@ bool Painter::initialize()
 
     glGenTextures(1, &m_depthTex);
     glBindTexture(GL_TEXTURE_2D, m_depthTex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, ShadowMapSize, ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, ShadowMapSize, ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -388,6 +388,8 @@ void Painter::paint_3_1_scene(const bool shadow, float /*timef*/)
 
 void Painter::paint_3_1(float timef)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     paint_3_1_scene(false, timef);
     paint_3_1_label(camera()->viewProjection(), timef);
 }
@@ -422,6 +424,8 @@ void Painter::paint_3_1_label(
 
 void Painter::paint_3_2(float timef)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     paint_3_1_scene(false, timef);
     paint_3_2_label(camera()->viewProjection(), timef);
 }
@@ -494,6 +498,8 @@ void Painter::paint_3_3_shadowmap(float timef)
 
 void Painter::paint_3_3_lightView(float timef)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     paint_3_3_shadowmap(timef);
 
     glActiveTexture(GL_TEXTURE0);
@@ -510,6 +516,8 @@ void Painter::paint_3_3_lightView(float timef)
 
 void Painter::paint_3_3_scene(float timef)
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     paint_3_3_shadowmap(timef);
 
     glActiveTexture(GL_TEXTURE1);
