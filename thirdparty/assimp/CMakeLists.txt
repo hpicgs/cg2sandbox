@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 2.6 )
 PROJECT( Assimp )
 
 # Define here the needed parameters
-set (ASSIMP_SV_REVISION 1264)
+set (ASSIMP_SV_REVISION 255)
 set (ASSIMP_VERSION_MAJOR 3)
 set (ASSIMP_VERSION_MINOR 0)
 set (ASSIMP_VERSION_PATCH ${ASSIMP_SV_REVISION}) # subversion revision?
@@ -45,7 +45,7 @@ SET( INCLUDE_INSTALL_DIR "include" CACHE PATH
 SET( BIN_INSTALL_DIR "bin" CACHE PATH
 	"Path the tool executables are installed to." )
 
-SET(DEBUG_POSTFIX "D" CACHE STRING "Debug Postfitx for lib, samples and tools")
+SET(DEBUG_POSTFIX "d")
 
 # Generate a pkg-config .pc for the Assimp library.
 CONFIGURE_FILE( "${PROJECT_SOURCE_DIR}/assimp.pc.in" "${PROJECT_BINARY_DIR}/assimp.pc" @ONLY )
