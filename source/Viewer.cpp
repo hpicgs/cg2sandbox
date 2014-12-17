@@ -15,6 +15,7 @@
 #include "Painter.h"
 #include "CyclicTime.h"
 #include "Viewer.h"
+#include "FileAssociatedShader.h"
 
 #include "ui_Viewer.h"
 
@@ -111,6 +112,9 @@ void Viewer::setup()
 
     m_toggleTimeShortcut.reset(new QShortcut(m_ui->toggleTimeAction->shortcut(), this));
     connect(m_toggleTimeShortcut.data(), &QShortcut::activated, this, &Viewer::toggleTime);
+
+    //m_reloadShadersShortcut.reset(new QShortcut(m_ui->reloadShaders->shortcut(), this));
+    //connect(m_reloadShadersShortcut.data(), &QShortcut::activated, this, &Viewer::reloadShaders);
 
 
     m_objLabel = new QLabel(m_ui->statusbar);
@@ -252,4 +256,14 @@ void Viewer::on_restartTimeAction_triggered(bool /*checked*/)
 void Viewer::on_quitAction_triggered(bool /*checked*/)
 {
     QApplication::quit();
+}
+
+void Viewer::on_reloadShaders_triggered(bool /*checked*/)
+{
+    reloadShaders();
+}
+
+void Viewer::reloadShaders()
+{
+    FileAssociatedShader::allChanged();
 }

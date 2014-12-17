@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>734</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="viewMenu">
@@ -50,6 +50,8 @@
     </property>
     <addaction name="toggleTimeAction"/>
     <addaction name="restartTimeAction"/>
+    <addaction name="separator"/>
+    <addaction name="reloadShaders"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="controlMenu"/>
@@ -389,6 +391,14 @@
   <action name="restartTimeAction">
    <property name="text">
     <string>&amp;Restart Time</string>
+   </property>
+  </action>
+  <action name="reloadShaders">
+   <property name="text">
+    <string>Reload Shaders</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
    </property>
   </action>
  </widget>

@@ -163,3 +163,11 @@ void FileAssociatedShader::repairWatchedFiles()
         }
     }
 }
+
+void FileAssociatedShader::allChanged()
+{
+    for (const QString & filePath : s_shaderByFilePath.keys())
+    {
+        instance()->fileChanged(filePath);
+    }
+}

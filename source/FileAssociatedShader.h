@@ -27,6 +27,8 @@ public:
     */
     static QList<QOpenGLShaderProgram *> process();
 
+    static void allChanged();
+
 protected slots:
     void shaderDestroyed(QObject * object);
     void programDestroyed(QObject * object);

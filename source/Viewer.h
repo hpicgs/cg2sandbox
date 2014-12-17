@@ -43,6 +43,8 @@ protected slots:
     void toggleAdaptiveGrid();
     void on_toggleTimeAction_triggered(bool checked);
     void toggleTime();
+    void on_reloadShaders_triggered(bool checked);
+    void reloadShaders();
 
     void on_restartTimeAction_triggered(bool checked);
     void on_quitAction_triggered(bool checked);
@@ -73,4 +75,5 @@ protected:
     QScopedPointer<QShortcut> m_swapIntervalShortcut;
     QScopedPointer<QShortcut> m_adaptiveGridShortcut;
     QScopedPointer<QShortcut> m_toggleTimeShortcut;
+    QScopedPointer<QShortcut> m_reloadShadersShortcut;
 };
