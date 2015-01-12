@@ -67,15 +67,14 @@ bool Painter::initialize()
     // load resources - goto https://moodle.hpi3d.de/course/view.php?id=58 and download either
     // the Tree Canyon Terrain or the complete Terrain Pack. Feel free to modify/exchange the data and extends/scales/offsets.
 
-    m_height = FileAssociatedTexture::getOrCreate2Dus16("data/tree_canyon_h.raw", 2048, 2048, *this, &m_heights);
+    m_height = FileAssociatedTexture::getOrCreate2Dus16("data/terrain-height.raw", 2048, 2048, *this, &m_heights);
     m_yOffset = -1.f;
     m_yScale  =  3.f;
 
-    m_normals = FileAssociatedTexture::getOrCreate2D("data/tree_canyon_n.png", *this);
-    m_diffuse = FileAssociatedTexture::getOrCreate2D("data/tree_canyon_c.png", *this);
-    m_detail  = FileAssociatedTexture::getOrCreate2D("data/moss_detail.png",   *this, GL_REPEAT, GL_REPEAT);
-    m_detailn = FileAssociatedTexture::getOrCreate2D("data/moss_detail_n.png", *this, GL_REPEAT, GL_REPEAT);
-    //m_detailc = FileAssociatedTexture::getOrCreate2D("data/moss-detail-c.png", *this, GL_REPEAT, GL_REPEAT);
+    m_normals = FileAssociatedTexture::getOrCreate2D("data/terrain-normals.png", *this);
+    m_diffuse = FileAssociatedTexture::getOrCreate2D("data/terrain-diffuse.png", *this);
+    m_detail  = FileAssociatedTexture::getOrCreate2D("data/terrain-detail.png",   *this, GL_REPEAT, GL_REPEAT);
+    m_detailn = FileAssociatedTexture::getOrCreate2D("data/terrain-detail_normals.png", *this, GL_REPEAT, GL_REPEAT);
 
     // Task_4_1 - ToDo Begin
 
