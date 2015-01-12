@@ -1,5 +1,7 @@
 
 #include <cassert>
+#include <algorithm>
+#include <fstream>
 
 #include <QFileSystemWatcher>
 #include <QFileInfo>
@@ -29,9 +31,18 @@ FileAssociatedTexture::FileAssociatedTexture()
 FileAssociatedTexture::~FileAssociatedTexture()
 {
     delete m_fileSystemWatcher;
+}
 
-    // ToDo:  glDeleteTexture...for all textures
-	s_queue.clear();
+void FileAssociatedTexture::clean(OpenGLFunctions & gl)
+{
+    instance()->m_fileSystemWatcher->removePaths(s_texturesByFilePath.keys());
+
+    foreach(const GLuint & texture, s_texturesByFilePath.values())
+        gl.glDeleteTextures(1, &texture);
+
+    s_queue.clear();
+    s_texturesByFilePath.clear();
+    s_imagesByFilePath.clear();
 }
 
 FileAssociatedTexture * FileAssociatedTexture::instance()
@@ -40,6 +51,56 @@ FileAssociatedTexture * FileAssociatedTexture::instance()
 		s_instance = new FileAssociatedTexture();
 
 	return s_instance;
+}
+
+GLuint FileAssociatedTexture::getOrCreate2Dus16(
+	const QString & fileName
+,   const int width
+,   const int height
+,   OpenGLFunctions & gl
+,   std::vector<unsigned short> * data
+,	const GLenum wrap_s
+,	const GLenum wrap_t
+,	const GLenum mag_filter
+,	const GLenum min_filter)
+{
+	QFileInfo fi(fileName);
+	if (!fi.exists())
+	{
+		qWarning() << fileName << " does not exist: texture has no associated file.";
+		return -1;
+	}
+	QString filePath(fi.absoluteFilePath());
+
+	if (s_texturesByFilePath.contains(filePath))
+        return s_texturesByFilePath[filePath];
+
+    std::ifstream ifs(fileName.toStdString().c_str(), std::ios::in | std::ios::binary | std::ios::ate);
+    if (!ifs)
+    {
+        qDebug() << "Reading from file \"" << fileName << "\" failed.";
+        return -1;
+    }
+
+    const size_t size = ifs.tellg();
+    ifs.seekg(0, std::ios::beg);
+
+    if (!data)
+        data = new std::vector<unsigned short>();
+
+    data->resize(size / sizeof(unsigned short));
+
+    ifs.read(reinterpret_cast<char*>(&data->operator[](0)), size);
+    ifs.close();
+
+	instance()->m_fileSystemWatcher->addPath(filePath);
+
+	GLuint texture = setupTexture2D(-1, wrap_s, wrap_t, mag_filter, min_filter, gl);
+    image2D(texture, width, height, data->data(), gl);
+
+	s_texturesByFilePath[filePath] = texture;
+
+	return texture;
 }
 
 GLuint FileAssociatedTexture::getOrCreate2D(
@@ -67,7 +128,9 @@ GLuint FileAssociatedTexture::getOrCreate2D(
 
 	instance()->m_fileSystemWatcher->addPath(filePath);
 
-	GLuint texture = loadTexture2D(-1, wrap_s, wrap_t, mag_filter, min_filter, image, gl);
+	GLuint texture = setupTexture2D(-1, wrap_s, wrap_t, mag_filter, min_filter, gl);
+    image2D(texture, image, gl);
+
 	s_texturesByFilePath[filePath] = texture;
 
 	return texture;
@@ -167,35 +230,35 @@ void FileAssociatedTexture::process(OpenGLFunctions & gl)
 		QString filePath = s_queue.first();
 		s_queue.removeFirst();
 
-		loadTexture2D(s_texturesByFilePath[filePath], s_imagesByFilePath[filePath], gl);
+		image2D(s_texturesByFilePath[filePath], s_imagesByFilePath[filePath], gl);
 	}
 }
 
-GLuint FileAssociatedTexture::loadTexture2D(
-	GLuint texture
-	, const GLenum wrap_s
-	, const GLenum wrap_t
-	, const GLenum mag_filter
-	, const GLenum min_filter
-	, const QImage & image
-	, OpenGLFunctions & gl)
+GLuint FileAssociatedTexture::setupTexture2D(
+    GLuint texture
+,   const GLenum wrap_s
+,   const GLenum wrap_t
+,   const GLenum mag_filter
+,   const GLenum min_filter
+,   OpenGLFunctions & gl)
 {
-    if (texture == static_cast<unsigned int>(-1))
-	{
-		gl.glGenTextures(1, &texture);
-		gl.glBindTexture(GL_TEXTURE_2D, texture);
+    if (texture != static_cast<unsigned int>(-1))
+        return texture;
 
-		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
-		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
+    gl.glGenTextures(1, &texture);
+    gl.glBindTexture(GL_TEXTURE_2D, texture);
 
-		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
-		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
-	}
-	
-	return loadTexture2D(texture, image, gl);
+    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
+    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
+
+    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
+    gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
+
+    return texture;
 }
 
-GLuint FileAssociatedTexture::loadTexture2D(
+
+GLuint FileAssociatedTexture::image2D(
 	GLuint texture
 ,	const QImage & image
 ,	OpenGLFunctions & gl)
@@ -203,8 +266,23 @@ GLuint FileAssociatedTexture::loadTexture2D(
 	gl.glBindTexture(GL_TEXTURE_2D, texture);
 	gl.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.width(), image.height()
 		, 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bits());
+    gl.glGenerateMipmap(GL_TEXTURE_2D);
 
-	return texture;
+    return texture;
+}
+
+GLuint FileAssociatedTexture::image2D(
+    GLuint texture
+,   const int width 
+,   const int height
+,   const unsigned short * data
+,   OpenGLFunctions & gl)
+{
+    gl.glBindTexture(GL_TEXTURE_2D, texture);
+    gl.glTexImage2D(GL_TEXTURE_2D, 0, GL_R16, width, height, 0, GL_RED, GL_UNSIGNED_SHORT, data);
+    gl.glGenerateMipmap(GL_TEXTURE_2D);
+
+    return texture;
 }
 
 GLuint FileAssociatedTexture::loadTextureCube(
@@ -248,6 +326,7 @@ GLuint FileAssociatedTexture::loadTextureCube(
         gl.glTexImage2D(face, 0, GL_RGB, image.width(), image.height()
             , 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bits());
     }
+    gl.glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
     return texture;
 }
 

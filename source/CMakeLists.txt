@@ -1,4 +1,8 @@
 
+set(META_AUTHOR1_MATNR "000000")
+set(META_AUTHOR2_MATNR "000000")
+set(META_VERSION "${META_VERSION_MAJOR}.${META_EXERCISE}.${META_AUTHOR1_MATNR}.${META_AUTHOR2_MATNR}")
+
 configure_file(version.h.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 if(MSVC)
@@ -33,6 +37,7 @@ include_directories(
 
 include_directories(
     BEFORE
+    ${CMAKE_SOURCE_DIR}/thirdparty/assimp/include
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -42,6 +47,7 @@ include_directories(
 #
 
 set(libs
+    assimp
 )
 
 #
@@ -68,6 +74,7 @@ set(sources
     ${source_path}/AbstractPainter.cpp
     ${source_path}/AdaptiveGrid.cpp
     ${source_path}/Application.cpp
+    ${source_path}/AssimpScene.cpp
     ${source_path}/AutoTimer.cpp
     ${source_path}/AxisAlignedBoundingBox.cpp
     ${source_path}/Camera.cpp
@@ -77,12 +84,14 @@ set(sources
     ${source_path}/FileAssociatedAsset.cpp
     ${source_path}/FileAssociatedShader.cpp
     ${source_path}/FileAssociatedTexture.cpp
+    ${source_path}/FlightNavigation.cpp
     ${source_path}/Icosahedron.cpp
     ${source_path}/main.cpp
     ${source_path}/MessageHandler.cpp
     ${source_path}/Navigation.cpp
     ${source_path}/NavigationMath.cpp
     ${source_path}/Painter.cpp
+    ${source_path}/PatchedTerrain.cpp
     ${source_path}/Plane3.cpp
     ${source_path}/ScreenAlignedQuad.cpp
     ${source_path}/Timer.cpp
@@ -95,6 +104,7 @@ set(headers
     ${include_path}/AbstractPainter.h
     ${include_path}/AdaptiveGrid.h
     ${include_path}/Application.h
+    ${include_path}/AssimpScene.h
     ${include_path}/AutoTimer.h
     ${include_path}/AxisAlignedBoundingBox.h
     ${include_path}/CachedValue.h
@@ -106,6 +116,7 @@ set(headers
     ${include_path}/FileAssociatedAsset.h
     ${include_path}/FileAssociatedShader.h
     ${include_path}/FileAssociatedTexture.h
+    ${include_path}/FlightNavigation.h
     ${include_path}/Icosahedron.h
     ${include_path}/MathMacros.h
     ${include_path}/MessageHandler.h
@@ -114,6 +125,7 @@ set(headers
     ${include_path}/OpenGLFunctions.h
     ${include_path}/Painter.h
     ${include_path}/PainterMode.h
+    ${include_path}/PatchedTerrain.h
     ${include_path}/Plane3.h
     ${include_path}/ScreenAlignedQuad.h
     ${include_path}/Timer.h
