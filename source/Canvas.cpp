@@ -370,6 +370,13 @@ bool Canvas::adaptiveGrid() const
 
 void Canvas::keyPressEvent(QKeyEvent * event)
 {
+    m_painter->keyPressEvent(event);
+
+    if (event->isAccepted())
+    {
+        return;
+    }
+    
     if (!m_navigation)
         return;
 
