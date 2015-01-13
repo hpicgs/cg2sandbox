@@ -1,5 +1,6 @@
 
 #include <cassert>
+#include <cmath>
 
 #include <QVector>
 #include <QVector2D>
@@ -94,7 +95,7 @@ void PatchedTerrain::setupVertices()
 
     // creates the bottom triangular tile in range x[0;1], y[0;0.5]
 
-    const int numLanes = pow(2, m_maxLOD) * 6;
+    const int numLanes = std::pow(2, m_maxLOD) * 6;
 
     const float xStep = 1.f / static_cast<float>(numLanes);
     const float yStep = xStep * 0.5f;
@@ -137,13 +138,13 @@ void PatchedTerrain::setupTiles()
 {
     QVector<unsigned int> rawi;
 
-    const int numLanes = pow(2, m_maxLOD) * 6;
+    const int numLanes = std::pow(2, m_maxLOD) * 6;
     const int so = numLanes - 1 + numLanes / 2 - 1 + numLanes / 4 - 1; // strip offset
 
     for (int tile = 0; tile < 3; ++tile)
     {
         rawi.clear();
-        const int t = pow(2, tile);
+        const int t = std::pow(2, tile);
 
         for (int l = t; l < numLanes - t; l += t)
         {
@@ -204,7 +205,7 @@ void PatchedTerrain::setupStrip001122(const PatchIdentifier strip)
     if (indices->isCreated())
         return;
 
-    const int numLanes = pow(2, m_maxLOD) * 6;
+    const int numLanes = std::pow(2, m_maxLOD) * 6;
     const int so = numLanes - 1 + numLanes / 2 - 1 + numLanes / 4; // strip offset
 
     int i0 = 1;
@@ -214,7 +215,7 @@ void PatchedTerrain::setupStrip001122(const PatchIdentifier strip)
     if (tile < 1)
         i0 += numLanes / 2 - 1;
 
-    const int t = pow(2, tile);
+    const int t = std::pow(2, tile);
 
     QVector<unsigned int> rawi;
 
@@ -269,13 +270,13 @@ void PatchedTerrain::setupStrip010212(const PatchIdentifier strip)
     if (indices->isCreated())
         return;
 
-    const int numLanes = pow(2, m_maxLOD) * 6;
+    const int numLanes = std::pow(2, m_maxLOD) * 6;
     const int so = numLanes - 1 + numLanes / 2 - 1 + numLanes / 4; // strip offset
 
     QVector<unsigned int> rawi;
 
-    const int t0 = pow(2, l0);
-    const int t1 = pow(2, l1);
+    const int t0 = std::pow(2, l0);
+    const int t1 = std::pow(2, l1);
 
     int id = sum(numLanes) - sum(numLanes - t0);
 

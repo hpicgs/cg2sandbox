@@ -24,7 +24,7 @@ void main()
 	vec4 v = T[gl_InstanceID] * vec4(a_vertex.x, 0.0, a_vertex.y, 1.0);
 	v_texc = 0.125 * v.xz + 0.5;
 
-	v.y = texture2D(height, v_texc).r * yScale * 1 + yOffset * 1;
+	v.y = texture(height, v_texc).r * yScale * 1 + yOffset * 1;
 
 	v_eye = v.xyz;
 	gl_Position = mvp * v;

@@ -74,7 +74,7 @@ bool Painter::initialize()
     m_normals = FileAssociatedTexture::getOrCreate2D("data/terrain-normals.png", *this);
     m_diffuse = FileAssociatedTexture::getOrCreate2D("data/terrain-diffuse.png", *this);
     m_detail  = FileAssociatedTexture::getOrCreate2D("data/terrain-detail.png",   *this, GL_REPEAT, GL_REPEAT);
-    m_detailn = FileAssociatedTexture::getOrCreate2D("data/terrain-detail_normals.png", *this, GL_REPEAT, GL_REPEAT);
+    m_detailn = FileAssociatedTexture::getOrCreate2D("data/terrain-detail-normals.png", *this, GL_REPEAT, GL_REPEAT);
 
     // Task_4_1 - ToDo Begin
 
