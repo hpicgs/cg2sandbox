@@ -41,6 +41,8 @@ Canvas::Canvas(
     create();
 
     m_camera->setFovy(40.0);
+    m_camera->setZNear(0.2);
+    m_camera->setZFar(6.01);
     m_navigation->reset();
 
     initializeGL(format);
@@ -374,6 +376,13 @@ void Canvas::keyPressEvent(QKeyEvent * event)
         return;
 
     m_navigation->keyPressEvent(event);
+
+    if (!event->isAccepted())
+    {
+        m_context->makeCurrent(this);
+        m_painter->keyPressEvent(event);
+        m_context->doneCurrent();
+    }
 }
 
 void Canvas::keyReleaseEvent(QKeyEvent * event)

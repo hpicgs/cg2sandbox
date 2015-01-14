@@ -29,9 +29,18 @@ FileAssociatedTexture::FileAssociatedTexture()
 FileAssociatedTexture::~FileAssociatedTexture()
 {
     delete m_fileSystemWatcher;
+}
 
-    // ToDo:  glDeleteTexture...for all textures
-	s_queue.clear();
+void FileAssociatedTexture::clean(OpenGLFunctions & gl)
+{
+    instance()->m_fileSystemWatcher->removePaths(s_texturesByFilePath.keys());
+
+    foreach(const GLuint & texture, s_texturesByFilePath.values())
+        gl.glDeleteTextures(1, &texture);
+
+    s_queue.clear();
+    s_texturesByFilePath.clear();
+    s_imagesByFilePath.clear();
 }
 
 FileAssociatedTexture * FileAssociatedTexture::instance()
@@ -203,8 +212,9 @@ GLuint FileAssociatedTexture::loadTexture2D(
 	gl.glBindTexture(GL_TEXTURE_2D, texture);
 	gl.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.width(), image.height()
 		, 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bits());
+    gl.glGenerateMipmap(GL_TEXTURE_2D);
 
-	return texture;
+    return texture;
 }
 
 GLuint FileAssociatedTexture::loadTextureCube(
@@ -248,6 +258,7 @@ GLuint FileAssociatedTexture::loadTextureCube(
         gl.glTexImage2D(face, 0, GL_RGB, image.width(), image.height()
             , 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bits());
     }
+    gl.glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
     return texture;
 }
 

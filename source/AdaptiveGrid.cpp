@@ -58,7 +58,7 @@ const char * AdaptiveGrid::s_fsSource =
     "   z = - znear * z / (zfar * z - zfar - znear * z);\n"
 	"\n"
     "   float g = mix(t, 1.0, z * z);\n"
-    "   float l = clamp(8.0 - length(v_vertex) / viewPlaneDistance[0], 0.0, 1.0);\n"
+    "   float l = clamp(4.0 - length(v_vertex) / viewPlaneDistance[0], 0.0, 1.0);\n"
     "   fragColor = vec4(color, l * (1.0 - g * g));\n"
     "}\n";
 
@@ -74,6 +74,8 @@ AdaptiveGrid::AdaptiveGrid(
 ,   m_normal(normal)
 ,   m_size(0)
 {
+    gl.glEnable(GL_DEPTH_TEST);
+
     m_transform = transform(m_location, m_normal); 
 
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, s_vsSource);
@@ -205,7 +207,7 @@ void AdaptiveGrid::update(
 
 	m_program->bind();
     m_program->setUniformValue("viewPlaneDistance", QVector2D(l, mod(distancelog, 1.f)));
-	m_program->setUniformValue("transform", modelViewProjection * offset);
+    m_program->setUniformValue("transform", modelViewProjection * offset);
 	m_program->release();
 } 
 

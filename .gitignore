@@ -13,6 +13,7 @@
 /cg2sandbox.log
 /cg2sandboxd.log
 /_run.bat
+/build-debug
 
 # Qt Creator User Files
 *.txt.user
