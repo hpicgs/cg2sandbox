@@ -187,7 +187,7 @@ void Painter::update(const QList<QOpenGLShaderProgram *> & programs)
             case PaintMode2:
             case PaintMode1:
 
-                if (!m_debug || camera()->eye() != m_cachedEye)
+                if (!m_debug && camera()->eye() != m_cachedEye)
                 {
                     m_cachedEye = camera()->eye();
                     patchify();
