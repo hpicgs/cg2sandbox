@@ -22,8 +22,7 @@ namespace
 
 
 Painter::Painter()
-: m_camera(nullptr)
-, m_quad(nullptr)
+: m_quad(nullptr)
 , m_terrain(nullptr)
 , m_height (-1)
 , m_normals(-1)
