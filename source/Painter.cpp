@@ -273,9 +273,9 @@ bool Painter::cull(
     // Task_4_1 - ToDo Begin
     
     // This function should return true, if the tile specified by vertices v0, v1, and v2 
-    // is not within the cameras view frustum.
+    // is not within the camera's view frustum.
 
-    // Hint: you might try to use NDCs and transfer the incomming verticies appropriatelly.
+    // Hint: you might try to use NDCs and transfer the incoming verticies appropriatelly.
     // With that in mind, it should be simpler to cull...
 
     // If you like, make use of QVector3D, QVector4D (toVector3DAffine), QPolygonF (boundingRect), and QRectF (intersects)
@@ -303,7 +303,7 @@ void Painter::patchify(
     // Feel free to implement this in any way with as few or as much traversals
     // /passes/recursions you need.
 
-    // Checkt out the paper "Seamless Patches for GPU-Based Terrain Rendering"
+    // Check out the paper "Seamless Patches for GPU-Based Terrain Rendering"
 
     //if () // needs subdivide?
     //{
