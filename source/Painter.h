@@ -69,9 +69,7 @@ protected:
     // ...
 
 protected:
-    Camera * m_camera;
-
-    ScreenAlignedQuad * m_quad;
+	ScreenAlignedQuad * m_quad;
 
     QList<QMatrix4x4> m_transforms;
 
