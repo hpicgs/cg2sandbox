@@ -273,7 +273,7 @@ bool Painter::cull(
     // Task_4_1 - ToDo Begin
     
     // This function should return true, if the tile specified by vertices v0, v1, and v2 
-    // is within the cameras view frustum.
+    // is not within the cameras view frustum.
 
     // Hint: you might try to use NDCs and transfer the incomming verticies appropriatelly.
     // With that in mind, it should be simpler to cull...
